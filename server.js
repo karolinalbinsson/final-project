@@ -66,7 +66,7 @@ const inviteSchema = new mongoose.Schema(
 	{ collection: "project-planner-collection" }
 );
 
-//mongoose model for creating a user object
+//To be able to store different collections/schemas(?) in the same db.
 const Base = mongoose.model("Base", new Schema({}, baseOptions));
 const User = Base.discriminator("User", userSchema);
 const Invite = Base.discriminator("Invite", inviteSchema);
@@ -98,7 +98,6 @@ app.post("/inviteUser", async (req, res) => {
 		const { fromUserId, toUserEmail, projectID } = req.body;
 		let mode = "";
 		let userIdFor = null;
-		let userNameFor = null;
 		let userFromName = null;
 
 		//Check if the invited user exists.
@@ -112,14 +111,14 @@ app.post("/inviteUser", async (req, res) => {
 		}
 		console.log(mode);
 
-		//Check the name of the userid sending the invite.
+		//Check the name of sender using the userid sent in the invite.
 		const userFrom = await mongoose.model("User").findOne({ _id: fromUserId });
 		if (userFrom) {
 			console.log("Found user", userFrom);
 		} else console.log("user not found");
 		userFrom ? (userFromName = userFrom.name) : userFromName === "A friend";
 
-		//Save a new invite in db. If mode is notification, set the userId at once.
+		//Save a new invite in db. If the to-user has been found already, it's userid will be saved at once.
 		const invite = await new Invite({
 			createdBy: fromUserId,
 			createdForEmail: toUserEmail,
@@ -128,8 +127,6 @@ app.post("/inviteUser", async (req, res) => {
 		}).save();
 		console.log("Invite saved:", invite);
 
-		//Kolla i databasen om e-postadressen i toUser finns bland users. om ja, skapa invite i databasen, skicka en notis om projekt = mode = "notification"
-		//Om usern inte finns kopplad, skapa en invite i databasen, skicka ett mejl om att användaren ska signa upp sig. "mode="newUser"
 		const inviteId = invite._id;
 
 		if (mode === "newUser") {
