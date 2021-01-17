@@ -2,9 +2,16 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
 
 const nodemailer = require("nodemailer");
 dotenv.config();
+
+const mongoUrl =
+	process.env.MONGO_URL || "mongodb://localhost/project-test-users";
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.Promise = Promise;
+const Schema = mongoose.Schema;
 
 // Defines the port the app will run on. Defaults to 8080, but can be
 // overridden when starting the server. For example:
@@ -16,6 +23,53 @@ const app = express();
 // Add middlewares to enable cors and json body parsing
 app.use(cors());
 app.use(bodyParser.json());
+
+const baseOptions = {
+	discriminatorKey: "__type",
+	collection: "project-planner-collection",
+};
+
+const userSchema = new mongoose.Schema(
+	{
+		email: {
+			type: String,
+			unique: true,
+			required: true,
+		},
+		name: {
+			type: String,
+			required: true,
+		},
+	},
+	{ collection: "project-planner-collection" }
+);
+
+const inviteSchema = new mongoose.Schema(
+	{
+		createdBy: {
+			type: String,
+			required: true,
+		},
+		createdForEmail: {
+			type: String,
+			required: true,
+		},
+		createdForUserId: {
+			type: String,
+			default: null,
+		},
+		projectId: {
+			type: String,
+			required: true,
+		},
+	},
+	{ collection: "project-planner-collection" }
+);
+
+//mongoose model for creating a user object
+const Base = mongoose.model("Base", new Schema({}, baseOptions));
+const User = Base.discriminator("User", userSchema);
+const Invite = Base.discriminator("Invite", inviteSchema);
 
 // Start defining your routes here
 app.get("/", (req, res) => {
@@ -41,14 +95,46 @@ const createHtmlNotification = (toUser, fromUser) => {
 //Endpoint for sending an invite-email to a user.
 app.post("/inviteUser", async (req, res) => {
 	try {
-		const { fromUserId, toUserEmail, mode } = req.body;
-		console.log(fromUserId, toUserEmail, mode);
+		const { fromUserId, toUserEmail, projectID } = req.body;
+		let mode = "";
+		let userIdFor = null;
+		let userNameFor = null;
+		let userFromName = null;
+
+		//Check if the invited user exists.
+		const user = await mongoose.model("User").findOne({ email: toUserEmail });
+		if (user) {
+			mode = "notification";
+			userIdFor = user._id;
+			userNameFor = user.name;
+		} else {
+			mode = "newUser";
+		}
+		console.log(mode);
+
+		//Check the name of the userid sending the invite.
+		const userFrom = await mongoose.model("User").findOne({ _id: fromUserId });
+		if (userFrom) {
+			console.log("Found user", userFrom);
+		} else console.log("user not found");
+		userFrom ? (userFromName = userFrom.name) : userFromName === "A friend";
+
+		//Save a new invite in db. If mode is notification, set the userId at once.
+		const invite = await new Invite({
+			createdBy: fromUserId,
+			createdForEmail: toUserEmail,
+			createdForUserId: userIdFor,
+			projectId: projectID,
+		}).save();
+		console.log("Invite saved:", invite);
+
 		//Kolla i databasen om e-postadressen i toUser finns bland users. om ja, skapa invite i databasen, skicka en notis om projekt = mode = "notification"
 		//Om usern inte finns kopplad, skapa en invite i databasen, skicka ett mejl om att användaren ska signa upp sig. "mode="newUser"
-		const inviteId = "12345";
+		const inviteId = invite._id;
+
 		if (mode === "newUser") {
 			const emailResults = await sendEmail(
-				fromUserId,
+				userFromName,
 				toUserEmail,
 				mode,
 				inviteId
@@ -56,12 +142,13 @@ app.post("/inviteUser", async (req, res) => {
 			console.log("E-mail results:", emailResults);
 			res.json({ message: "Send OK" }).status(200);
 		} else {
-			const emailResults = await sendEmail(fromUserId, toUserEmail, mode);
+			const emailResults = await sendEmail(userFromName, toUserEmail, mode);
 			console.log("E-mail results:", emailResults);
 			res.json({ message: "Send OK" }).status(200);
 		}
 	} catch (error) {
 		console.log("Caught an error, sending error results to user.");
+		console.log(error);
 		res
 			.json({
 				message: "Something went wrong in sending the invite.",
@@ -105,6 +192,22 @@ const sendEmail = async (fromUserName, toUserEmail, mode, inviteId = -1) => {
 		//return "400";
 	}
 };
+
+app.post("/users", async (req, res) => {
+	try {
+		const { email, name } = req.body;
+		const user = await new User({
+			email,
+			name,
+		}).save();
+
+		res
+			.status(201)
+			.json({ userId: user._id, email: user.email, name: user.name });
+	} catch (err) {
+		res.status(400).json({ message: "could not create user", errors: err });
+	}
+});
 
 // Start the server
 app.listen(port, () => {
