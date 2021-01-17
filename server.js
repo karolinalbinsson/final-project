@@ -1,7 +1,10 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import dotenv from "dotenv";
+
 const nodemailer = require("nodemailer");
+dotenv.config();
 
 // Defines the port the app will run on. Defaults to 8080, but can be
 // overridden when starting the server. For example:
@@ -35,6 +38,7 @@ const createHtmlNotification = (toUser, fromUser) => {
 	return htmlstring;
 };
 
+//Endpoint for sending an invite-email to a user.
 app.post("/inviteUser", async (req, res) => {
 	try {
 		const { fromUserId, toUserEmail, mode } = req.body;
@@ -50,11 +54,11 @@ app.post("/inviteUser", async (req, res) => {
 				inviteId
 			);
 			console.log("E-mail results:", emailResults);
-			res.status(200);
+			res.json({ message: "Send OK" }).status(200);
 		} else {
 			const emailResults = await sendEmail(fromUserId, toUserEmail, mode);
 			console.log("E-mail results:", emailResults);
-			res.status(200);
+			res.json({ message: "Send OK" }).status(200);
 		}
 	} catch (error) {
 		console.log("Caught an error, sending error results to user.");
@@ -70,15 +74,15 @@ app.post("/inviteUser", async (req, res) => {
 const sendEmail = async (fromUserName, toUserEmail, mode, inviteId = -1) => {
 	try {
 		const transport = nodemailer.createTransport({
-			service: "gmail",
+			service: process.env.MAIL_SERVICE,
 			auth: {
-				user: "tsk.project.planner@gmail.com",
-				pass: "Technigo123",
+				user: process.env.MAIL_FROM,
+				pass: process.env.MAIL_PW,
 			},
 		});
 
 		const mailOptions = {
-			from: "tsk.project.planner@gmail.com",
+			from: process.env.MAIL_FROM,
 			to: toUserEmail,
 			subject:
 				mode === "newUser"
