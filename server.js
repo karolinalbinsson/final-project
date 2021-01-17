@@ -49,17 +49,21 @@ app.post("/inviteUser", async (req, res) => {
 				mode,
 				inviteId
 			);
-			console.log("SEnding results to user");
-			res.sendStatus(emailResults);
+			console.log("E-mail results:", emailResults);
+			res.status(200);
 		} else {
 			const emailResults = await sendEmail(fromUserId, toUserEmail, mode);
-			console.log("SEnding results to user");
-			res.sendStatus(emailResults);
+			console.log("E-mail results:", emailResults);
+			res.status(200);
 		}
 	} catch (error) {
+		console.log("Caught an error, sending error results to user.");
 		res
-			.json({ message: "Something went wrong in sending the invite." })
-			.sendStatus(400);
+			.json({
+				message: "Something went wrong in sending the invite.",
+				error: error,
+			})
+			.status(400);
 	}
 });
 
@@ -87,11 +91,10 @@ const sendEmail = async (fromUserName, toUserEmail, mode, inviteId = -1) => {
 					: createHtmlNotification(toUserEmail, fromUserName),
 		};
 
-		transport.sendMail(mailOptions, (err, info) => {
-			console.log("Message sent: %s", info.messageId);
-		});
+		const emailInfo = await transport.sendMail(mailOptions);
+		return emailInfo;
 		//res.sendStatus(200);
-		return 200;
+		//	return 200;
 	} catch (error) {
 		//console.log("Message not sent: %s");
 		throw "Error, message not sent.";
