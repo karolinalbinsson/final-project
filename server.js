@@ -3,13 +3,15 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
+import { isEmail } from 'validator'; //npm install validator
+
 
 const nodemailer = require("nodemailer");
 dotenv.config();
 
 const mongoUrl =
 	process.env.MONGO_URL || "mongodb://localhost/project-test-users";
-mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 mongoose.Promise = Promise;
 const Schema = mongoose.Schema;
 
@@ -29,12 +31,14 @@ const baseOptions = {
 	collection: "project-planner-collection",
 };
 
+//create new user
 const userSchema = new mongoose.Schema(
 	{
 		email: {
 			type: String,
 			unique: true,
 			required: true,
+			validate: [isEmail, 'invalid email'] //added
 		},
 		name: {
 			type: String,
@@ -44,6 +48,7 @@ const userSchema = new mongoose.Schema(
 	{ collection: "project-planner-collection" }
 );
 
+//invite user to collab
 const inviteSchema = new mongoose.Schema(
 	{
 		createdBy: {
@@ -71,11 +76,16 @@ const Base = mongoose.model("Base", new Schema({}, baseOptions));
 const User = Base.discriminator("User", userSchema);
 const Invite = Base.discriminator("Invite", inviteSchema);
 
+const listEndpoints = require('express-list-endpoints');
+
+
 // Start defining your routes here
 app.get("/", (req, res) => {
-	res.send("Hello world");
+	//res.send("Hello world");
+	res.send(listEndpoints(app));
 });
 
+//WHATS THE DIFFERENCE BETWEEN first and second html message?
 //For creating some basic html to send to the user.
 const createHtmlNewUser = (toUser, fromUser, inviteId) => {
 	let htmlstring = `<h2>Hey ${toUser}!</h2><br>`;
@@ -85,8 +95,8 @@ const createHtmlNewUser = (toUser, fromUser, inviteId) => {
 	return htmlstring;
 };
 
-const createHtmlNotification = (toUser, fromUser) => {
-	let htmlstring = `<h2>Hey ${toUser}!</h2><br>`;
+const createHtmlNotification = (userNameFor, fromUser) => {
+	let htmlstring = `<h2>Hey ${userNameFor}!</h2><br>`;
 	htmlstring += `${fromUser} has invited you to collaborate on a project in project planner.<br>`;
 	htmlstring += `<a href="https://www.google.se/">Click to sign in and have a look at the project!<a>`;
 	return htmlstring;
@@ -99,13 +109,14 @@ app.post("/inviteUser", async (req, res) => {
 		let mode = "";
 		let userIdFor = null;
 		let userFromName = null;
+		let userNameFor = null;
 
 		//Check if the invited user exists.
 		const user = await mongoose.model("User").findOne({ email: toUserEmail });
 		if (user) {
 			mode = "notification";
 			userIdFor = user._id;
-			userNameFor = user.name;
+			userNameFor = user.name; 
 		} else {
 			mode = "newUser";
 		}
@@ -139,7 +150,7 @@ app.post("/inviteUser", async (req, res) => {
 			console.log("E-mail results:", emailResults);
 			res.json({ message: "Send OK" }).status(200);
 		} else {
-			const emailResults = await sendEmail(userFromName, toUserEmail, mode);
+			const emailResults = await sendEmail(userFromName, toUserEmail, mode, userNameFor);
 			console.log("E-mail results:", emailResults);
 			res.json({ message: "Send OK" }).status(200);
 		}
@@ -149,13 +160,14 @@ app.post("/inviteUser", async (req, res) => {
 		res
 			.json({
 				message: "Something went wrong in sending the invite.",
-				error: error,
+				//error: error,
+				errors : { message: error.message, errors: error }
 			})
 			.status(400);
 	}
 });
 
-const sendEmail = async (fromUserName, toUserEmail, mode, inviteId = -1) => {
+const sendEmail = async (fromUserName, toUserEmail, mode, userNameFor = null, inviteId = -1) => { ///varför -1?
 	try {
 		const transport = nodemailer.createTransport({
 			service: process.env.MAIL_SERVICE,
@@ -176,7 +188,7 @@ const sendEmail = async (fromUserName, toUserEmail, mode, inviteId = -1) => {
 			html:
 				mode === "newUser"
 					? createHtmlNewUser(toUserEmail, fromUserName, inviteId)
-					: createHtmlNotification(toUserEmail, fromUserName),
+					: createHtmlNotification(userNameFor, fromUserName),
 		};
 
 		const emailInfo = await transport.sendMail(mailOptions);
