@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 import { isEmail } from 'validator'; //npm install validator
 
 // Schema
@@ -27,4 +27,3 @@ export const userSchema = new mongoose.Schema({
     default: () => crypto.randomBytes(128).toString('hex'),
   },
 });
-

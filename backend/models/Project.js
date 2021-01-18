@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 export const projectSchema = new mongoose.Schema({
   projectName: {
@@ -12,7 +12,7 @@ export const projectSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: () => new Date()
+    default: () => new Date(),
   },
   updatedAt: {
     type: Date,
@@ -22,11 +22,15 @@ export const projectSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
-  posts: [{
-    //koppla mot post model
-  }],
-  invitedUsers: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  }],
+  posts: [
+    {
+      //koppla mot post model
+    },
+  ],
+  invitedUsers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
 });
