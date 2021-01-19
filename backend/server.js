@@ -111,7 +111,6 @@ const listEndpoints = require('express-list-endpoints');
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  //res.send("Hello world");
   res.send(listEndpoints(app));
 });
 
@@ -160,6 +159,23 @@ app.post('/sessions', async (req, res) => {
       message: USER_NOT_FOUND,
       errors: { message: err.message, error: err },
     });
+  }
+});
+
+//POST - logout user
+app.post('/users/logout', authenticateUser);
+app.post('/users/logout', async (req, res) => {
+  try {
+    req.user.accessToken = null;
+    await req.user.save();
+    res.status(200).json({ loggedOut: true });
+  } catch (err) {
+    res
+      .status(400)
+      .json({
+        error: LOGOUT_FAILED,
+        errors: { message: err.message, error: err },
+      });
   }
 });
 
