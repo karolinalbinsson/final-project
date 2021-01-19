@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import Dashboard from '../components/Dashboard';
+import DashboardThumb from '../components/DashboardThumb';
 import NotSignedIn from '../components/NotSignedIn';
 import Nav from '../components/Nav';
 import Footer from '../components/Footer';
@@ -17,7 +17,7 @@ const HomePage = () => {
   return (
     <>
       <Nav />
-      {!accessToken ? <NotSignedIn /> : <Dashboard />}
+      {!accessToken ? <NotSignedIn /> : <DashboardThumb />}
       <Footer />
     </>
   );

@@ -9,6 +9,9 @@ const initialState = {
     accessToken: null,
     isLogIn: true,
   },
+  project: {
+    createdProjects: [],
+  },
 };
 
 export const user = createSlice({
@@ -36,6 +39,9 @@ export const user = createSlice({
     },
     toggleForm: (store, action) => {
       store.login.isLogIn = action.payload;
+    },
+    setCreatedProjects: (store, action) => {
+      store.project.createdProjects = action.payload;
     },
   },
 });
@@ -129,5 +135,38 @@ export const logout = () => {
     dispatch(user.actions.setErrorMessage({ errorMessage: '' }));
     dispatch(user.actions.setAccessToken({ accessToken: null }));
     localStorage.clear();
+  };
+};
+
+//GET one users own created / invited to projects
+// RETURNS INFO ON ONE USERS GRIDS
+export const usersGrids = () => {
+  return (dispatch, getState) => {
+    const accessToken = getState().user.login.accessToken;
+    const userId = getState().user.login.userId;
+
+    fetch(`http://localhost8080/projects/${userId}`, {
+      method: 'GET',
+      headers: { Authorization: accessToken },
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error('Could not get projects.');
+      })
+      .then(json => {
+        dispatch(
+          user.actions.setCreatedProjects({
+            createdProjects: json,
+          })
+        );
+        console.log(json);
+      })
+      .catch(err => {
+        dispatch(
+          user.actions.setErrorMessage({ errorMessage: err.toString() })
+        );
+      });
   };
 };

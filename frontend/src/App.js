@@ -6,10 +6,11 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { user } from './reducers/user';
 import { ui } from './reducers/ui';
 import HomePage from './pages/HomePage';
-import Dashboard from './components/Dashboard';
+import DashboardThumb from './components/DashboardThumb';
 import FormPage from './pages/FormPage';
 import LogInForm from './components/LogInForm';
 import SignUpForm from './components/SignUpForm';
+import DashboardPage from 'pages/DashboardPage';
 
 const reducer = combineReducers({ user: user.reducer, ui: ui.reducer });
 const store = configureStore({ reducer });
@@ -19,18 +20,27 @@ export const App = () => {
     <BrowserRouter>
       <Provider store={store}>
         <Switch>
-          <Route exact path="/">
+          {/* <Route exact path="/">
             <HomePage />
-          </Route>
-          <Route exact path="/loginForm">
+          </Route> */}
+          <Route exact path="/">
             <FormPage />
-          </Route>
-          <Route exact path="/login">
-            <LogInForm />
           </Route>
           <Route exact path="/signUp">
             <SignUpForm />
           </Route>
+          <Route exact path="/project/:id">
+            <DashboardPage />
+          </Route>
+          {/* <Route exact path="/loginForm">
+            <FormPage />
+          </Route> */}
+          {/* <Route exact path="/login">
+            <LogInForm />
+          </Route> */}
+          {/* <Route exact path="/signUp">
+            <SignUpForm />
+          </Route> */}
 
           {/* <Route exact path="/error">
 					<Error />

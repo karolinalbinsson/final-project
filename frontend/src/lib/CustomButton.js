@@ -5,7 +5,7 @@ const CustomButton = ({
   button,
   onClick,
   disabled,
-  value,
+  // value,
   text,
   color,
   variant,
@@ -20,7 +20,7 @@ const CustomButton = ({
       type={button}
       onClick={onClick}
       disabled={disabled}
-      value={value}
+      // value={value}
       className={className}
     >
       {text}
