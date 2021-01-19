@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 
 import Dashboard from '../components/Dashboard';
 import NotSignedIn from '../components/NotSignedIn';
+import Nav from '../components/Nav';
+import Footer from '../components/Footer';
 
 //navbar
 //importera olika kompentener bereoend på om inloggad eller ej
@@ -12,6 +14,12 @@ import NotSignedIn from '../components/NotSignedIn';
 const HomePage = () => {
   const accessToken = useSelector(store => store.user.login.accessToken);
   console.log(accessToken);
-  return <>{!accessToken ? <NotSignedIn /> : <Dashboard />}</>;
+  return (
+    <>
+      <Nav />
+      {!accessToken ? <NotSignedIn /> : <Dashboard />}
+      <Footer />
+    </>
+  );
 };
 export default HomePage;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { signUp } from 'reducers/user';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Button from '../lib/Button';
+import CustomButton from '../lib/CustomButton';
 import { user } from '../reducers/user';
 
 //import '../styles/style.css';
@@ -69,7 +69,7 @@ const SignUpForm = () => {
         </label>
       </div>
       <div className="form-buttons">
-        <Button
+        <CustomButton
           className={
             !name || !email || password.length < 5
               ? 'form-button-disabled'

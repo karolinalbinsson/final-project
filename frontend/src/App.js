@@ -8,6 +8,8 @@ import { ui } from './reducers/ui';
 import HomePage from './pages/HomePage';
 import Dashboard from './components/Dashboard';
 import FormPage from './pages/FormPage';
+import LogInForm from './components/LogInForm';
+import SignUpForm from './components/SignUpForm';
 
 const reducer = combineReducers({ user: user.reducer, ui: ui.reducer });
 const store = configureStore({ reducer });
@@ -20,8 +22,14 @@ export const App = () => {
           <Route exact path="/">
             <HomePage />
           </Route>
-          <Route exact path="/login">
+          <Route exact path="/loginForm">
             <FormPage />
+          </Route>
+          <Route exact path="/login">
+            <LogInForm />
+          </Route>
+          <Route exact path="/signUp">
+            <SignUpForm />
           </Route>
 
           {/* <Route exact path="/error">

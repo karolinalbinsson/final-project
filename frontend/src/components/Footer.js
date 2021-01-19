@@ -6,7 +6,7 @@ import React from 'react';
  *
  */
 
-const Nav = () => {
-  return <p>Nav</p>;
+const Footer = () => {
+  return <p>Footer</p>;
 };
-export default Nav;
+export default Footer;
