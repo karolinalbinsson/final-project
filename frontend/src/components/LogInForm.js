@@ -22,21 +22,22 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+
 import { login } from '../reducers/user';
 import { user } from '../reducers/user';
+import CustomButton from '../lib/CustomButton';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+// function Copyright() {
+//   return (
+//     <Typography variant="body2" color="textSecondary" align="center">
+//       {'Copyright © '}
+//       <Link color="inherit" href="https://material-ui.com/">
+//         Your Website
+//       </Link>{' '}
+//       {new Date().getFullYear()}
+//     </Typography>
+//   );
+// }
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -46,21 +47,23 @@ const useStyles = makeStyles(theme => ({
     backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
-      theme.palette.type === 'light'
+      theme.palette.type === 'dark'
         ? theme.palette.grey[50]
         : theme.palette.grey[900],
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
+  // container: {
+  //   backgroundColor:
+  //     theme.palette.type === 'dark'
+  //       ? theme.palette.grey[50]
+  //       : theme.palette.grey[900],
+  // },
   paper: {
     margin: theme.spacing(8, 4),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-  },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: '100%', // Fix IE 11 issue.
@@ -71,7 +74,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignInSide() {
+const LogInForm = () => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -97,12 +100,21 @@ export default function SignInSide() {
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+      <Grid
+        item
+        xs={12}
+        sm={8}
+        md={5}
+        component={Paper}
+        elevation={6}
+        square
+        //className={classes.container}
+      >
         <div className={classes.paper}>
           <Typography component="h1" variant="h5">
-            Sign in
+            Log in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} noValidate onSubmit={handleSubmit}>
             <TextField
               value={email}
               onChange={event => setEmail(event.target.value)}
@@ -116,8 +128,34 @@ export default function SignInSide() {
               autoComplete="email"
               autoFocus
             />
+            <FormControl fullWidth variant="outlined">
+              <InputLabel htmlFor="outlined-adornment-password">
+                Password
+              </InputLabel>
+              <OutlinedInput
+                required={true}
+                id="outlined-adornment-password"
+                type={showPassword ? 'text' : 'password'} //changed when icon is clicked
+                value={password}
+                fullWidth={true}
+                onChange={event => setPassword(event.target.value)}
+                inputProps={minimumPasswordLength}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                    >
+                      {/* toggles */}
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+                labelWidth={70}
+              />
+            </FormControl>
 
-            <TextField
+            {/* <TextField
               value={password}
               onChange={event => setPassword(event.target.value)}
               variant="outlined"
@@ -129,21 +167,33 @@ export default function SignInSide() {
               type="password"
               id="password"
               autoComplete="current-password"
-            />
-            <FormControlLabel
+            /> */}
+            {/* <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            />
+            /> */}
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={handleSubmit}
+              disabled={!email || password.length < 5}
             >
               Sign In
             </Button>
+
+            <CustomButton
+              variant="contained"
+              color="primary"
+              size="large"
+              type="submit"
+              disabled={!email || password.length < 5}
+              text="Login"
+              onClick={handleSubmit}
+              className={classes.form}
+            />
+
             <Grid container>
               <Grid item xs>
                 <Link href="#" variant="body2">
@@ -156,15 +206,16 @@ export default function SignInSide() {
                 </Link>
               </Grid>
             </Grid>
-            <Box mt={5}>
+            {/* <Box mt={5}>
               <Copyright />
-            </Box>
+            </Box> */}
           </form>
         </div>
       </Grid>
     </Grid>
   );
-}
+};
+export default LogInForm;
 
 // import React, { useState } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';

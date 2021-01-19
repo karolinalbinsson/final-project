@@ -10,6 +10,7 @@ const CustomButton = ({
   color,
   variant,
   size,
+  className,
 }) => {
   return (
     <Button
@@ -20,6 +21,7 @@ const CustomButton = ({
       onClick={onClick}
       disabled={disabled}
       value={value}
+      className={className}
     >
       {text}
     </Button>
