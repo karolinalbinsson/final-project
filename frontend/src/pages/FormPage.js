@@ -7,7 +7,6 @@ import { user } from '../reducers/user';
 
 const FormPage = () => {
   const isLogIn = useSelector(store => store.user.login.isLogIn);
-  console.log(isLogIn);
 
   return <>{isLogIn ? <LogInForm /> : <SignUpForm />}</>;
 };

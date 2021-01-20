@@ -29,7 +29,7 @@ export const App = () => {
           <Route exact path="/signUp">
             <SignUpForm />
           </Route>
-          <Route exact path="/project/:id">
+          <Route exact path="/dashboard/:userId">
             <DashboardPage />
           </Route>
           {/* <Route exact path="/loginForm">

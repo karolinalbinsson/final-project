@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 
 import DashboardThumb from '../components/DashboardThumb';
 import NotSignedIn from '../components/NotSignedIn';
-import Nav from '../components/Nav';
+import Nav from '../lib/Nav';
 import Footer from '../components/Footer';
 
 //navbar
