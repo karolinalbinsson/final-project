@@ -15,6 +15,19 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
+//dialog
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+//Edit project menu
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+
 const useStyles = makeStyles(theme =>
   createStyles({
     root: {
@@ -47,10 +60,22 @@ const useStyles = makeStyles(theme =>
 
 const ProjectThumb = ({ projectTitle, createdAt, description }) => {
   const [expanded, setExpanded] = useState(false);
+  const [open, setOpen] = useState(false); //sharebutton
+  const [anchorEl, setAnchorEl] = useState(false); //Prickarna högst upp till höger
+
+  console.log('edit project', anchorEl);
   const classes = useStyles();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const toggleShareButton = () => {
+    setOpen(!open);
+  };
+
+  const toggleEditButton = () => {
+    setAnchorEl(!anchorEl);
   };
 
   return (
@@ -61,7 +86,18 @@ const ProjectThumb = ({ projectTitle, createdAt, description }) => {
             <CardHeader
               action={
                 <IconButton aria-label="settings">
-                  <MoreVertIcon />
+                  <MoreVertIcon onClick={toggleEditButton} />
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={toggleEditButton}
+                  >
+                    <MenuItem onClick={toggleEditButton}>Edit</MenuItem>
+                    <MenuItem onClick={toggleEditButton}>Invite</MenuItem>
+                    <MenuItem onClick={toggleEditButton}>Delete</MenuItem>
+                  </Menu>
                 </IconButton>
               }
               title={projectTitle}
@@ -79,7 +115,36 @@ const ProjectThumb = ({ projectTitle, createdAt, description }) => {
             </CardContent>
             <CardActions disableSpacing>
               <IconButton aria-label="share">
-                <ShareIcon />
+                <ShareIcon onClick={toggleShareButton} />
+                <Dialog
+                  open={open}
+                  onClose={toggleShareButton}
+                  aria-labelledby="form-dialog-title"
+                >
+                  <DialogTitle id="form-dialog-title">Invite</DialogTitle>
+                  <DialogContent>
+                    <DialogContentText>
+                      To invite friends to collaborate on this project, please
+                      enter their email address here.
+                    </DialogContentText>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      label="Email Address"
+                      type="email"
+                      fullWidth
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={toggleShareButton} color="primary">
+                      Cancel
+                    </Button>
+                    <Button onClick={toggleShareButton} color="primary">
+                      Invite
+                    </Button>
+                  </DialogActions>
+                </Dialog>
               </IconButton>
               <IconButton
                 className={clsx(classes.expand, {
