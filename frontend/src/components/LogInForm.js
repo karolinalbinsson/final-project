@@ -173,8 +173,7 @@ const LogInForm = () => {
             >
               Sign In
             </Button>
-
-            <CustomButton
+            {/* <CustomButton
               button="submit"
               variant="contained"
               color="primary"
@@ -183,7 +182,7 @@ const LogInForm = () => {
               text="Login"
               onClick={handleSubmit}
               className={classes.form}
-            />
+            /> */}
 
             {errorMessage && <p>{errorMessage}</p>}
             <Grid container>
