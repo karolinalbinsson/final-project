@@ -1,5 +1,4 @@
 //QUESTIONS:
-//Store image in AWS or how? (free versions?)
 //Hur namnger vid route för project/:id
 //status code if invite already has been send to user 409 just nu
 
