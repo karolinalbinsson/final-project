@@ -1,36 +1,51 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 export const projectSchema = new mongoose.Schema({
-  projectName: {
-    type: String,
-    required: true,
-  },
-  projectDescription: {
-    type: String,
-    required: true,
-    maxlength: 240,
-  },
-  createdAt: {
-    type: Date,
-    default: () => new Date(),
-  },
-  updatedAt: {
-    type: Date,
-    default: () => new Date(),
-  },
-  creator: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  },
-  posts: [
-    {
-      //koppla mot post model
-    },
-  ],
-  invitedUsers: [
+	projectName: {
+		type: String,
+		required: true,
+	},
+	projectDescription: {
+		type: String,
+		required: true,
+		maxlength: 240,
+	},
+	createdAt: {
+		type: Date,
+		default: () => new Date(),
+	},
+	updatedAt: {
+		type: Date,
+		default: () => new Date(),
+	},
+	creator: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "User",
+	},
+	posts: [
+		{
+			//koppla mot post model
+		},
+	],
+	invitedUsersEmail: [
+		{
+			type: String,
+		},
+		{ toJSON: { virtuals: true } },
+		{
+			getters: true,
+		},
+	],
+	/* invitedUsers: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
     },
-  ],
+  ],*/
+});
+projectSchema.virtual("usersInvited", {
+	ref: "User",
+	localField: "invitedUsersEmail",
+	foreignField: "email",
+	justOne: false,
 });
