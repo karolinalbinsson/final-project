@@ -11,6 +11,7 @@ const DashboardPage = () => {
   //const { userId } = useParams();
   const userId = useSelector(store => store.user.login.userId);
   const projects = useSelector(store => store.user.project.createdProjects);
+  const errorMessage = useSelector(store => store.user.login.errorMessage);
   console.log('dashboardPage', userId);
   const dispatch = useDispatch();
 
@@ -31,6 +32,7 @@ const DashboardPage = () => {
           description={project.projectDescription}
         />
       ))}
+      {errorMessage && <p>{errorMessage}</p>}
       {/* <section>
         {projects.map(project => (
           <p>{project.projectName}</p>

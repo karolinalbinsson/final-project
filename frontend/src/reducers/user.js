@@ -120,7 +120,9 @@ export const signUp = (name, email, password) => {
         );
         dispatch(user.actions.setUserId({ userId: json.userId }));
         dispatch(user.actions.setName({ name: json.name }));
+        // can this be done in another way?
         dispatch(user.actions.setErrorMessage({ errorMessage: '' }));
+        browserHistory.push(`/dashboard/${json.userId}`);
       })
       .catch(err => {
         dispatch(
@@ -163,7 +165,7 @@ export const getUserProject = () => {
     const accessToken = getStore().user.login.accessToken;
     console.log('thunken', accessToken);
     const userId = getStore().user.login.userId;
-    console.log('thunken userId', userId);
+    console.log('thunken', { userId });
 
     fetch(`http://localhost:8080/projects/${userId}`, {
       method: 'GET',
