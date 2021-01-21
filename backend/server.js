@@ -30,6 +30,7 @@ import {
 	createHtmlInvite,
 	createHtmlNotification,
 } from "./email-templates/emailTemplates";
+import { isBuffer } from "util";
 
 const nodemailer = require("nodemailer");
 dotenv.config();
@@ -43,8 +44,7 @@ const ACCESS_DENIED = "Access denied";
 const USER_ALREADY_INVITED = "User already invited";
 const INVITE_REPLY_FAILED = "Could not reply on invite";
 
-const mongoUrl =
-	process.env.MONGO_URL || "mongodb://localhost/project-new-invites";
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-planner";
 mongoose.connect(mongoUrl, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
@@ -130,10 +130,17 @@ app.post("/users", async (req, res) => {
 			email: user.email,
 		});
 	} catch (err) {
-		res.status(400).json({
-			message: POST_FAILED,
-			errors: { message: err.message, error: err },
-		});
+		if (err.code === 11000) {
+			res.status(409).json({
+				message: "USER ALREADY EXISTS",
+				errors: { message: err.message, error: err },
+			});
+		} else {
+			res.status(400).json({
+				message: POST_FAILED,
+				errors: { message: err.message, error: err },
+			});
+		}
 	}
 });
 
@@ -215,7 +222,7 @@ app.get("/projects/:userId", async (req, res) => {
 
 		console.log(emailToFind[0].email);
 		const createdProjects = await Project.find({
-			$or: [{ _id: userId }, { invitedUsersEmail: emailToFind[0].email }],
+			$or: [{ creator: userId }, { invitedUsersEmail: emailToFind[0].email }],
 		})
 			.lean()
 			.populate("creator", "name")
@@ -235,7 +242,7 @@ app.get("/projects/:userId", async (req, res) => {
 //Endpoint for sending an invite-email to a user.
 app.post("/inviteUser", authenticateUser);
 /*Test new invite user start*/
-app.post("/inviteUserNew", async (req, res) => {
+app.post("/inviteUser", async (req, res) => {
 	try {
 		const { fromUserId, toUserEmail, projectId } = req.body;
 
