@@ -128,6 +128,7 @@ app.post("/users", async (req, res) => {
 			accessToken: user.accessToken,
 			name: user.name,
 			email: user.email,
+			lastLogin: user.lastLoginDate,
 		});
 	} catch (err) {
 		if (err.code === 11000) {
@@ -174,6 +175,7 @@ app.delete("/users/:userId/", async (req, res) => {
 app.post("/sessions", async (req, res) => {
 	try {
 		const { email, password } = req.body;
+		const updateDate = new Date();
 		const user = await User.findOne({ email });
 		if (user && bcrypt.compareSync(password, user.password)) {
 			user.accessToken = crypto.randomBytes(128).toString("hex");
@@ -183,6 +185,7 @@ app.post("/sessions", async (req, res) => {
 				userId: updatedUser._id,
 				accessToken: updatedUser.accessToken,
 				name: updatedUser.name,
+				lastLogin: updateDate,
 			});
 		} else {
 			throw USER_NOT_FOUND;
