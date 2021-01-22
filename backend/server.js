@@ -241,7 +241,7 @@ app.get("/projects/:userId", async (req, res) => {
 	}
 });
 
-//Hämta ett projekt
+//Get one project
 app.get("/projects/:projectId/project", authenticateUser);
 app.get("/projects/:projectId/project", async (req, res) => {
 	try {
@@ -258,6 +258,27 @@ app.get("/projects/:projectId/project", async (req, res) => {
 		});
 	}
 });
+
+//remove a project
+app.delete("/projects/:projectId/project", authenticateUser);
+app.delete("/projects/:projectId/project", async (req, res) => {
+	try {
+		const projectId = req.params.projectId;
+		const project = await Project.deleteOne({
+			_id: projectId,
+		});
+		console.log(project);
+		if (project.deletedCount > 0 && project.ok === 1) {
+			res.status(200).json(project);
+		} else throw "Project not found";
+	} catch (err) {
+		res.status(404).json({
+			error: "PROJECT NOT FOUND",
+			errors: { message: err.message, error: err },
+		});
+	}
+});
+
 //Endpoint for sending an invite-email to a user.
 app.post("/inviteUser", authenticateUser);
 /*Test new invite user start*/
