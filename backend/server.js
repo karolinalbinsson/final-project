@@ -264,13 +264,27 @@ app.delete("/projects/:projectId/project", authenticateUser);
 app.delete("/projects/:projectId/project", async (req, res) => {
 	try {
 		const projectId = req.params.projectId;
-		const project = await Project.deleteOne({
+		const { userId } = req.body;
+
+		const project = await Project.findOne({
 			_id: projectId,
 		});
-		console.log(project);
-		if (project.deletedCount > 0 && project.ok === 1) {
-			res.status(200).json(project);
-		} else throw "Project not found";
+
+		if (JSON.stringify(project.creator).replace(/^"(.*)"$/, "$1") === userId) {
+			const deletedProject = await Project.deleteOne({
+				_id: projectId,
+				creator: userId,
+			});
+
+			if (deletedProject.deletedCount > 0 && deletedProject.ok === 1) {
+				res.status(200).json(deletedProject);
+			} else throw "Project not found";
+		} else {
+			res.status(405).json({
+				error: "NOT ALLOWED",
+				errors: { message: "Only the creator can delete a project" },
+			});
+		}
 	} catch (err) {
 		res.status(404).json({
 			error: "PROJECT NOT FOUND",
