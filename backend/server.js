@@ -42,6 +42,7 @@ const LOGOUT_FAILED = "Could not logout";
 const ACCESS_DENIED = "Access denied";
 const USER_ALREADY_INVITED = "User already invited";
 const INVITE_REPLY_FAILED = "Could not reply on invite";
+const NOT_ALLOWED = "Not allowed";
 
 const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/project-planner";
 mongoose.connect(mongoUrl, {
@@ -140,6 +141,32 @@ app.post("/users", async (req, res) => {
 				errors: { message: err.message, error: err },
 			});
 		}
+	}
+});
+
+//Delete user
+
+app.delete("/users/:userId/", authenticateUser);
+app.delete("/users/:userId/", async (req, res) => {
+	try {
+		const userId = req.params.userId;
+		//To check if the authorized user is the same as the user-Id in the URL.
+		//User can only delete themselves.
+		if (userId != req.user._id) {
+			throw NOT_ALLOWED;
+		}
+		const deletedUser = await User.deleteOne({
+			_id: userId,
+		});
+
+		if (deletedUser.deletedCount > 0 && deletedUser.ok === 1) {
+			res.status(200).json(deletedUser);
+		} else throw USER_NOT_FOUND;
+	} catch (err) {
+		res.status(404).json({
+			error: USER_NOT_FOUND,
+			errors: { message: err.message, error: err },
+		});
 	}
 });
 
@@ -259,7 +286,7 @@ app.get("/projects/:projectId/project", async (req, res) => {
 	}
 });
 
-//remove a project
+//delete a project
 app.delete("/projects/:projectId/project", authenticateUser);
 app.delete("/projects/:projectId/project", async (req, res) => {
 	try {
@@ -295,7 +322,6 @@ app.delete("/projects/:projectId/project", async (req, res) => {
 
 //Endpoint for sending an invite-email to a user.
 app.post("/inviteUser", authenticateUser);
-/*Test new invite user start*/
 app.post("/inviteUser", async (req, res) => {
 	try {
 		const { fromUserId, toUserEmail, projectId } = req.body;
