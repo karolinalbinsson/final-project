@@ -24,12 +24,13 @@ import crypto from "crypto";
 import { userSchema } from "./models/User";
 import { projectSchema } from "./models/Project";
 import { inviteSchema } from "./models/Invite";
+import { postSchema } from "./models/Post";
 
 import {
 	createHtmlInvite,
 	createHtmlNotification,
 } from "./email-templates/emailTemplates";
-import { isBuffer } from "util";
+//import { isBuffer } from "util";
 
 const nodemailer = require("nodemailer");
 dotenv.config();
@@ -49,6 +50,7 @@ mongoose.connect(mongoUrl, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useCreateIndex: true,
+	useFindAndModify: false,
 });
 mongoose.Promise = Promise;
 
@@ -106,6 +108,7 @@ userSchema.pre("save", async function (next) {
 const User = mongoose.model("User", userSchema);
 const Project = mongoose.model("Project", projectSchema);
 const Invite = mongoose.model("Invite", inviteSchema);
+const Post = mongoose.model("Post", postSchema);
 
 const listEndpoints = require("express-list-endpoints");
 
@@ -242,25 +245,33 @@ app.post("/projects", async (req, res) => {
 
 //get all created projects on my dashboard
 //eventuellt ändra till /users/:userId/projects
-app.get("/projects/:userId", authenticateUser);
-app.get("/projects/:userId", async (req, res) => {
+//Vi skulle kunna ta bort userId i urlen och göra samma som på de andra, att vi hämtar
+//userid från req.objektet på rad 255.
+app.get("/projects/", authenticateUser);
+app.get("/projects/", async (req, res) => {
 	try {
-		const userId = req.params.userId;
-		console.log(userId);
-		if (userId != req.user._id) {
-			throw ACCESS_DENIED;
-		}
+		//22/1 ändrat så att userId plockas från AUTH istället för urlen. snyggare tycker jag?
+		//const userId = req.params.userId;
+		//console.log(userId);
+		console.log(typeof req.user._id);
+		//if (userId != req.user._id) {
+		//throw ACCESS_DENIED;
+		//}
 		//Här har jag lagt till en populate för att hämta registrerade users som matchar på e-post(invitedusers -> email i user).
 		//Om det ligger en e-post i inbjudningar men som inte är registrerad ännu så syns den inte förrän användaren registrerat sig.
-		const emailToFind = await User.find({ _id: userId }).lean().select({
+		const emailToFind = await User.find({ _id: req.user._id }).lean().select({
 			email: 1,
 			_id: 0,
 		});
 
 		console.log(emailToFind[0].email);
 		const createdProjects = await Project.find({
-			$or: [{ creator: userId }, { invitedUsersEmail: emailToFind[0].email }],
+			$or: [
+				{ creator: req.user._id },
+				{ invitedUsersEmail: emailToFind[0].email },
+			],
 		})
+			.sort({ createdAt: -1 })
 			.lean()
 			.populate("creator", "name")
 			.populate({
@@ -279,13 +290,21 @@ app.get("/projects/:userId", async (req, res) => {
 });
 
 //Get one project
-app.get("/projects/:projectId/project", authenticateUser);
-app.get("/projects/:projectId/project", async (req, res) => {
+//Ändrat i URLEN så att vi bara behöver skicka in projekt-id och inte en till /projects
+app.get("/projects/:projectId", authenticateUser);
+app.get("/projects/:projectId", async (req, res) => {
 	try {
 		const projectId = req.params.projectId;
 		const project = await Project.find({
 			_id: projectId,
-		}).lean();
+		})
+			.lean()
+			.populate("creator", "name")
+			.populate({
+				path: "usersInvited",
+				select: "invitedUsersEmail _id name",
+			})
+			.populate({ path: "posts", options: { sort: { createdAt: -1 } } });
 		console.log(project);
 		res.status(200).json(project);
 	} catch (err) {
@@ -297,8 +316,8 @@ app.get("/projects/:projectId/project", async (req, res) => {
 });
 
 //delete a project
-app.delete("/projects/:projectId/project", authenticateUser);
-app.delete("/projects/:projectId/project", async (req, res) => {
+app.delete("/projects/:projectId", authenticateUser);
+app.delete("/projects/:projectId", async (req, res) => {
 	try {
 		const projectId = req.params.projectId;
 		const userId = req.user._id.toString();
@@ -331,6 +350,54 @@ app.delete("/projects/:projectId/project", async (req, res) => {
 	}
 });
 
+//Create a comment on a project
+app.post("/comments", async (req, res) => {
+	try {
+		const { postType, projectId, message, createdBy } = req.body;
+		const updateDate = new Date();
+		console.log(req.body);
+
+		const post = await new Post({
+			postType,
+			message,
+			createdBy,
+			projectId,
+		}).save();
+
+		if (post) {
+			const updatedProject = await Project.findOneAndUpdate(
+				{ _id: projectId },
+				{ $push: { posts: post._id }, $set: { updatedAt: updateDate } },
+				{ new: true }
+			);
+
+			res.status(200).json({
+				updatedProject,
+			});
+		}
+	} catch (err) {
+		res.status(400).json({
+			message: "could not save project",
+			errors: { message: err.message, error: err },
+		});
+	}
+});
+app.get("/comments/:projectId", async (req, res) => {
+	try {
+		const projectId = req.params.projectId;
+		const comments = await Post.find({
+			projectId: projectId,
+		})
+			.sort({ createdAt: -1 })
+			.lean();
+		res.status(200).json(comments);
+	} catch (err) {
+		res.status(404).json({
+			error: "COMMENTS NOT FOUND",
+			errors: { message: err.message, error: err },
+		});
+	}
+});
 //Endpoint for sending an invite-email to a user.
 app.post("/inviteUser", authenticateUser);
 app.post("/inviteUser", async (req, res) => {

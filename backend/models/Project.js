@@ -27,7 +27,8 @@ export const projectSchema = new mongoose.Schema({
 	},
 	posts: [
 		{
-			//koppla mot post model
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Post",
 		},
 	],
 	invitedUsersEmail: [

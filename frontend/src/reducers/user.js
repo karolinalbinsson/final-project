@@ -185,7 +185,7 @@ export const getUserProjects = () => {
 		const userId = getStore().user.login.userId;
 		//console.log('thunken', { userId });
 
-		fetch(`http://localhost:8080/projects/${userId}`, {
+		fetch(`http://localhost:8080/projects`, {
 			method: "GET",
 			headers: { Authorization: accessToken },
 		})
@@ -219,7 +219,7 @@ export const getSingleProject = (projectId) => {
 		const accessToken = getStore().user.login.accessToken;
 		//const projectId = getStore().user.project.userId;
 
-		fetch(`http://localhost:8080/projects/${projectId}/project`, {
+		fetch(`http://localhost:8080/projects/${projectId}`, {
 			method: "GET",
 			headers: { Authorization: accessToken },
 		})
@@ -252,7 +252,7 @@ export const deleteSingleProject = (projectId) => {
 		//const userId = getStore().user.login.userId;
 		//console.log('delete', userId);
 
-		fetch(`http://localhost:8080/projects/${projectId}/project/`, {
+		fetch(`http://localhost:8080/projects/${projectId}`, {
 			method: "DELETE",
 			//body: JSON.stringify({ userId: userId }),
 			headers: { Authorization: accessToken },
