@@ -165,6 +165,7 @@ export const logout = () => {
 };
 
 //GET one users own created / invited to projects
+//ÄNDRA TILL PLURAL
 export const getUserProject = () => {
   return (dispatch, getStore) => {
     const accessToken = getStore().user.login.accessToken;
@@ -188,7 +189,7 @@ export const getUserProject = () => {
             createdProjects: json,
           })
         );
-        console.log(json);
+        //console.log(json);
       })
       .catch(err => {
         dispatch(
@@ -239,9 +240,9 @@ export const deleteSingleProject = projectId => {
     const userId = getStore().user.login.userId;
     console.log('delete', userId);
 
-    fetch(`http://localhost:8080/projects/${projectId}/project`, {
+    fetch(`http://localhost:8080/projects/${projectId}/project/${userId}`, {
       method: 'DELETE',
-      body: JSON.stringify({ userId: userId }),
+      //body: JSON.stringify({ userId: userId }),
       headers: { Authorization: accessToken },
     })
       .then(res => {
@@ -251,6 +252,7 @@ export const deleteSingleProject = projectId => {
         throw new Error('Could not delete this project.');
       })
       .then(json => {
+        dispatch(getUserProject());
         console.log(json);
       })
       .catch(err => {
