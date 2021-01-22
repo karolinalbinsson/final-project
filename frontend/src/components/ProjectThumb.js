@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 //import Paper from '@material-ui/core/Paper';
@@ -28,6 +29,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 //Edit project menu
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import { deleteSingleProject } from 'reducers/user';
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -64,6 +66,7 @@ const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
   const [open, setOpen] = useState(false); //sharebutton
   const [anchorEl, setAnchorEl] = useState(null); //edit button högst upp
 
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   const handleClick = event => {
@@ -82,6 +85,11 @@ const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
     setOpen(!open);
   };
 
+  const handleDelete = projectId => {
+    dispatch(deleteSingleProject(projectId));
+    //console.log('delete project');
+  };
+
   // const toggleEditButton = () => {
   //   setAnchorEl(!anchorEl);
   // };
@@ -91,36 +99,39 @@ const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
       <Grid container spacing={3}>
         <Grid item xs={12} className={classes.card}>
           <Card>
-            <Link to={`/projects/${projectId}/project`}>
-              <CardHeader
-                action={
-                  <>
-                    <IconButton aria-label="settings" onClick={handleClick}>
-                      <MoreVertIcon />
-                    </IconButton>
+            <CardHeader
+              action={
+                <>
+                  <IconButton aria-label="settings" onClick={handleClick}>
+                    <MoreVertIcon />
+                  </IconButton>
 
-                    <Menu
-                      id="simple-menu"
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                    >
-                      <MenuItem onClick={handleClose}>Edit</MenuItem>
-                      <MenuItem>Invite</MenuItem>
-                      <MenuItem>Delete</MenuItem>
-                    </Menu>
-                  </>
-                }
-                title={projectTitle}
-                subheader={createdAt}
-              />
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    keepMounted
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem>Invite</MenuItem>
+                    <MenuItem onClick={event => handleDelete(projectId)}>
+                      Delete
+                    </MenuItem>
+                  </Menu>
+                </>
+              }
+              title={projectTitle}
+              subheader={createdAt}
+            />
+            <Link to={`/projects/${projectId}/project`}>
               <CardMedia
                 className={classes.media}
                 image="https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80"
                 title="My first project"
               />
             </Link>
+
             <CardContent>
               <Typography variant="body2" color="textSecondary" component="p">
                 {description}.

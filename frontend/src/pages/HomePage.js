@@ -9,9 +9,9 @@ import ProjectPage from './ProjectPage';
 
 const HomePage = () => {
   const accessToken = useSelector(store => store.user.login.accessToken);
-  console.log(accessToken);
-  const userId = useSelector(store => store.user.login.userId);
-  console.log(userId);
+  //console.log(accessToken);
+  //const userId = useSelector(store => store.user.login.userId);
+  //console.log(userId);
 
   return (
     <BrowserRouter>
