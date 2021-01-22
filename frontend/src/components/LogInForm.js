@@ -24,8 +24,6 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { login } from '../reducers/user';
-import { user } from '../reducers/user';
-import CustomButton from '../lib/CustomButton';
 
 // function Copyright() {
 //   return (

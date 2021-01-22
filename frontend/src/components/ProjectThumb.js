@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+import { Link } from 'react-router-dom';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
+//import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -58,7 +59,7 @@ const useStyles = makeStyles(theme =>
   })
 );
 
-const ProjectThumb = ({ projectTitle, createdAt, description }) => {
+const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
   const [expanded, setExpanded] = useState(false); //more info of project
   const [open, setOpen] = useState(false); //sharebutton
   const [anchorEl, setAnchorEl] = useState(null); //edit button högst upp
@@ -90,34 +91,36 @@ const ProjectThumb = ({ projectTitle, createdAt, description }) => {
       <Grid container spacing={3}>
         <Grid item xs={12} className={classes.card}>
           <Card>
-            <CardHeader
-              action={
-                <>
-                  <IconButton aria-label="settings" onClick={handleClick}>
-                    <MoreVertIcon />
-                  </IconButton>
+            <Link to={`/projects/${projectId}/project`}>
+              <CardHeader
+                action={
+                  <>
+                    <IconButton aria-label="settings" onClick={handleClick}>
+                      <MoreVertIcon />
+                    </IconButton>
 
-                  <Menu
-                    id="simple-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
-                    <MenuItem>Invite</MenuItem>
-                    <MenuItem>Delete</MenuItem>
-                  </Menu>
-                </>
-              }
-              title={projectTitle}
-              subheader={createdAt}
-            />
-            <CardMedia
-              className={classes.media}
-              image="https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80"
-              title="My first project"
-            />
+                    <Menu
+                      id="simple-menu"
+                      anchorEl={anchorEl}
+                      keepMounted
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem onClick={handleClose}>Edit</MenuItem>
+                      <MenuItem>Invite</MenuItem>
+                      <MenuItem>Delete</MenuItem>
+                    </Menu>
+                  </>
+                }
+                title={projectTitle}
+                subheader={createdAt}
+              />
+              <CardMedia
+                className={classes.media}
+                image="https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80"
+                title="My first project"
+              />
+            </Link>
             <CardContent>
               <Typography variant="body2" color="textSecondary" component="p">
                 {description}.
