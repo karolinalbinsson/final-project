@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import moment from 'moment';
 
 import Nav from '../lib/Nav';
@@ -19,7 +18,7 @@ const DashboardPage = () => {
     if (userId) {
       dispatch(getUserProject());
     }
-  }, [userId]);
+  }, [userId, dispatch]);
 
   return (
     <>
@@ -27,6 +26,7 @@ const DashboardPage = () => {
       {projects.map(project => (
         <ProjectThumb
           key={project._id}
+          projectId={project._id}
           projectTitle={project.projectName}
           createdAt={moment(project.createdAt).format('dddd, MMMM Do YYYY')}
           description={project.projectDescription}

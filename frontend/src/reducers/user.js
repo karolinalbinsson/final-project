@@ -16,6 +16,7 @@ const initialState = {
   },
   project: {
     createdProjects: [],
+    singleProject: null,
   },
 };
 
@@ -50,6 +51,10 @@ export const user = createSlice({
     setCreatedProjects: (store, action) => {
       const { createdProjects } = action.payload;
       store.project.createdProjects = createdProjects;
+    },
+    setSingleProject: (store, action) => {
+      const { singleProject } = action.payload;
+      store.project.singleProject = singleProject;
     },
   },
 });
@@ -181,6 +186,40 @@ export const getUserProject = () => {
         dispatch(
           user.actions.setCreatedProjects({
             createdProjects: json,
+          })
+        );
+        console.log(json);
+      })
+      .catch(err => {
+        dispatch(
+          user.actions.setErrorMessage({ errorMessage: err.toString() })
+        );
+      });
+  };
+};
+
+//GET one single project based on projectID
+
+//GET one users own created / invited to projects
+export const getSingleProject = projectId => {
+  return (dispatch, getStore) => {
+    const accessToken = getStore().user.login.accessToken;
+    //const projectId = getStore().user.project.userId;
+
+    fetch(`http://localhost:8080/projects/${projectId}/project`, {
+      method: 'GET',
+      headers: { Authorization: accessToken },
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error('Could not get single project.');
+      })
+      .then(json => {
+        dispatch(
+          user.actions.setSingleProject({
+            singleProject: json,
           })
         );
         console.log(json);
