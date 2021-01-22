@@ -213,10 +213,17 @@ app.post("/users/logout", async (req, res) => {
 //create project
 app.post("/projects", async (req, res) => {
 	try {
-		const { projectName, projectDescription, creator } = req.body;
+		const {
+			projectName,
+			projectShortDescription,
+			projectLongDescription,
+			creator,
+		} = req.body;
+		console.log(req.body);
 		const project = await new Project({
 			projectName,
-			projectDescription,
+			projectShortDescription,
+			projectLongDescription,
 			creator,
 		}).save();
 		res.status(200).json({
@@ -288,19 +295,20 @@ app.get("/projects/:projectId/project", async (req, res) => {
 
 //delete a project
 app.delete("/projects/:projectId/project", authenticateUser);
-app.delete("/projects/:projectId/project/:userId", async (req, res) => {
+app.delete("/projects/:projectId/project", async (req, res) => {
 	try {
 		const projectId = req.params.projectId;
-		const userId = req.params.userId;
-		console.log(userId);
+		const userId = req.user._id.toString();
+		console.log(req.user._id.toString());
 		const project = await Project.findOne({
 			_id: projectId,
 		});
-
-		if (JSON.stringify(project.creator).replace(/^"(.*)"$/, "$1") === userId) {
+		const projectCreator = project.creator.toString();
+		if (userId === projectCreator) {
+			console.log("inside delete if");
 			const deletedProject = await Project.deleteOne({
 				_id: projectId,
-				creator: userId,
+				creator: req.user._id,
 			});
 
 			if (deletedProject.deletedCount > 0 && deletedProject.ok === 1) {
@@ -308,7 +316,7 @@ app.delete("/projects/:projectId/project/:userId", async (req, res) => {
 			} else throw "Project not found";
 		} else {
 			res.status(405).json({
-				error: "NOT ALLOWED",
+				error: NOT_ALLOWED,
 				errors: { message: "Only the creator can delete a project" },
 			});
 		}

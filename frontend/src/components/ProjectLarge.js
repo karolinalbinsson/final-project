@@ -61,7 +61,13 @@ const useStyles = makeStyles((theme) =>
 	})
 );
 
-const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
+const ProjectLarge = ({
+	projectTitle,
+	createdAt,
+	description,
+	projectId,
+	longDescription,
+}) => {
 	const [expanded, setExpanded] = useState(false); //more info of project
 	const [open, setOpen] = useState(false); //sharebutton
 	const [anchorEl, setAnchorEl] = useState(null); //edit button högst upp
@@ -188,9 +194,7 @@ const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
 						<Collapse in={expanded} timeout="auto" unmountOnExit>
 							<CardContent>
 								<Typography paragraph>Detailed information:</Typography>
-								<Typography paragraph>
-									This is some more information of the project.
-								</Typography>
+								<Typography paragraph>{longDescription}</Typography>
 							</CardContent>
 						</Collapse>
 					</Card>
@@ -199,20 +203,4 @@ const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
 		</div>
 	);
 };
-export default ProjectThumb;
-
-// import React from 'react';
-
-// /**
-//  * infinitescroll
-//  */
-// const ProjectThumb = ({ projectTitle, createdAt, description }) => {
-//   return (
-//     <article>
-//       <h2>{projectTitle}</h2>
-//       <p>{createdAt}</p>
-//       <p>{description}</p>
-//     </article>
-//   );
-// };
-// export default ProjectThumb;
+export default ProjectLarge;

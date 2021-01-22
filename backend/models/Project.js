@@ -5,9 +5,12 @@ export const projectSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	projectDescription: {
+	projectShortDescription: {
 		type: String,
-		required: true,
+		maxlength: 100,
+	},
+	projectLongDescription: {
+		type: String,
 		maxlength: 240,
 	},
 	createdAt: {
