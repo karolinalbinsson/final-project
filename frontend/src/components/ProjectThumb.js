@@ -59,12 +59,19 @@ const useStyles = makeStyles(theme =>
 );
 
 const ProjectThumb = ({ projectTitle, createdAt, description }) => {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false); //more info of project
   const [open, setOpen] = useState(false); //sharebutton
-  const [anchorEl, setAnchorEl] = useState(false); //Prickarna högst upp till höger
+  const [anchorEl, setAnchorEl] = useState(null); //edit button högst upp
 
-  console.log('edit project', anchorEl);
   const classes = useStyles();
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -74,9 +81,9 @@ const ProjectThumb = ({ projectTitle, createdAt, description }) => {
     setOpen(!open);
   };
 
-  const toggleEditButton = () => {
-    setAnchorEl(!anchorEl);
-  };
+  // const toggleEditButton = () => {
+  //   setAnchorEl(!anchorEl);
+  // };
 
   return (
     <div className={classes.root}>
@@ -85,20 +92,23 @@ const ProjectThumb = ({ projectTitle, createdAt, description }) => {
           <Card>
             <CardHeader
               action={
-                <IconButton aria-label="settings">
-                  <MoreVertIcon onClick={toggleEditButton} />
+                <>
+                  <IconButton aria-label="settings" onClick={handleClick}>
+                    <MoreVertIcon />
+                  </IconButton>
+
                   <Menu
                     id="simple-menu"
                     anchorEl={anchorEl}
                     keepMounted
                     open={Boolean(anchorEl)}
-                    onClose={toggleEditButton}
+                    onClose={handleClose}
                   >
-                    <MenuItem onClick={toggleEditButton}>Edit</MenuItem>
-                    <MenuItem onClick={toggleEditButton}>Invite</MenuItem>
-                    <MenuItem onClick={toggleEditButton}>Delete</MenuItem>
+                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem>Invite</MenuItem>
+                    <MenuItem>Delete</MenuItem>
                   </Menu>
-                </IconButton>
+                </>
               }
               title={projectTitle}
               subheader={createdAt}
@@ -114,8 +124,8 @@ const ProjectThumb = ({ projectTitle, createdAt, description }) => {
               </Typography>
             </CardContent>
             <CardActions disableSpacing>
-              <IconButton aria-label="share">
-                <ShareIcon onClick={toggleShareButton} />
+              <IconButton aria-label="share" onClick={toggleShareButton}>
+                <ShareIcon />
                 <Dialog
                   open={open}
                   onClose={toggleShareButton}
@@ -137,10 +147,14 @@ const ProjectThumb = ({ projectTitle, createdAt, description }) => {
                     />
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={toggleShareButton} color="primary">
+                    <Button onClick={toggleShareButton} variant="outlined">
                       Cancel
                     </Button>
-                    <Button onClick={toggleShareButton} color="primary">
+                    <Button
+                      onClick={toggleShareButton}
+                      variant="contained"
+                      color="primary"
+                    >
                       Invite
                     </Button>
                   </DialogActions>

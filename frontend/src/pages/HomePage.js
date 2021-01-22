@@ -5,6 +5,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import LogInForm from '../components/LogInForm';
 import SignUpForm from '../components/SignUpForm';
 import DashboardPage from './DashboardPage';
+import ProjectPage from './ProjectPage';
 
 const HomePage = () => {
   const accessToken = useSelector(store => store.user.login.accessToken);
@@ -28,20 +29,9 @@ const HomePage = () => {
         <Route exact path="/dashboard/:userId">
           <DashboardPage />
         </Route>
-        {/* <Route exact path="/loginForm">
-            <FormPage />
-          </Route> */}
-        {/* <Route exact path="/login">
-            <LogInForm />
-          </Route> */}
-        {/* <Route exact path="/signUp">
-            <SignUpForm />
-          </Route> */}
-
-        {/* <Route exact path="/error">
-					<Error />
-				</Route>
-				<Redirect to="/error" /> */}
+        <Route exact path="/projects/:projectId/project">
+          <ProjectPage />
+        </Route>
       </Switch>
     </BrowserRouter>
   );
