@@ -8,11 +8,10 @@ export const browserHistory = createBrowserHistory();
 
 const initialState = {
 	login: {
-		name: "",
-		userId: 0,
-		errorMessage: "",
+		name: null,
+		userId: null,
+		errorMessage: null,
 		accessToken: null,
-		isLogIn: true,
 	},
 	project: {
 		createdProjects: [], //byt namn till projects (projekt som vi har)
@@ -46,9 +45,9 @@ export const user = createSlice({
 			console.log("reducer", accessToken);
 			localStorage.setItem("accessToken", accessToken);
 		},
-		toggleForm: (store, action) => {
-			store.login.isLogIn = action.payload;
-		},
+		// toggleForm: (store, action) => {
+		// 	store.login.isLogIn = action.payload;
+		// },
 		setCreatedProjects: (store, action) => {
 			const { createdProjects } = action.payload;
 			store.project.createdProjects = createdProjects;
@@ -60,6 +59,9 @@ export const user = createSlice({
 		setLastCreatedProjectId: (store, action) => {
 			const projectID = action.payload;
 			store.project.lastCreatedProjectId = projectID;
+		},
+		setInitialState: () => {
+			return initialState;
 		},
 
 		// createProject: (store, action) => {
@@ -168,10 +170,11 @@ export const logout = () => {
 					user.actions.setErrorMessage({ errorMessage: err.toString() })
 				);
 			});
-		dispatch(user.actions.setName({ name: "" }));
-		dispatch(user.actions.setUserId({ userId: 0 }));
-		dispatch(user.actions.setErrorMessage({ errorMessage: "" }));
-		dispatch(user.actions.setAccessToken({ accessToken: null }));
+		dispatch(user.actions.setInitialState);
+		// dispatch(user.actions.setName({ name: "" }));
+		// dispatch(user.actions.setUserId({ userId: 0 }));
+		// dispatch(user.actions.setErrorMessage({ errorMessage: "" }));
+		// dispatch(user.actions.setAccessToken({ accessToken: null }));
 		localStorage.clear();
 	};
 };
