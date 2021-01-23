@@ -21,6 +21,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { signUp } from 'reducers/user';
+import SnackBar from '../lib/SnackBar';
 
 // function Copyright() {
 //   return (
@@ -158,7 +159,8 @@ const SignUpForm = () => {
               />
             </Grid> */}
           </Grid>
-          {errorMessage && <p>{errorMessage}</p>}
+          {/* {errorMessage && <p>{errorMessage}</p>} */}
+          {errorMessage && <SnackBar severity="error" message={errorMessage} />}
 
           <Button
             type="submit"
