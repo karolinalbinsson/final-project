@@ -17,6 +17,7 @@ const initialState = {
     createdProjects: [], //byt namn till projects (projekt som vi har)
     singleProject: null,
     lastCreatedProjectId: null,
+    lastUpdatedProjectId: null,
     invitedUsers: 0,
     invitedUserEmail: null,
   },
@@ -47,12 +48,8 @@ export const user = createSlice({
     setAccessToken: (store, action) => {
       const { accessToken } = action.payload;
       store.login.accessToken = accessToken;
-      //console.log('reducer', accessToken);
       localStorage.setItem('accessToken', accessToken);
     },
-    // toggleForm: (store, action) => {
-    // 	store.login.isLogIn = action.payload;
-    // },
     setCreatedProjects: (store, action) => {
       const { createdProjects } = action.payload;
       store.project.createdProjects = createdProjects;
@@ -62,8 +59,12 @@ export const user = createSlice({
       store.project.singleProject = singleProject;
     },
     setLastCreatedProjectId: (store, action) => {
-      const projectID = action.payload;
-      store.project.lastCreatedProjectId = projectID;
+      const projectId = action.payload;
+      store.project.lastCreatedProjectId = projectId;
+    },
+    setLastUpdatedProjectId: (store, action) => {
+      const projectId = action.payload;
+      store.project.lastUpdatedProjectId = projectId;
     },
     setInitialState: () => {
       return initialState;
@@ -308,6 +309,45 @@ export const createNewProject = (
       })
       .then(json => {
         dispatch(user.actions.setLastCreatedProjectId(json.projectId));
+      })
+      .catch(err => {
+        dispatch(
+          user.actions.setErrorMessage({ errorMessage: err.toString() })
+        );
+      });
+  };
+};
+
+//Update singleProject
+export const updateProject = (
+  projectName,
+  projectShortDescription,
+  projectLongDescription,
+  projectId
+) => {
+  return (dispatch, getStore) => {
+    const accessToken = getStore().user.login.accessToken;
+
+    fetch(`http://localhost:8080/projects/${projectId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({
+        projectName,
+        projectShortDescription,
+        projectLongDescription,
+      }),
+      headers: {
+        Authorization: accessToken,
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(res => {
+        if (res.ok) {
+          return res.json();
+        }
+        throw new Error('Could not update project.');
+      })
+      .then(json => {
+        dispatch(user.actions.setLastUpdatedProjectId(json.projectId));
       })
       .catch(err => {
         dispatch(

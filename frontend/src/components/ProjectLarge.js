@@ -71,7 +71,6 @@ const ProjectLarge = ({
   creator,
   updatedAt,
 }) => {
-  console.log(creator, usersInvited);
   const [expanded, setExpanded] = useState(true); //more info of project
   const [open, setOpen] = useState(false); //sharebutton
   const [anchorEl, setAnchorEl] = useState(null); //edit button högst upp
@@ -118,7 +117,9 @@ const ProjectLarge = ({
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <Link to={`/editproject/${projectId}`}>
+                      <MenuItem>Edit</MenuItem>
+                    </Link>
                     <MenuItem>Invite</MenuItem>
                     <MenuItem onClick={event => handleDelete(projectId)}>
                       Delete

@@ -7,6 +7,7 @@ import SignUpForm from '../components/SignUpForm';
 import DashboardPage from './DashboardPage';
 import ProjectPage from './ProjectPage';
 import CreateProjectPage from './CreateProjectPage';
+import EditProjectPage from './EditProjectPage';
 
 const HomePage = () => {
   const accessToken = useSelector(store => store.user.login.accessToken);
@@ -35,6 +36,9 @@ const HomePage = () => {
         </Route>
         <Route exact path="/createproject/">
           <CreateProjectPage />
+        </Route>
+        <Route exact path="/editproject/:projectId">
+          <EditProjectPage />
         </Route>
       </Switch>
     </BrowserRouter>
