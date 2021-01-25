@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Drawer from '@material-ui/core/Drawer';
@@ -62,10 +62,10 @@ const Nav = () => {
   const classes = useStyles();
   const theme = useTheme();
   const dispatch = useDispatch();
-  const history = useHistory();
+  //const history = useHistory();
 
-  const accessToken = useSelector(store => store.user.login.accessToken);
-  console.log(accessToken);
+  //const accessToken = useSelector(store => store.user.login.accessToken);
+  //console.log(accessToken);
 
   const menuList = [
     {

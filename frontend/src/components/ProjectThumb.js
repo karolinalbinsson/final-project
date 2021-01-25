@@ -94,8 +94,8 @@ const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
   };
 
   const handleInvite = email => {
+    console.log(projectId);
     dispatch(inviteFriend(email, projectId));
-    //console.log('delete project');
   };
 
   return (

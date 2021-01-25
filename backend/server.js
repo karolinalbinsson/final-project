@@ -45,7 +45,8 @@ const USER_ALREADY_INVITED = 'User already invited';
 const INVITE_REPLY_FAILED = 'Could not reply on invite';
 const NOT_ALLOWED = 'Not allowed';
 
-const mongoUrl = process.env.MONGO_URL || 'mongodb://localhost/project-planner';
+const mongoUrl =
+  process.env.MONGO_URL || 'mongodb://localhost/project-planner1';
 mongoose.connect(mongoUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -205,12 +206,12 @@ app.post('/sessions', async (req, res) => {
 app.post('/users/logout', authenticateUser);
 app.post('/users/logout', async (req, res) => {
   try {
-    console.log('try');
+    //console.log('try');
     req.user.accessToken = null;
     await req.user.save();
     res.status(200).json({ loggedOut: true });
   } catch (err) {
-    console.log('catch');
+    //console.log('catch');
     res.status(400).json({
       error: LOGOUT_FAILED,
       errors: { message: err.message, error: err },
@@ -227,7 +228,7 @@ app.post('/projects', async (req, res) => {
       projectLongDescription,
       creator,
     } = req.body;
-    console.log(req.body);
+    //console.log(req.body);
     const project = await new Project({
       projectName,
       projectShortDescription,
@@ -255,7 +256,7 @@ app.get('/projects/', async (req, res) => {
     //22/1 ändrat så att userId plockas från AUTH istället för urlen. snyggare tycker jag?
     //const userId = req.params.userId;
     //console.log(userId);
-    console.log(typeof req.user._id);
+    //console.log(typeof req.user._id);
     //if (userId != req.user._id) {
     //throw ACCESS_DENIED;
     //}
@@ -266,7 +267,7 @@ app.get('/projects/', async (req, res) => {
       _id: 0,
     });
 
-    console.log(emailToFind[0].email);
+    //console.log(emailToFind[0].email);
     const createdProjects = await Project.find({
       $or: [
         { creator: req.user._id },
@@ -280,10 +281,10 @@ app.get('/projects/', async (req, res) => {
         path: 'usersInvited',
         select: 'invitedUsersEmail _id name',
       });
-    console.log(createdProjects);
+    console.log('created proejcts', createdProjects);
     res.status(200).json(createdProjects);
   } catch (err) {
-    console.log('catchen');
+    //console.log('catchen');
     res.status(403).json({
       error: ACCESS_DENIED,
       errors: { message: err.message, error: err },
@@ -307,7 +308,7 @@ app.get('/projects/:projectId', async (req, res) => {
         select: 'invitedUsersEmail _id name',
       })
       .populate({ path: 'posts', options: { sort: { createdAt: -1 } } });
-    console.log(project);
+    console.log('project', project);
     res.status(200).json(project);
   } catch (err) {
     res.status(404).json({
@@ -405,13 +406,14 @@ app.post('/inviteUser', authenticateUser);
 app.post('/inviteUser', async (req, res) => {
   try {
     const { fromUserId, toUserEmail, projectId } = req.body;
-
+    console.log({ fromUserId, toUserEmail, projectId });
     let mode = 'invite';
     let userFromName = null;
 
     //Check if the email is already added in the project
     const isAlreadyInvited = await Project.findOne({
       invitedUsersEmail: toUserEmail,
+      _id: projectId,
     });
 
     if (isAlreadyInvited) {

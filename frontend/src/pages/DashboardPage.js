@@ -1,24 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 
 import Nav from '../lib/Nav';
 import ProjectThumb from '../components/ProjectThumb';
 import { getUserProjects, user } from '../reducers/user';
-import SnackBar from '../lib/SnackBar';
+//import SnackBar from '../lib/SnackBar';
 
 const DashboardPage = () => {
   //const { userId } = useParams();
   const userId = useSelector(store => store.user.login.userId);
   const projects = useSelector(store => store.user.project.createdProjects);
-  const errorMessage = useSelector(store => store.user.login.errorMessage);
-  const invitedUserEmail = useSelector(
-    store => store.user.project.invitedUserEmail
-  );
+  //const errorMessage = useSelector(store => store.user.login.errorMessage);
+  // const invitedUserEmail = useSelector(
+  //   store => store.user.project.invitedUserEmail
+  // );
+
   const numberOfInvitedUsers = useSelector(
     store => store.user.project.invitedUsers
   );
   //console.log(numberOfInvitedUsers);
+  // const [openSnackBar, setOpenSnackBar] = useState(false);
+  // console.log({ openSnackBar });
 
   const dispatch = useDispatch();
 
@@ -28,23 +31,24 @@ const DashboardPage = () => {
     }
   }, [userId, dispatch]);
 
-  useEffect(() => {
-    console.log('reset last invitedUserEmail');
-    dispatch(user.actions.setLastInvitedUserEmail(null));
-  }, []);
-
   //to close snackbar when we rerender get all projects
   //första inbjudan visar snackbar sidan laddas om och snackbar försvinner.
   //Om jag bjuder in en till visas inte snackbar
   useEffect(() => {
-    if (numberOfInvitedUsers != 0) {
-      console.log('in use effect');
-      const timeout = setTimeout(() => {
-        dispatch(getUserProjects());
-      }, 2000);
-      return () => clearTimeout(timeout);
+    if (numberOfInvitedUsers !== 0) {
+      dispatch(getUserProjects());
     }
-  }, [numberOfInvitedUsers]);
+  }, [numberOfInvitedUsers, dispatch]);
+
+  useEffect(() => {
+    //console.log('i useeffect');
+    dispatch(user.actions.setLastCreatedProjectId(null));
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   console.log('reset last invitedUserEmail');
+  //   dispatch(user.actions.setLastInvitedUserEmail(null));
+  // }, [dispatch]);
 
   return (
     <>
@@ -58,13 +62,21 @@ const DashboardPage = () => {
           description={project.projectDescription}
         />
       ))}
-      {invitedUserEmail && (
-        <SnackBar
-          severity="success"
-          message={`Successfully invited: ${invitedUserEmail}`}
-        />
-      )}
-      {errorMessage && <SnackBar severity="error" message={errorMessage} />}
+      {/* {invitedUserEmail && ( */}
+      {/* <SnackBar
+        severity="success"
+        message={`Successfully invited: ${invitedUserEmail}`}
+        openIn={openSnackBar}
+      /> */}
+      {/* )} */}
+
+      {/* {errorMessage && ( */}
+      {/* <SnackBar
+        severity="error"
+        message={errorMessage}
+        openIn={!openSnackBar}
+      /> */}
+      {/* )} */}
     </>
   );
 };

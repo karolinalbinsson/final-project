@@ -8,10 +8,10 @@ export const browserHistory = createBrowserHistory();
 
 const initialState = {
   login: {
-    name: null,
-    userId: null,
+    name: localStorage.name || null,
+    userId: localStorage.userId || null,
     errorMessage: null,
-    accessToken: null,
+    accessToken: localStorage.accessToken || null,
   },
   project: {
     createdProjects: [], //byt namn till projects (projekt som vi har)
@@ -40,6 +40,9 @@ export const user = createSlice({
     setErrorMessage: (store, action) => {
       const { errorMessage } = action.payload;
       store.login.errorMessage = errorMessage;
+    },
+    resetErrorMessage: store => {
+      store.login.errorMessage = null;
     },
     setAccessToken: (store, action) => {
       const { accessToken } = action.payload;
@@ -94,8 +97,7 @@ export const login = (email, password) => {
         );
       })
       .then(json => {
-        //console.log(json);
-
+        dispatch(user.actions.resetErrorMessage());
         dispatch(
           user.actions.setAccessToken({
             accessToken: json.accessToken,
@@ -103,14 +105,8 @@ export const login = (email, password) => {
         );
         dispatch(user.actions.setUserId({ userId: json.userId }));
         dispatch(user.actions.setName({ name: json.name }));
-        //			browserHistory.push(`/dashboard/${json.userId}`);
         browserHistory.push(`/dashboard`);
-        //history.push(`/dashboard/${json.userId}`);
       })
-      // .then(json => {
-      //   browserHistory.push(`/dashboard/${json.userId}`);
-      //   console.log('hej hej');
-      // })
       .catch(err => {
         dispatch(
           user.actions.setErrorMessage({ errorMessage: err.toString() })
@@ -187,7 +183,7 @@ export const getUserProjects = () => {
   return (dispatch, getStore) => {
     const accessToken = getStore().user.login.accessToken;
     //console.log('thunken', accessToken);
-    const userId = getStore().user.login.userId;
+    //const userId = getStore().user.login.userId;
     //console.log('thunken', { userId });
 
     fetch(`http://localhost:8080/projects`, {
@@ -208,6 +204,7 @@ export const getUserProjects = () => {
         );
         //console.log(json);
       })
+
       .catch(err => {
         dispatch(
           user.actions.setErrorMessage({ errorMessage: err.toString() })

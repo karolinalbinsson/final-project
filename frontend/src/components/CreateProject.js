@@ -65,7 +65,7 @@ const CreateProject = () => {
   useEffect(() => {
     //console.log('i useeffect');
     dispatch(user.actions.setLastCreatedProjectId(null));
-  }, []);
+  }, [dispatch]);
 
   return (
     <Container component="main" maxWidth="xs">
@@ -137,7 +137,7 @@ const CreateProject = () => {
         </form>
       </div>
       {/*projectID && <Link to={`/project/${projectID}`}>View the project!</Link>*/}
-      {projectID && <Redirect to={`/project/${projectID}`} />}
+      {projectID && <Redirect to={`/dashboard`} />}
     </Container>
   );
 };

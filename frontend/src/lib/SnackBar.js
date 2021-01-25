@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import Button from '@material-ui/core/Button';
+//import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,17 +19,18 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const SnackBar = ({ severity, message }) => {
+const SnackBar = ({ severity, message, openIn }) => {
   const classes = useStyles();
 
   const invitedUserEmail = useSelector(
     store => store.user.project.invitedUserEmail
   );
+  console.log(invitedUserEmail);
+
   const errorMessage = useSelector(store => store.user.login.errorMessage);
 
-  const [open, setOpen] = useState(
-    invitedUserEmail || errorMessage ? true : false
-  );
+  const [open, setOpen] = useState(openIn);
+  console.log({ open });
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {

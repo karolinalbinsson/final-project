@@ -34,7 +34,7 @@ export const projectSchema = new mongoose.Schema({
   invitedUsersEmail: [
     {
       type: String,
-      unique: true,
+      //unique: true,
     },
     { toJSON: { virtuals: true } },
     {
