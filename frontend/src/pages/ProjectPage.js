@@ -3,17 +3,28 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
-import { getSingleProject } from '../reducers/user';
+import { user, getSingleProject } from '../reducers/user';
 import ProjectLarge from '../components/ProjectLarge';
 
 const ProjectPage = () => {
   const { projectId } = useParams();
   const dispatch = useDispatch();
   const project = useSelector(store => store.user.project.singleProject);
-  console.log(project);
+  //console.log(project);
+
+  const numberOfInvitedUsers = useSelector(
+    store => store.user.project.invitedUsers
+  );
+
+  useEffect(() => {
+    if (numberOfInvitedUsers !== 0) {
+      dispatch(getSingleProject(projectId));
+    }
+  }, [numberOfInvitedUsers, dispatch]);
 
   useEffect(() => {
     dispatch(getSingleProject(projectId));
+    //dispatch(user.actions.setLastDeletedProjectId(null));
   }, [projectId, dispatch]);
 
   return (

@@ -101,7 +101,7 @@ const ProjectThumb = ({
   };
 
   const handleInvite = email => {
-    console.log(projectId);
+    //console.log(projectId);
     dispatch(inviteFriend(email, projectId));
   };
 
@@ -133,7 +133,7 @@ const ProjectThumb = ({
                     <MenuItem onClick={() => handleEdit(projectId)}>
                       Edit
                     </MenuItem>
-                    <MenuItem>Invite</MenuItem>
+                    <MenuItem onClick={toggleShareButton}>Invite</MenuItem>
                     <MenuItem onClick={() => handleDelete(projectId)}>
                       Delete
                     </MenuItem>

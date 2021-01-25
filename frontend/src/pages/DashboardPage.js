@@ -46,6 +46,7 @@ const DashboardPage = () => {
     //console.log('i useeffect');
     dispatch(user.actions.setLastCreatedProjectId(null));
     dispatch(user.actions.setLastUpdatedProjectId(null));
+    dispatch(user.actions.setDeletedProjects(null));
   }, [dispatch]);
 
   // useEffect(() => {

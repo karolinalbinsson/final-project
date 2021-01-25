@@ -18,6 +18,7 @@ const initialState = {
     singleProject: null,
     lastCreatedProjectId: null,
     lastUpdatedProjectId: null,
+    deletedProjects: null,
     invitedUsers: 0,
     invitedUserEmail: null,
   },
@@ -65,6 +66,10 @@ export const user = createSlice({
     setLastUpdatedProjectId: (store, action) => {
       const projectId = action.payload;
       store.project.lastUpdatedProjectId = projectId;
+    },
+    setDeletedProjects: (store, action) => {
+      const deletedCount = action.payload;
+      store.project.deletedProjects = deletedCount;
     },
     setInitialState: () => {
       return initialState;
@@ -267,8 +272,9 @@ export const deleteSingleProject = projectId => {
         throw new Error('Could not delete this project.');
       })
       .then(json => {
+        console.log('thunken', json);
+        dispatch(user.actions.setDeletedProjects(json.deletedCount));
         dispatch(getUserProjects());
-        //console.log(json);
       })
       .catch(err => {
         dispatch(

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 //import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -29,7 +29,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 //Edit project menu
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { deleteSingleProject } from 'reducers/user';
+import { user, deleteSingleProject, inviteFriend } from 'reducers/user';
 
 const useStyles = makeStyles(theme =>
   createStyles({
@@ -74,6 +74,12 @@ const ProjectLarge = ({
   const [expanded, setExpanded] = useState(true); //more info of project
   const [open, setOpen] = useState(false); //sharebutton
   const [anchorEl, setAnchorEl] = useState(null); //edit button högst upp
+  const [email, setEmail] = useState(''); //invite button
+
+  const deletedProjectId = useSelector(
+    store => store.user.project.deletedProjects
+  );
+  console.log('project large last deleted', deletedProjectId);
 
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -88,6 +94,12 @@ const ProjectLarge = ({
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
+  };
+
+  const handleInvite = email => {
+    console.log({ email });
+    dispatch(inviteFriend(email, projectId));
+    setEmail('');
   };
 
   const toggleShareButton = () => {
@@ -120,8 +132,8 @@ const ProjectLarge = ({
                     <Link to={`/editproject/${projectId}`}>
                       <MenuItem>Edit</MenuItem>
                     </Link>
-                    <MenuItem>Invite</MenuItem>
-                    <MenuItem onClick={event => handleDelete(projectId)}>
+                    <MenuItem onClick={toggleShareButton}>Invite</MenuItem>
+                    <MenuItem onClick={() => handleDelete(projectId)}>
                       Delete
                     </MenuItem>
                   </Menu>
@@ -165,6 +177,8 @@ const ProjectLarge = ({
                       label="Email Address"
                       type="email"
                       fullWidth
+                      value={email}
+                      onChange={event => setEmail(event.target.value)}
                     />
                   </DialogContent>
                   <DialogActions>
@@ -172,7 +186,7 @@ const ProjectLarge = ({
                       Cancel
                     </Button>
                     <Button
-                      onClick={toggleShareButton}
+                      onClick={() => handleInvite(email)}
                       variant="contained"
                       color="primary"
                     >
@@ -206,6 +220,7 @@ const ProjectLarge = ({
           </Card>
         </Grid>
       </Grid>
+      {deletedProjectId && <Redirect to={`/dashboard`} />}
     </div>
   );
 };

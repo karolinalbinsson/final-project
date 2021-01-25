@@ -47,7 +47,7 @@ const CreateProject = () => {
     store => store.user.project.lastCreatedProjectId
   );
 
-  console.log(projectID);
+  //console.log(projectID);
   //Funderar på om vi måste resetta variabeln i store varje gång den här komponenten laddas?
 
   const [projectTitle, setProjectTitle] = useState('');
