@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect, useHistory } from 'react-router-dom';
 import { makeStyles, createStyles } from '@material-ui/core/styles';
 //import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -61,12 +61,19 @@ const useStyles = makeStyles(theme =>
   })
 );
 
-const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
+const ProjectThumb = ({
+  projectTitle,
+  createdAt,
+  longDescription,
+  shortDescription,
+  projectId,
+}) => {
   const [expanded, setExpanded] = useState(false); //more info of project
   const [open, setOpen] = useState(false); //sharebutton
   const [anchorEl, setAnchorEl] = useState(null); //edit button högst upp
   const [email, setEmail] = useState(''); //invite button
 
+  const history = useHistory();
   //console.log(email);
 
   const dispatch = useDispatch();
@@ -98,6 +105,12 @@ const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
     dispatch(inviteFriend(email, projectId));
   };
 
+  const handleEdit = projectId => {
+    console.log({ projectId });
+    history.push(`/editproject/${projectId}`);
+    //return <Redirect to={`/editproject/${projectId}`} />;
+  };
+
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
@@ -117,9 +130,11 @@ const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                    <MenuItem onClick={() => handleEdit(projectId)}>
+                      Edit
+                    </MenuItem>
                     <MenuItem>Invite</MenuItem>
-                    <MenuItem onClick={event => handleDelete(projectId)}>
+                    <MenuItem onClick={() => handleDelete(projectId)}>
                       Delete
                     </MenuItem>
                   </Menu>
@@ -138,7 +153,7 @@ const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
 
             <CardContent>
               <Typography variant="body2" color="textSecondary" component="p">
-                {description}.
+                {shortDescription}.
               </Typography>
             </CardContent>
             <CardActions disableSpacing>
@@ -193,10 +208,7 @@ const ProjectThumb = ({ projectTitle, createdAt, description, projectId }) => {
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
               <CardContent>
-                <Typography paragraph>Detailed information:</Typography>
-                <Typography paragraph>
-                  This is some more information of the project.
-                </Typography>
+                <Typography paragraph>{longDescription}</Typography>
               </CardContent>
             </Collapse>
           </Card>

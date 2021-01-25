@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -8,8 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
-import { user } from 'reducers/user';
-import { createNewProject } from '../reducers/user';
+import { getSingleProject, user } from 'reducers/user';
+import { updateProject } from '../reducers/user';
 // function Copyright() {
 //   return (
 //     <Typography variant="body2" color="textSecondary" align="center">
@@ -39,36 +40,55 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const EditProject = () => {
+const EditProject = ({
+  projectTitle,
+  createdAt,
+  description,
+  projectId,
+  longDescription,
+  usersInvited,
+  creator,
+  updatedAt,
+}) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  //const projectId = useParams();
   const errorMessage = useSelector(store => store.user.login.errorMessage);
-  const project = useSelector(store => store.user.project.singleProject);
-  console.log({ project });
+  // const project = useSelector(store => store.user.project.singleProject);
+  // console.log({ project });
+  // // const projectId = useSelector(
+  // //   store => store.user.project.singleProject[0]._id
+  // // );
+  const updatedProjectId = useSelector(
+    store => store.user.project.lastUpdatedProjectId
+  );
 
-  const [projectTitle, setProjectTitle] = useState(project[0].projectName);
-  console.log(projectTitle);
-  const [shortDescription, setShortDescription] = useState(
-    project[0].projectShortDescription
+  const [projectName, setProjectName] = useState(projectTitle);
+  //console.log(projectName);
+  const [projectShortDescription, setProjectShortDescription] = useState(
+    description
   );
-  const [longDescription, setLongDescription] = useState(
-    project[0].projectLongDescription
+  const [projectLongDescription, setProjectLongDescription] = useState(
+    longDescription
   );
-  const [projectId, setProjectId] = useState(project[0]._id);
+  //const [projectId, setProjectId] = useState(project[0]._id);
+  // useEffect(() => {
+  //   dispatch(getSingleProject(projectId));
+  // }, [dispatch]);
 
   const handleSubmit = event => {
     event.preventDefault();
     dispatch(
-      createNewProject(
-        projectTitle,
-        shortDescription,
-        longDescription,
+      updateProject(
+        projectName,
+        projectShortDescription,
+        projectLongDescription,
         projectId
       )
     );
-    setProjectTitle('');
-    setShortDescription('');
-    setLongDescription('');
+    setProjectName('');
+    setProjectShortDescription('');
+    setProjectLongDescription('');
   };
 
   return (
@@ -82,8 +102,8 @@ const EditProject = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12}>
               <TextField
-                value={projectTitle}
-                onChange={event => setProjectTitle(event.target.value)}
+                value={projectName}
+                onChange={event => setProjectName(event.target.value)}
                 //autoComplete="fname"
                 name="projectTitle"
                 variant="outlined"
@@ -96,8 +116,10 @@ const EditProject = () => {
             </Grid>
             <Grid item xs={12} sm={12}>
               <TextField
-                value={shortDescription}
-                onChange={event => setShortDescription(event.target.value)}
+                value={projectShortDescription}
+                onChange={event =>
+                  setProjectShortDescription(event.target.value)
+                }
                 //autoComplete="fname"
                 name="shortDescription"
                 variant="outlined"
@@ -110,8 +132,10 @@ const EditProject = () => {
             </Grid>
             <Grid item xs={12} sm={12}>
               <TextField
-                value={longDescription}
-                onChange={event => setLongDescription(event.target.value)}
+                value={projectLongDescription}
+                onChange={event =>
+                  setProjectLongDescription(event.target.value)
+                }
                 //autoComplete="fname"
                 name="longDescription"
                 variant="outlined"
@@ -133,7 +157,7 @@ const EditProject = () => {
             variant="contained"
             color="primary"
             className={classes.submit}
-            disabled={!projectTitle}
+            disabled={!projectName}
             //onClick={handleSubmit}
           >
             Save project
@@ -141,7 +165,7 @@ const EditProject = () => {
         </form>
       </div>
       {/*projectID && <Link to={`/project/${projectID}`}>View the project!</Link>*/}
-      {/* {projectID && <Redirect to={`/dashboard`} />} */}
+      {updatedProjectId && <Redirect to={`/dashboard`} />}
     </Container>
   );
 };

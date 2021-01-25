@@ -28,6 +28,8 @@ const DashboardPage = () => {
   useEffect(() => {
     if (userId) {
       dispatch(getUserProjects());
+      console.log('dashboard rerender');
+      dispatch(user.actions.setSingleProject([]));
     }
   }, [userId, dispatch]);
 
@@ -43,6 +45,7 @@ const DashboardPage = () => {
   useEffect(() => {
     //console.log('i useeffect');
     dispatch(user.actions.setLastCreatedProjectId(null));
+    dispatch(user.actions.setLastUpdatedProjectId(null));
   }, [dispatch]);
 
   // useEffect(() => {
@@ -59,7 +62,8 @@ const DashboardPage = () => {
           projectId={project._id}
           projectTitle={project.projectName}
           createdAt={moment(project.createdAt).format('dddd, MMMM Do YYYY')}
-          description={project.projectDescription}
+          shortDescription={project.projectShortDescription}
+          longDescription={project.projectLongDescription}
         />
       ))}
       {/* {invitedUserEmail && ( */}
