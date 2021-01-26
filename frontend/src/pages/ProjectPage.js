@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
 import { getSingleProject } from '../reducers/user';
-import ProjectLarge from '../components/ProjectLarge';
+//import ProjectLarge from '../components/ProjectLarge';
 import Card from '../lib/Card';
 
 const ProjectPage = () => {

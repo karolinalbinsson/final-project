@@ -12,6 +12,7 @@ const initialState = {
     userId: localStorage.userId || null,
     errorMessage: null,
     accessToken: localStorage.accessToken || null,
+    isDialogOpen: false,
   },
   project: {
     createdProjects: [], //byt namn till projects (projekt som vi har)
@@ -50,6 +51,10 @@ export const user = createSlice({
       const { accessToken } = action.payload;
       store.login.accessToken = accessToken;
       localStorage.setItem('accessToken', accessToken);
+    },
+    //create project dialoge
+    toggleDialog: store => {
+      store.login.isDialogOpen = !store.login.isDialogOpen;
     },
     setCreatedProjects: (store, action) => {
       const { createdProjects } = action.payload;
@@ -272,7 +277,7 @@ export const deleteSingleProject = projectId => {
         throw new Error('Could not delete this project.');
       })
       .then(json => {
-        console.log('thunken', json);
+        //console.log('thunken', json);
         dispatch(user.actions.setDeletedProjects(json.deletedCount));
         dispatch(getUserProjects());
       })

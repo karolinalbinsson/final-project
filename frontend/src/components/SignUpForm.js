@@ -18,7 +18,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { signUp } from 'reducers/user';
-import SnackBar from '../lib/SnackBar';
+//import SnackBar from '../lib/SnackBar';
 
 import { useLogInStyles } from '../styles/Styles';
 

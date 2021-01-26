@@ -27,7 +27,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 //Edit project menu
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { deleteSingleProject, inviteFriend, user } from 'reducers/user';
+import { deleteSingleProject, inviteFriend } from 'reducers/user';
 
 import { useCardStyles } from '../styles/Styles';
 

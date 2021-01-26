@@ -6,18 +6,18 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import LogInForm from '../components/LogInForm';
 import SignUpForm from '../components/SignUpForm';
-import DashboardPage from './DashboardPage';
+//import DashboardPage from './DashboardPage';
 import ProjectPage from './ProjectPage';
 import CreateProjectPage from './CreateProjectPage';
 import EditProjectPage from './EditProjectPage';
 import TemplatePage from './TemplatePage';
 
 const HomePage = () => {
-  const theme = createMuiTheme({
-    palette: {
-      type: 'dark',
-    },
-  });
+  //   const theme = createMuiTheme({
+  //     palette: {
+  //       type: 'dark',
+  //     },
+  //   });
 
   const accessToken = useSelector(store => store.user.login.accessToken);
 
@@ -35,7 +35,7 @@ const HomePage = () => {
           {accessToken ? <Redirect to="/dashboard/" /> : <SignUpForm />}
         </Route>
         <Route exact path="/dashboard/">
-          <TemplatePage />
+          {!accessToken ? <Redirect to="/login" /> : <TemplatePage />}
         </Route>
         <Route exact path="/project/:projectId">
           <ProjectPage />

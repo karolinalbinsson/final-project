@@ -18,3 +18,7 @@ export const App = () => {
 };
 
 //vill vi ha olika routes beroende på login formulär eller signup formulär?
+// Slå ihop createPage och EditPage (componenter)
+// Göra TemplatePage reusable för alla sidor (titel och content props)
+// Ev skissa på en kommentars komponent som läggs till i singleProject sidan
+// Fixa alla knappar på TemaplatePage (invite, logout - redirect login, delete etc etc )

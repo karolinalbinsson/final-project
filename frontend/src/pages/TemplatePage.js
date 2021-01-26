@@ -114,7 +114,7 @@ const TemplatePage = () => {
   useEffect(() => {
     if (userId) {
       dispatch(getUserProjects());
-      console.log('dashboard rerender');
+      //console.log('dashboard rerender');
       dispatch(user.actions.setSingleProject([]));
     }
   }, [userId, dispatch]);
@@ -168,6 +168,7 @@ const TemplatePage = () => {
             noWrap
             className={classes.title}
           >
+            {/* prop */}
             Dashboard
           </Typography>
           <IconButton color="inherit">
@@ -193,18 +194,16 @@ const TemplatePage = () => {
         <List>
           <TemplateListItems />
         </List>
-        {/* <List>{TemplateListItems}</List> */}
       </Drawer>
+
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Card */}
-
+            {/*  som prop???? "content" */}
             {projects.map(project => (
-              <Grid item xs={12} md={6} lg={3}>
+              <Grid item xs={12} md={6} lg={3} key={project._id}>
                 <Card
-                  key={project._id}
                   creator={project.creator.name}
                   linkTo={`/project/${project._id}`}
                   projectId={project._id}
@@ -217,6 +216,7 @@ const TemplatePage = () => {
                 />
               </Grid>
             ))}
+            {/* slut på prop */}
           </Grid>
         </Container>
       </main>

@@ -92,6 +92,9 @@ export const useTemplateStyles = makeStyles(theme => ({
     position: 'relative',
     whiteSpace: 'nowrap',
     width: drawerWidth,
+    [theme.breakpoints.down('md')]: {
+      position: 'relative',
+    },
     transition: theme.transitions.create('width', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,

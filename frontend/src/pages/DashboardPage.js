@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 
 import Nav from '../lib/Nav';
-import ProjectThumb from '../components/ProjectThumb';
+//import ProjectThumb from '../components/ProjectThumb';
 import { getUserProjects, user } from '../reducers/user';
 import Card from '../lib/Card';
 
@@ -18,7 +18,6 @@ const DashboardPage = () => {
   useEffect(() => {
     if (userId) {
       dispatch(getUserProjects());
-      console.log('dashboard rerender');
       dispatch(user.actions.setSingleProject([]));
     }
   }, [userId, dispatch]);
