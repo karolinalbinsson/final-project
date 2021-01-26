@@ -5,24 +5,14 @@ import moment from 'moment';
 import Nav from '../lib/Nav';
 import ProjectThumb from '../components/ProjectThumb';
 import { getUserProjects, user } from '../reducers/user';
-//import SnackBar from '../lib/SnackBar';
+import Card from '../lib/Card';
 
 const DashboardPage = () => {
-  //const { userId } = useParams();
   const userId = useSelector(store => store.user.login.userId);
   const projects = useSelector(store => store.user.project.createdProjects);
-  //const errorMessage = useSelector(store => store.user.login.errorMessage);
-  // const invitedUserEmail = useSelector(
-  //   store => store.user.project.invitedUserEmail
-  // );
-
   const numberOfInvitedUsers = useSelector(
     store => store.user.project.invitedUsers
   );
-  //console.log(numberOfInvitedUsers);
-  // const [openSnackBar, setOpenSnackBar] = useState(false);
-  // console.log({ openSnackBar });
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,21 +33,15 @@ const DashboardPage = () => {
   }, [numberOfInvitedUsers, dispatch]);
 
   useEffect(() => {
-    //console.log('i useeffect');
     dispatch(user.actions.setLastCreatedProjectId(null));
     dispatch(user.actions.setLastUpdatedProjectId(null));
     dispatch(user.actions.setDeletedProjects(null));
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   console.log('reset last invitedUserEmail');
-  //   dispatch(user.actions.setLastInvitedUserEmail(null));
-  // }, [dispatch]);
-
   return (
     <>
       <Nav />
-      {projects.map(project => (
+      {/* {projects.map(project => (
         <ProjectThumb
           key={project._id}
           projectId={project._id}
@@ -66,22 +50,20 @@ const DashboardPage = () => {
           shortDescription={project.projectShortDescription}
           longDescription={project.projectLongDescription}
         />
-      ))}
-      {/* {invitedUserEmail && ( */}
-      {/* <SnackBar
-        severity="success"
-        message={`Successfully invited: ${invitedUserEmail}`}
-        openIn={openSnackBar}
-      /> */}
-      {/* )} */}
+      ))} */}
 
-      {/* {errorMessage && ( */}
-      {/* <SnackBar
-        severity="error"
-        message={errorMessage}
-        openIn={!openSnackBar}
-      /> */}
-      {/* )} */}
+      {projects.map(project => (
+        <Card
+          key={project._id}
+          creator={project.creator.name}
+          linkTo={`/project/${project._id}`}
+          projectId={project._id}
+          projectTitle={project.projectName}
+          createdAt={moment(project.createdAt).format('dddd, MMMM Do YYYY')}
+          shortDescription={project.projectShortDescription}
+          longDescription={project.projectLongDescription}
+        />
+      ))}
     </>
   );
 };

@@ -10,7 +10,7 @@ const EditProjectPage = () => {
   const { projectId } = useParams();
   const dispatch = useDispatch();
   const project = useSelector(store => store.user.project.singleProject);
-  //console.log(project);
+
   useEffect(() => {
     dispatch(getSingleProject(projectId));
   }, [projectId, dispatch]);
@@ -25,7 +25,6 @@ const EditProjectPage = () => {
         <EditProject
           projectId={project[0]._id}
           projectTitle={project[0].projectName}
-          //createdAt={moment(project.createdAt).format('dddd, MMMM Do YYYY')}
           createdAt={moment(project[0].createdAt).fromNow()}
           description={project[0].projectShortDescription}
           longDescription={project[0].projectLongDescription}
