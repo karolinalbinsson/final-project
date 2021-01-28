@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 
-import Nav from '../lib/Nav';
+import Nav from './Nav';
 //import ProjectThumb from '../components/ProjectThumb';
 import { getUserProjects, user } from '../reducers/user';
 import Card from '../lib/Card';

@@ -8,29 +8,12 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Grid from '@material-ui/core/Grid';
 
-import { makeStyles } from '@material-ui/core/styles';
-
 import { user } from 'reducers/user';
 import { createNewProject, getUserProjects } from '../reducers/user';
-
-const useStyles = makeStyles(theme => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  form: {
-    width: '100%', // Fix IE 11 issue.
-    marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-  },
-}));
+import { useFormProjectStyles } from '../styles/Styles';
 
 const CreateProject = () => {
-  const classes = useStyles();
+  const classes = useFormProjectStyles();
   const dispatch = useDispatch();
   const errorMessage = useSelector(store => store.user.login.errorMessage);
   const isDialogeOpen = useSelector(store => store.user.login.isDialogOpen);

@@ -183,7 +183,6 @@ export const logout = () => {
         );
       });
     dispatch(user.actions.setInitialState());
-    browserHistory.push(`/`);
     localStorage.clear();
   };
 };
@@ -248,7 +247,6 @@ export const getSingleProject = projectId => {
             singleProject: json,
           })
         );
-        //console.log(json);
       })
       .catch(err => {
         dispatch(

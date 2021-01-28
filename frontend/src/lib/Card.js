@@ -27,11 +27,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 //Edit project menu
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { deleteSingleProject, inviteFriend } from 'reducers/user';
+import { deleteSingleProject, inviteFriend, user } from 'reducers/user';
 
 import { useCardStyles } from '../styles/Styles';
 
-const ProjectLarge = ({
+const ProjectCard = ({
   projectTitle,
   createdAt,
   shortDescription,
@@ -80,8 +80,12 @@ const ProjectLarge = ({
     dispatch(deleteSingleProject(projectId));
   };
 
-  const handleEdit = projectId => {
-    history.push(`/editproject/${projectId}`);
+  // const handleEdit = projectId => {
+  //   history.push(`/editproject/${projectId}`);
+  // };
+
+  const toggleDialog = () => {
+    dispatch(user.actions.toggleDialog());
   };
 
   return (
@@ -104,9 +108,7 @@ const ProjectLarge = ({
                       open={Boolean(anchorEl)}
                       onClose={handleClose}
                     >
-                      <MenuItem onClick={() => handleEdit(projectId)}>
-                        Edit
-                      </MenuItem>
+                      <MenuItem onClick={() => toggleDialog()}>Edit</MenuItem>
                       <MenuItem onClick={toggleShareButton}>Invite</MenuItem>
                       <MenuItem onClick={() => handleDelete(projectId)}>
                         Delete
@@ -212,4 +214,4 @@ const ProjectLarge = ({
     </>
   );
 };
-export default ProjectLarge;
+export default ProjectCard;

@@ -18,9 +18,12 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
+
+import { useTemplateStyles } from '../styles/Styles';
 import { getUserProjects, user } from '../reducers/user';
 import Card from '../lib/Card';
 import TemplateListItems from '../components/TemplateListItems';
+import ProjectDialog from '../components/ProjectDialog';
 
 const drawerWidth = 240;
 
@@ -104,17 +107,21 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const TemplatePage = () => {
+  const [open, setOpen] = useState(false);
+
+  const classes = useStyles();
   const userId = useSelector(store => store.user.login.userId);
   const projects = useSelector(store => store.user.project.createdProjects);
   const numberOfInvitedUsers = useSelector(
     store => store.user.project.invitedUsers
   );
+  const isDialogOpen = useSelector(store => store.user.login.isDialogOpen);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (userId) {
       dispatch(getUserProjects());
-      //console.log('dashboard rerender');
       dispatch(user.actions.setSingleProject([]));
     }
   }, [userId, dispatch]);
@@ -133,9 +140,6 @@ const TemplatePage = () => {
     dispatch(user.actions.setLastUpdatedProjectId(null));
     dispatch(user.actions.setDeletedProjects(null));
   }, [dispatch]);
-
-  const classes = useStyles();
-  const [open, setOpen] = useState(false);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -216,6 +220,7 @@ const TemplatePage = () => {
                 />
               </Grid>
             ))}
+            {isDialogOpen && <ProjectDialog />}
             {/* slut på prop */}
           </Grid>
         </Container>

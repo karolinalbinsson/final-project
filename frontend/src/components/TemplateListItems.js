@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-//import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { ListItem } from '@material-ui/core';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -11,13 +11,13 @@ import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import { logout, user } from '../reducers/user';
-import CreateProject from './CreateProject';
+import CreateProject from '../Delete/CreateProject';
 
 const TemplateListItems = () => {
   const isDialogeOpen = useSelector(store => store.user.login.isDialogOpen);
 
   const dispatch = useDispatch();
-  //const history = useHistory();
+  const history = useHistory();
 
   const handleCreate = () => {
     dispatch(user.actions.toggleDialog());
@@ -25,12 +25,13 @@ const TemplateListItems = () => {
 
   const handleLogOut = () => {
     dispatch(logout());
+    history.push('/');
   };
 
   return (
     <>
       <div>
-        <ListItem button>
+        <ListItem button onClick={() => history.push('/dashboard')}>
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>

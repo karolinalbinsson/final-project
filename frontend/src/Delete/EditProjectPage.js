@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 
-import EditProject from '../components/EditProject';
+import EditProject from './EditProject';
 import { user, getSingleProject } from '../reducers/user';
 
 const EditProjectPage = () => {
