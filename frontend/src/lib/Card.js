@@ -28,6 +28,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { deleteSingleProject, inviteFriend, user } from 'reducers/user';
+import AlertDialog from '../lib/AlertDialog';
 
 import { useCardStyles } from '../styles/Styles';
 
@@ -46,6 +47,7 @@ const ProjectCard = ({
   const [open, setOpen] = useState(false); //sharebutton
   const [anchorEl, setAnchorEl] = useState(null); //edit button högst upp
   const [email, setEmail] = useState(''); //invite button
+  const [openAlert, setOpenAlert] = useState(false);
 
   const deletedProjectId = useSelector(
     store => store.user.project.deletedProjects
@@ -72,25 +74,35 @@ const ProjectCard = ({
     setEmail('');
   };
 
-  const toggleShareButton = () => {
+  const toggleInviteButton = () => {
     setOpen(!open);
+    handleClose();
   };
 
   const handleDelete = projectId => {
     dispatch(deleteSingleProject(projectId));
   };
 
-  // const handleEdit = projectId => {
-  //   history.push(`/editproject/${projectId}`);
-  // };
-
-  const toggleDialog = () => {
+  //edit project button
+  const handleEditDialog = () => {
     dispatch(user.actions.toggleDialog());
+    handleClose();
+  };
+
+  const toggleAlert = () => {
+    setOpenAlert(!openAlert);
   };
 
   return (
     <>
       <div className={classes.root}>
+        {openAlert && (
+          <AlertDialog
+            open={openAlert}
+            handleClose={toggleAlert}
+            handleDelete={handleDelete}
+          />
+        )}
         <Grid container spacing={3}>
           <Grid item xs={12} className={classes.card}>
             <Card>
@@ -108,9 +120,14 @@ const ProjectCard = ({
                       open={Boolean(anchorEl)}
                       onClose={handleClose}
                     >
-                      <MenuItem onClick={() => toggleDialog()}>Edit</MenuItem>
-                      <MenuItem onClick={toggleShareButton}>Invite</MenuItem>
-                      <MenuItem onClick={() => handleDelete(projectId)}>
+                      <MenuItem onClick={() => handleEditDialog()}>
+                        Edit
+                      </MenuItem>
+                      <MenuItem onClick={toggleInviteButton}>Invite</MenuItem>
+                      <MenuItem
+                        //onClick={() => handleDelete(projectId)}
+                        onClick={toggleAlert}
+                      >
                         Delete
                       </MenuItem>
                     </Menu>
@@ -141,11 +158,11 @@ const ProjectCard = ({
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
-                <IconButton aria-label="share" onClick={toggleShareButton}>
+                <IconButton aria-label="share" onClick={toggleInviteButton}>
                   <ShareIcon />
                   <Dialog
                     open={open}
-                    onClose={toggleShareButton}
+                    onClose={toggleInviteButton}
                     aria-labelledby="form-dialog-title"
                   >
                     <DialogTitle id="form-dialog-title">Invite</DialogTitle>
@@ -166,7 +183,7 @@ const ProjectCard = ({
                       />
                     </DialogContent>
                     <DialogActions>
-                      <Button onClick={toggleShareButton} variant="outlined">
+                      <Button onClick={toggleInviteButton} variant="outlined">
                         Cancel
                       </Button>
                       <Button

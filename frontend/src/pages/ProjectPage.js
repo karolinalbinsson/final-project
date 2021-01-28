@@ -210,10 +210,10 @@ const ProjectPage = () => {
               )}
               {isDialogOpen && (
                 <ProjectDialog
-                  projectId={project[0]._id}
-                  projectTitle={project[0].projectName}
-                  shortDescription={project[0].projectShortDescription}
-                  longDescription={project[0].projectLongDescription}
+                  projectId={project._id}
+                  projectTitle={project.projectName}
+                  shortDescription={project.projectShortDescription}
+                  longDescription={project.projectLongDescription}
                 />
               )}
             </Grid>
