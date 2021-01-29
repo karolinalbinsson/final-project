@@ -90,7 +90,7 @@ const ProjectCard = ({
 
   //edit project button
   const handleEditDialog = () => {
-    console.log('handleEditDialog', projectId);
+    dispatch(user.actions.resetSingleProject());
     dispatch(user.actions.setSingleProjectId(projectId));
     dispatch(user.actions.toggleEditDialog());
     handleClose();

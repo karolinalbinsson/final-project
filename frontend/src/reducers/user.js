@@ -75,9 +75,12 @@ export const user = createSlice({
       const { singleProject } = action.payload;
       store.project.singleProject = singleProject;
     },
+    resetSingleProject: store => {
+      store.project.singleProject = initialState.singleProject;
+      ///return { ...store, singleProject: null };
+    },
     setSingleProjectId: (store, action) => {
       const singleProjectId = action.payload;
-      console.log('thunk', action.payload);
       store.project.singleProjectId = singleProjectId;
     },
     setLastCreatedProjectId: (store, action) => {
@@ -123,6 +126,7 @@ export const login = (email, password) => {
           'Unable to sign in. Please check that e-mail and password are correct'
         );
       })
+
       .then(json => {
         dispatch(user.actions.resetErrorMessage());
         dispatch(
@@ -374,6 +378,9 @@ export const updateProject = (
       .then(json => {
         dispatch(user.actions.setLastUpdatedProjectId(json.projectId));
         dispatch(getUserProjects());
+        dispatch(user.actions.setSingleProjectId(null));
+        //dispatch(user.action.setSingleProject(null));
+        //dispatch(user.actions.resetSingleProject());
       })
       .catch(err => {
         dispatch(

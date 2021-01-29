@@ -21,7 +21,6 @@ import { useFormProjectStyles } from '../styles/Styles';
 const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
   const singleProject = useSelector(store => store.user.project.singleProject);
   const singleProjectId = singleProject._id;
-  console.log('singId', singleProjectId);
   const dispatch = useDispatch();
   const classes = useFormProjectStyles();
 
@@ -36,6 +35,7 @@ const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
   );
 
   console.log('open', open);
+
   const handleEditSubmit = () => {
     dispatch(
       updateProject(
@@ -53,7 +53,6 @@ const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
   };
 
   const handleCreateSubmit = () => {
-    //event.preventDefault();
     dispatch(
       createNewProject(
         projectName,
@@ -66,7 +65,6 @@ const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
     setProjectLongDescription('');
     toggleDialog();
     dispatch(getUserProjects()); //kan detta bli ett problem timewise?
-    //window.location.reload(); //är detta ok att göra?
   };
 
   return (

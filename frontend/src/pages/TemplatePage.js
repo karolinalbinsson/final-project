@@ -122,14 +122,13 @@ const TemplatePage = () => {
   const isDialogEditOpen = useSelector(
     store => store.user.login.isDialogEditOpen
   );
-  console.log('templatePage', isDialogEditOpen);
+  //console.log('templatePage', isDialogEditOpen);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (userId) {
       dispatch(getUserProjects());
-      dispatch(user.actions.setSingleProject([]));
     }
   }, [userId, dispatch]);
 
@@ -143,10 +142,12 @@ const TemplatePage = () => {
   }, [numberOfInvitedUsers, dispatch]);
 
   useEffect(() => {
+    console.log('in dashboard');
     dispatch(user.actions.setLastCreatedProjectId(null));
     dispatch(user.actions.setLastUpdatedProjectId(null));
     dispatch(user.actions.setDeletedProjects(null));
-  }, [dispatch]);
+    //dispatch(user.actions.resetSingleProject());
+  }, [dispatch, projects]);
 
   const toggleDrawer = () => {
     setOpen(!open);
