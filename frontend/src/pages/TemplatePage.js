@@ -23,7 +23,7 @@ import { useTemplateStyles } from '../styles/Styles';
 import { getUserProjects, user } from '../reducers/user';
 import Card from '../lib/Card';
 import TemplateListItems from '../components/TemplateListItems';
-import ProjectDialog from '../components/ProjectEditDialog';
+import ProjectEditDialog from '../components/ProjectEditDialog';
 
 const drawerWidth = 240;
 
@@ -116,13 +116,13 @@ const TemplatePage = () => {
   const numberOfInvitedUsers = useSelector(
     store => store.user.project.invitedUsers
   );
-  const isDialogCreateOpen = useSelector(
-    store => store.user.login.isDialogCreateOpen
-  );
+  // const isDialogCreateOpen = useSelector(
+  //   store => store.user.login.isDialogCreateOpen
+  // );
   const isDialogEditOpen = useSelector(
     store => store.user.login.isDialogEditOpen
   );
-  const isDialogOpen = useSelector(store => store.user.login.isDialogOpen);
+  console.log('templatePage', isDialogEditOpen);
 
   const dispatch = useDispatch();
 
@@ -227,7 +227,7 @@ const TemplatePage = () => {
                 />
               </Grid>
             ))}
-            {isDialogOpen && <ProjectDialog />}
+            {isDialogEditOpen && <ProjectEditDialog />}
             {/* {isDialogCreateOpen && <ProjectDialog />} */}
           </Grid>
         </Container>

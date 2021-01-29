@@ -92,7 +92,7 @@ const ProjectCard = ({
   const handleEditDialog = () => {
     console.log('handleEditDialog', projectId);
     dispatch(user.actions.setSingleProjectId(projectId));
-    dispatch(user.actions.toggleDialog());
+    dispatch(user.actions.toggleEditDialog());
     handleClose();
   };
 

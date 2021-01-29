@@ -373,6 +373,7 @@ export const updateProject = (
       })
       .then(json => {
         dispatch(user.actions.setLastUpdatedProjectId(json.projectId));
+        dispatch(getUserProjects());
       })
       .catch(err => {
         dispatch(
