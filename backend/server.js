@@ -510,7 +510,7 @@ const sendEmail = async (fromUserName, toUserEmail, mode, userNameFor = "") => {
 		});
 
 		const mailOptions = {
-			from: process.env.MAIL_FROM,
+			from: `👋 Project Planner 👋 ${process.env.MAIL_FROM}`,
 			to: toUserEmail,
 			subject:
 				mode === "invite"

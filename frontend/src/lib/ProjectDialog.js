@@ -79,6 +79,7 @@ const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
 				open={open}
 				onClose={() => toggleDialog()}
 				aria-labelledby="form-dialog-title"
+				//disableBackdropClick={true}
 			>
 				<DialogTitle id="form-dialog-title">{dialogTitle}</DialogTitle>
 				<DialogContent>
