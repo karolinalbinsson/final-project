@@ -29,7 +29,6 @@ const SnackBar = () => {
 	console.log(invitedUserEmail);
 
 	//	const errorMessage = useSelector((store) => store.user.login.errorMessage);
-
 	const snackBarMessage = useSelector(
 		(store) => store.user.project.snackBarMessage
 	);
@@ -42,7 +41,7 @@ const SnackBar = () => {
 		if (reason === "clickaway") {
 			return;
 		}
-		dispatch(user.actions.setSnackBarOpen(null));
+		dispatch(user.actions.setSnackBarOpen(false));
 	};
 
 	useEffect(() => {
@@ -50,7 +49,12 @@ const SnackBar = () => {
 	}, []);
 	return (
 		<div className={classes.root}>
-			<Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+			<Snackbar
+				open={open}
+				autoHideDuration={2000}
+				onClose={handleClose}
+				anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+			>
 				<Alert onClose={handleClose} severity={severity}>
 					{snackBarMessage}
 				</Alert>

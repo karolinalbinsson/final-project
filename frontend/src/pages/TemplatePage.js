@@ -225,9 +225,7 @@ const TemplatePage = () => {
 									linkTo={`/project/${project._id}`}
 									projectId={project._id}
 									projectTitle={project.projectName}
-									createdAt={moment(project.createdAt).format(
-										"dddd, MMMM Do YYYY"
-									)}
+									createdAt={moment(project.createdAt).fromNow()}
 									shortDescription={project.projectShortDescription}
 									longDescription={project.projectLongDescription}
 								/>

@@ -110,6 +110,12 @@ export const user = createSlice({
 			const email = action.payload;
 			store.project.invitedUserEmail = email;
 		},
+		setSnackBar: (store, action) => {
+			const snackBarInfo = action.payload;
+			store.project.snackBarOpen = snackBarInfo.snackBarOpen;
+			store.project.snackBarMessage = snackBarInfo.snackBarMessage;
+			store.project.snackBarSeverity = snackBarInfo.snackBarSeverity;
+		},
 		setSnackBarOpen: (store, action) => {
 			console.log("in setsnackbaropen", action.payload);
 			const isOpen = action.payload;
@@ -316,10 +322,24 @@ export const deleteSingleProject = (projectId) => {
 				//console.log('thunken', json);
 				dispatch(user.actions.setDeletedProjects(json.deletedCount));
 				dispatch(getUserProjects());
+				dispatch(
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: "Project deleted!",
+						snackBarSeverity: "success",
+					})
+				);
 			})
 			.catch((err) => {
 				dispatch(
 					user.actions.setErrorMessage({ errorMessage: err.toString() })
+				);
+				dispatch(
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: err.toString(),
+						snackBarSeverity: "error",
+					})
 				);
 			});
 	};
@@ -359,19 +379,31 @@ export const createNewProject = (
 				console.log(
 					"After set last created project id, before snackbar setOpen"
 				);
-				dispatch(user.actions.setSnackBarOpen(true));
-				dispatch(user.actions.setSnackBarSeverity("success"));
 				dispatch(
-					user.actions.setSnackBarMessage("Successfully created project!")
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: "Project created!",
+						snackBarSeverity: "success",
+					})
 				);
+				//	dispatch(user.actions.setSnackBarOpen(true));
+				//dispatch(user.actions.setSnackBarSeverity("success"));
+				// dispatch(
+				// 	user.actions.setSnackBarMessage("Successfully created project!")
+				// );
 			})
 			.catch((err) => {
 				dispatch(
 					user.actions.setErrorMessage({ errorMessage: err.toString() })
 				);
-				dispatch(user.actions.setSnackBarOpen(true));
-				dispatch(user.actions.setSnackBarSeverity("error"));
-				dispatch(user.actions.setSnackBarMessage(err.toString()));
+
+				dispatch(
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: err.toString(),
+						snackBarSeverity: "error",
+					})
+				);
 			});
 	};
 };
@@ -408,12 +440,26 @@ export const updateProject = (
 				dispatch(user.actions.setLastUpdatedProjectId(json.projectId));
 				dispatch(getUserProjects());
 				dispatch(user.actions.setSingleProjectId(null));
+				dispatch(
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: "Project updated!",
+						snackBarSeverity: "success",
+					})
+				);
 				//dispatch(user.action.setSingleProject(null));
 				//dispatch(user.actions.resetSingleProject());
 			})
 			.catch((err) => {
 				dispatch(
 					user.actions.setErrorMessage({ errorMessage: err.toString() })
+				);
+				dispatch(
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: err.toString(),
+						snackBarSeverity: "error",
+					})
 				);
 			});
 	};
@@ -439,9 +485,9 @@ export const inviteFriend = (toUserEmail, projectId) => {
 		})
 			.then((res) => {
 				if (res.ok) {
-					//console.log('then i if statement');
 					return res.json();
-					//return res.json();
+				} else if (res.status === 409) {
+					throw new Error("Friend has already been invited");
 				} else {
 					throw new Error("Could not invite friend.");
 				}
@@ -449,17 +495,31 @@ export const inviteFriend = (toUserEmail, projectId) => {
 			.then((json) => {
 				dispatch(user.actions.setInvitedUsers());
 				dispatch(user.actions.setLastInvitedUserEmail(json.invitedUser));
-				dispatch(user.actions.setSnackBarOpen(true));
-				dispatch(user.actions.setSnackBarSeverity("success"));
-				dispatch(user.actions.setSnackBarMessage("Successfully invited user!"));
+				dispatch(
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: "Friend invited!",
+						snackBarSeverity: "success",
+					})
+				);
 			})
 			.catch((err) => {
+				console.log("error in thunk:", err);
+				console.log("error message", err.message);
 				dispatch(
 					user.actions.setErrorMessage({ errorMessage: err.toString() })
 				);
-				dispatch(user.actions.setSnackBarOpen(true));
-				dispatch(user.actions.setSnackBarSeverity("error"));
-				dispatch(user.actions.setSnackBarMessage(err.toString()));
+
+				dispatch(
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: err.message,
+						snackBarSeverity:
+							err.message === "Friend has already been invited"
+								? "info"
+								: "error",
+					})
+				);
 			});
 	};
 };
