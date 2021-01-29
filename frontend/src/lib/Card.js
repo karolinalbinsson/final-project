@@ -226,7 +226,9 @@ const ProjectCard = ({
                     <>
                       <Typography paragraph>Invited users:</Typography>
                       {usersInvited.map(user => (
-                        <Typography paragraph> {user.name}</Typography>
+                        <Typography key={user.email} paragraph>
+                          {user.name}
+                        </Typography>
                       ))}
                     </>
                   )}

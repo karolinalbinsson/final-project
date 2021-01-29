@@ -18,7 +18,8 @@ const TemplateListItems = () => {
   const history = useHistory();
 
   const handleCreate = () => {
-    dispatch(user.actions.toggleDialog());
+    console.log('in handleCreate');
+    dispatch(user.actions.toggleCreateDialog());
   };
 
   const handleLogOut = () => {
