@@ -26,6 +26,8 @@ import TemplateListItems from "../components/TemplateListItems";
 import ProjectEditDialog from "../components/ProjectEditDialog";
 import ProjectCreateDialog from "../components/ProjectCreateDialog";
 
+import SnackBarComponent from "lib/SnackBarComponent";
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -215,6 +217,7 @@ const TemplatePage = () => {
 				<Container maxWidth="lg" className={classes.container}>
 					<Grid container spacing={3}>
 						{/*  som prop???? "content" */}
+						<SnackBarComponent />
 						{projects.map((project) => (
 							<Grid item xs={12} md={6} lg={3} key={project._id}>
 								<Card
