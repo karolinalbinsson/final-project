@@ -109,6 +109,7 @@ const ProjectCard = ({
             handleClose={toggleAlert}
             handleDelete={handleDelete}
             projectName={projectTitle}
+            projectId={projectId}
           />
         )}
         <Grid container spacing={3}>

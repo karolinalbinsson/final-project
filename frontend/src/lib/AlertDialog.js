@@ -6,7 +6,13 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-const AlertDialog = ({ open, handleClose, handleDelete, projectName }) => {
+const AlertDialog = ({
+  open,
+  handleClose,
+  handleDelete,
+  projectName,
+  projectId,
+}) => {
   return (
     <div>
       <Dialog
@@ -30,7 +36,11 @@ const AlertDialog = ({ open, handleClose, handleDelete, projectName }) => {
           >
             Cancel
           </Button>
-          <Button onClick={handleDelete} variant="contained" color="primary">
+          <Button
+            onClick={() => handleDelete(projectId)}
+            variant="contained"
+            color="primary"
+          >
             Delete
           </Button>
         </DialogActions>
