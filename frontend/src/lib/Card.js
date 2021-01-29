@@ -27,7 +27,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 //Edit project menu
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { deleteSingleProject, inviteFriend, user } from 'reducers/user';
+import {
+  deleteSingleProject,
+  inviteFriend,
+  user,
+  getSingleProject,
+} from 'reducers/user';
 import AlertDialog from '../lib/AlertDialog';
 
 import { useCardStyles } from '../styles/Styles';
@@ -85,6 +90,8 @@ const ProjectCard = ({
 
   //edit project button
   const handleEditDialog = () => {
+    console.log('handleEditDialog', projectId);
+    dispatch(user.actions.setSingleProjectId(projectId));
     dispatch(user.actions.toggleDialog());
     handleClose();
   };
@@ -101,6 +108,7 @@ const ProjectCard = ({
             open={openAlert}
             handleClose={toggleAlert}
             handleDelete={handleDelete}
+            projectName={projectTitle}
           />
         )}
         <Grid container spacing={3}>

@@ -25,7 +25,7 @@ import { useTemplateStyles } from '../styles/Styles';
 import { getSingleProject } from '../reducers/user';
 import Card from '../lib/Card';
 import TemplateListItems from '../components/TemplateListItems';
-import ProjectDialog from '../components/ProjectDialog';
+import ProjectDialog from '../components/ProjectEditDialog';
 
 const drawerWidth = 240;
 
@@ -117,8 +117,14 @@ const ProjectPage = () => {
   const numberOfInvitedUsers = useSelector(
     store => store.user.project.invitedUsers
   );
-  const isDialogOpen = useSelector(store => store.user.login.isDialogOpen);
+  const isDialogCreateOpen = useSelector(
+    store => store.user.login.isDialogCreateOpen
+  );
+  const isDialogEditOpen = useSelector(
+    store => store.user.login.isDialogEditOpen
+  );
 
+  const isDialogOpen = useSelector(store => store.user.login.isDialogOpen);
   const classes = useStyles();
 
   //kan vi slå ihop dessa två useEffect på något sätt?
@@ -210,12 +216,13 @@ const ProjectPage = () => {
               )}
               {isDialogOpen && (
                 <ProjectDialog
-                  projectId={project._id}
-                  projectTitle={project.projectName}
-                  shortDescription={project.projectShortDescription}
-                  longDescription={project.projectLongDescription}
+                // projectId={project._id}
+                // projectTitle={project.projectName}
+                // shortDescription={project.projectShortDescription}
+                // longDescription={project.projectLongDescription}
                 />
               )}
+              {/* {isDialogOpen && <ProjectDialog />} */}
             </Grid>
           </Grid>
         </Container>

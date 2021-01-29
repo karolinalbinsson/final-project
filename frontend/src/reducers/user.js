@@ -12,11 +12,15 @@ const initialState = {
     userId: localStorage.userId || null,
     errorMessage: null,
     accessToken: localStorage.accessToken || null,
+    //Create
+    isDialogCreateOpen: false,
+    isDialogEditOpen: false,
     isDialogOpen: false,
   },
   project: {
     createdProjects: [], //byt namn till projects (projekt som vi har)
     singleProject: null,
+    singleProjectId: null,
     lastCreatedProjectId: null,
     lastUpdatedProjectId: null,
     deletedProjects: null,
@@ -53,6 +57,13 @@ export const user = createSlice({
       localStorage.setItem('accessToken', accessToken);
     },
     //create project dialoge
+    toggleCreateDialog: store => {
+      store.login.isDialogCreateOpen = !store.login.isDialogCreateOpen;
+    },
+    //edit project dialoge
+    toggleEditDialog: store => {
+      store.login.isDialogEditOpen = !store.login.isDialogEditOpen;
+    },
     toggleDialog: store => {
       store.login.isDialogOpen = !store.login.isDialogOpen;
     },
@@ -63,6 +74,11 @@ export const user = createSlice({
     setSingleProject: (store, action) => {
       const { singleProject } = action.payload;
       store.project.singleProject = singleProject;
+    },
+    setSingleProjectId: (store, action) => {
+      const singleProjectId = action.payload;
+      console.log('thunk', action.payload);
+      store.project.singleProjectId = singleProjectId;
     },
     setLastCreatedProjectId: (store, action) => {
       const projectId = action.payload;

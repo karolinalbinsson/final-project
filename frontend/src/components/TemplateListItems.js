@@ -14,8 +14,6 @@ import { logout, user } from '../reducers/user';
 import CreateProject from '../Delete/CreateProject';
 
 const TemplateListItems = () => {
-  const isDialogeOpen = useSelector(store => store.user.login.isDialogOpen);
-
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -59,7 +57,6 @@ const TemplateListItems = () => {
           <ListItemText primary="Log out" />
         </ListItem>
       </div>
-      {isDialogeOpen && <CreateProject />}
     </>
   );
 };

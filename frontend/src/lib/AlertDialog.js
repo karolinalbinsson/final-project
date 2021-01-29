@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-const AlertDialog = ({ open, handleClose, handleDelete }) => {
+const AlertDialog = ({ open, handleClose, handleDelete, projectName }) => {
   return (
     <div>
       <Dialog
@@ -18,14 +18,19 @@ const AlertDialog = ({ open, handleClose, handleDelete }) => {
         <DialogTitle id="alert-dialog-title">{'Delete project'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete this project?
+            Are you sure you want to delete "{projectName}"?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button
+            onClick={handleClose}
+            variant="outlined"
+            color="secondary"
+            autoFocus
+          >
             Cancel
           </Button>
-          <Button onClick={handleDelete} color="primary" autoFocus>
+          <Button onClick={handleDelete} variant="contained" color="primary">
             Delete
           </Button>
         </DialogActions>
