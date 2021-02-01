@@ -51,9 +51,9 @@ const SnackBar = () => {
 		<div className={classes.root}>
 			<Snackbar
 				open={open}
-				autoHideDuration={2000}
+				autoHideDuration={3000}
 				onClose={handleClose}
-				anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+				anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
 			>
 				<Alert onClose={handleClose} severity={severity}>
 					{snackBarMessage}
