@@ -47,13 +47,15 @@ const ProjectCard = ({
 	creator,
 	updatedAt,
 	linkTo,
+	imageUrl,
 }) => {
 	const [expanded, setExpanded] = useState(false); //more info of project
 	const [open, setOpen] = useState(false); //sharebutton
 	const [anchorEl, setAnchorEl] = useState(null); //edit button högst upp
 	const [email, setEmail] = useState(""); //invite button
 	const [openAlert, setOpenAlert] = useState(false);
-
+	const defaultUrl =
+		"https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80";
 	const deletedProjectId = useSelector(
 		(store) => store.user.project.deletedProjects
 	);
@@ -149,14 +151,16 @@ const ProjectCard = ({
 								<Link to={linkTo}>
 									<CardMedia
 										className={classes.media}
-										image="https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80"
+										//image="https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80"
+										image={imageUrl ? imageUrl : defaultUrl}
 										title="My first project"
 									/>
 								</Link>
 							) : (
 								<CardMedia
 									className={classes.media}
-									image="https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80"
+									//	image="https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80"
+									image={imageUrl ? imageUrl : defaultUrl}
 									title="My first project"
 								/>
 							)}

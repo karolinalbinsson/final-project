@@ -166,6 +166,13 @@ export const login = (email, password) => {
 				dispatch(
 					user.actions.setErrorMessage({ errorMessage: err.toString() })
 				);
+				dispatch(
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: err.message,
+						snackBarSeverity: "error",
+					})
+				);
 			});
 	};
 };
@@ -201,6 +208,13 @@ export const signUp = (name, email, password) => {
 			.catch((err) => {
 				dispatch(
 					user.actions.setErrorMessage({ errorMessage: err.toString() })
+				);
+				dispatch(
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: err.message,
+						snackBarSeverity: "error",
+					})
 				);
 			});
 	};
@@ -349,7 +363,8 @@ export const deleteSingleProject = (projectId) => {
 export const createNewProject = (
 	projectName,
 	projectShortDescription,
-	projectLongDescription
+	projectLongDescription,
+	fileInput
 ) => {
 	return (dispatch, getStore) => {
 		const accessToken = getStore().user.login.accessToken;
@@ -379,18 +394,37 @@ export const createNewProject = (
 				console.log(
 					"After set last created project id, before snackbar setOpen"
 				);
-				dispatch(
-					user.actions.setSnackBar({
-						snackBarOpen: true,
-						snackBarMessage: "Project created!",
-						snackBarSeverity: "success",
-					})
-				);
 				//	dispatch(user.actions.setSnackBarOpen(true));
 				//dispatch(user.actions.setSnackBarSeverity("success"));
 				// dispatch(
 				// 	user.actions.setSnackBarMessage("Successfully created project!")
 				// );
+			})
+			.then(() => {
+				const projectId = getStore().user.project.lastCreatedProjectId;
+				console.log("lastCreatedProjectId:", projectId);
+				console.log("In next then, fileinput");
+				const formData = new FormData();
+				console.log("formdata before append", formData);
+				console.log("fileinput:", fileInput[0]);
+				formData.append("image", fileInput[0]);
+				console.log("formdata after append", formData);
+
+				fetch(`http://localhost:8080/projects/${projectId}/image`, {
+					method: "PATCH",
+					body: formData,
+				}).then((res) => {
+					console.log("done with patch");
+					dispatch(getUserProjects());
+					dispatch(
+						user.actions.setSnackBar({
+							snackBarOpen: true,
+							snackBarMessage: "Project created!",
+							snackBarSeverity: "success",
+						})
+					);
+					res.json();
+				});
 			})
 			.catch((err) => {
 				dispatch(

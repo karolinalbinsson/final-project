@@ -9,7 +9,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-//import { DropzoneArea } from "material-ui-dropzone";
+import { DropzoneArea } from "material-ui-dropzone";
 import Input from "@material-ui/core/Input";
 
 import {
@@ -22,9 +22,8 @@ import {
 import { useFormProjectStyles } from "../styles/Styles";
 
 const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
-	const fileInput = useRef();
-	console.log(fileInput);
-
+	//	const fileInput = useRef();
+	console.log("in projectdialog child");
 	const singleProject = useSelector(
 		(store) => store.user.project.singleProject
 	);
@@ -43,8 +42,9 @@ const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
 	const [projectLongDescription, setProjectLongDescription] = useState(
 		singleProject ? singleProject.projectLongDescription : ""
 	);
-	//const [name, setName] = useState('');
-	//console.log('files', files);
+
+	const [file, setFile] = useState("");
+	console.log("file", file);
 
 	const handleFileChange = () => {};
 
@@ -72,14 +72,14 @@ const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
 				projectName,
 				projectShortDescription,
 				projectLongDescription,
-				fileInput
+				file
 			)
 		);
 		setProjectName("");
 		setProjectShortDescription("");
 		setProjectLongDescription("");
 		toggleDialog();
-		dispatch(getUserProjects());
+		//	dispatch(getUserProjects());
 	};
 
 	return (
@@ -139,7 +139,12 @@ const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
 								/>
 							</Grid>
 						</Grid>
-						{/* {errorMessage && <p>{errorMessage}</p>} */}
+						{/*New fileupload start*/}
+
+						{mode !== "edit" && (
+							<DropzoneArea onChange={(files) => setFile(files)} />
+						)}
+						{/*New fileupload end*/}
 					</form>
 				</DialogContent>
 				<DialogActions>

@@ -48,6 +48,7 @@ const USER_ALREADY_INVITED = "User already invited";
 const INVITE_REPLY_FAILED = "Could not reply on invite";
 const NOT_ALLOWED = "Not allowed";
 const UPDATE_FAILED = "Update failed";
+const ADD_IMAGE_FAILED = "Image upload failed";
 
 const mongoUrl =
 	process.env.MONGO_URL || "mongodb://localhost/project-planner1";
@@ -271,25 +272,29 @@ app.post("/projects", async (req, res) => {
 
 //ADD PROFILE IMAGE TO USER
 //This needs to be a patch since we're modifyin an already existing user
-app.patch("/projects/:projectId", parser.single("image"), async (req, res) => {
-	const { projectId } = req.params;
-	try {
-		console.log("try patch");
+app.patch(
+	"/projects/:projectId/image",
+	parser.single("image"),
+	async (req, res) => {
+		const { projectId } = req.params;
+		try {
+			console.log("try patch project");
 
-		const project = await Project.findOneAndUpdate(
-			{ _id: projectId },
-			{ image: { imageName: req.file.filename, imageUrl: req.file.path } },
-			{ new: true }
-		);
-		res.status(200).json(project);
-		console.log("patch project", project);
-	} catch (err) {
-		res.status(400).json({
-			message: ADD_IMAGE_FAILED,
-			errors: { message: err.message, error: err },
-		});
+			const project = await Project.findOneAndUpdate(
+				{ _id: projectId },
+				{ image: { imageName: req.file.filename, imageUrl: req.file.path } },
+				{ new: true }
+			);
+			res.status(200).json(project);
+			console.log("patch project", project);
+		} catch (err) {
+			res.status(400).json({
+				message: ADD_IMAGE_FAILED,
+				errors: { message: err.message, error: err },
+			});
+		}
 	}
-});
+);
 // app.post('/pets', parser.single('image'), async (req, res) => {
 // 	res.json({ imageUrl: req.file.path, imageId: req.file.filename})
 // })
@@ -329,7 +334,6 @@ app.get("/projects/", async (req, res) => {
 				path: "usersInvited",
 				select: "invitedUsersEmail _id name",
 			});
-		console.log("created proejcts", createdProjects);
 		res.status(200).json(createdProjects);
 	} catch (err) {
 		//console.log('catchen');

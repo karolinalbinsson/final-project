@@ -205,26 +205,18 @@ const ProjectPage = () => {
 						<Container maxWidth="lg" className={classes.container}>
 							<Grid container spacing={3}>
 								<Grid item md={8} xs={12}>
-									{project && (
-										<Card
-											projectId={project._id}
-											projectTitle={project.projectName}
-											createdAt={moment(project.createdAt).fromNow()}
-											shortDescription={project.projectShortDescription}
-											longDescription={project.projectLongDescription}
-											usersInvited={project.usersInvited}
-											creator={project.creator.name}
-											updatedAt={moment(project.updatedAt).fromNow()}
-										/>
-									)}
-									{isDialogEditOpen && (
-										<ProjectEditDialog
-										// projectId={project._id}
-										// projectTitle={project.projectName}
-										// shortDescription={project.projectShortDescription}
-										// longDescription={project.projectLongDescription}
-										/>
-									)}
+									<Card
+										projectId={project._id}
+										projectTitle={project.projectName}
+										createdAt={moment(project.createdAt).fromNow()}
+										shortDescription={project.projectShortDescription}
+										longDescription={project.projectLongDescription}
+										usersInvited={project.usersInvited}
+										creator={project.creator.name}
+										updatedAt={moment(project.updatedAt).fromNow()}
+										imageUrl={project.image.imageUrl}
+									/>
+
 									{/* {isDialogOpen && <ProjectDialog />} */}
 								</Grid>
 
@@ -234,6 +226,14 @@ const ProjectPage = () => {
 						</Container>
 					</main>
 				</div>
+			)}
+			{isDialogEditOpen && (
+				<ProjectEditDialog
+				// projectId={project._id}
+				// projectTitle={project.projectName}
+				// shortDescription={project.projectShortDescription}
+				// longDescription={project.projectLongDescription}
+				/>
 			)}
 		</>
 	);

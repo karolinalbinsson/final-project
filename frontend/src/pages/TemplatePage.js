@@ -218,19 +218,25 @@ const TemplatePage = () => {
 					<Grid container spacing={3}>
 						{/*  som prop???? "content" */}
 						<SnackBarComponent />
-						{projects.map((project) => (
-							<Grid item xs={12} md={6} lg={3} key={project._id}>
-								<Card
-									creator={project.creator.name}
-									linkTo={`/project/${project._id}`}
-									projectId={project._id}
-									projectTitle={project.projectName}
-									createdAt={moment(project.createdAt).fromNow()}
-									shortDescription={project.projectShortDescription}
-									longDescription={project.projectLongDescription}
-								/>
-							</Grid>
-						))}
+						{projects && (
+							<>
+								{projects.map((project) => (
+									<Grid item xs={12} md={6} lg={3} key={project._id}>
+										<Card
+											creator={project.creator.name}
+											linkTo={`/project/${project._id}`}
+											projectId={project._id}
+											projectTitle={project.projectName}
+											createdAt={moment(project.createdAt).fromNow()}
+											shortDescription={project.projectShortDescription}
+											longDescription={project.projectLongDescription}
+											imageUrl={project.image.imageUrl}
+										/>
+									</Grid>
+								))}
+							</>
+						)}
+
 						{isDialogEditOpen && <ProjectEditDialog />}
 						{isDialogCreateOpen && <ProjectCreateDialog />}
 					</Grid>
