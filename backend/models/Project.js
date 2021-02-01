@@ -41,6 +41,14 @@ export const projectSchema = new mongoose.Schema({
       getters: true,
     },
   ],
+  image: {
+    imageName: {
+      type: String,
+    },
+    imageUrl: {
+      type: String,
+    },
+  },
   /* invitedUsers: [
     {
       type: mongoose.Schema.Types.ObjectId,

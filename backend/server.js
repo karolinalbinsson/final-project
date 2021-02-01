@@ -21,6 +21,10 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 
+import cloudinaryFramework from 'cloudinary';
+import multer from 'multer';
+import cloudinaryStorage from 'multer-storage-cloudinary';
+
 import { userSchema } from './models/User';
 import { projectSchema } from './models/Project';
 import { inviteSchema } from './models/Invite';
@@ -45,6 +49,7 @@ const USER_ALREADY_INVITED = 'User already invited';
 const INVITE_REPLY_FAILED = 'Could not reply on invite';
 const NOT_ALLOWED = 'Not allowed';
 const UPDATE_FAILED = 'Update failed';
+const ADD_IMAGE_FAILED = 'Could not upload image';
 
 const mongoUrl =
   process.env.MONGO_URL || 'mongodb://localhost/project-planner1';
@@ -55,6 +60,23 @@ mongoose.connect(mongoUrl, {
   useFindAndModify: false,
 });
 mongoose.Promise = Promise;
+
+const cloudinary = cloudinaryFramework.v2;
+cloudinary.config({
+  cloud_name: 'dcusmr4ub', // this needs to be whatever you get from cloudinary
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = cloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'projects',
+    allowedFormats: ['jpg', 'png'],
+    transformation: [{ width: 500, height: 500, crop: 'limit' }],
+  },
+});
+const parser = multer({ storage });
 
 // Defines the port the app will run on. Defaults to 8080, but can be
 // overridden when starting the server. For example:
@@ -246,6 +268,33 @@ app.post('/projects', async (req, res) => {
     });
   }
 });
+
+//Cloudinary
+
+//ADD PROFILE IMAGE TO USER
+//This needs to be a patch since we're modifyin an already existing user
+app.patch('/projects/:projectId', parser.single('image'), async (req, res) => {
+  const { projectId } = req.params;
+  try {
+    console.log('try patch');
+
+    const project = await Project.findOneAndUpdate(
+      { _id: projectId },
+      { image: { imageName: req.file.filename, imageUrl: req.file.path } },
+      { new: true }
+    );
+    res.status(200).json(project);
+    console.log('patch project', project);
+  } catch (err) {
+    res.status(400).json({
+      message: ADD_IMAGE_FAILED,
+      errors: { message: err.message, error: err },
+    });
+  }
+});
+// app.post('/pets', parser.single('image'), async (req, res) => {
+// 	res.json({ imageUrl: req.file.path, imageId: req.file.filename})
+// })
 
 //get all created projects on my dashboard
 //eventuellt ändra till /users/:userId/projects

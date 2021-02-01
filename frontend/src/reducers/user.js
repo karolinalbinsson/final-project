@@ -311,12 +311,13 @@ export const deleteSingleProject = projectId => {
 export const createNewProject = (
   projectName,
   projectShortDescription,
-  projectLongDescription
+  projectLongDescription,
+  fileInput
 ) => {
   return (dispatch, getStore) => {
     const accessToken = getStore().user.login.accessToken;
     const creator = getStore().user.login.userId;
-
+    console.log('fösta raden fileIn', fileInput);
     fetch('http://localhost:8080/projects', {
       method: 'POST',
       body: JSON.stringify({
@@ -336,8 +337,27 @@ export const createNewProject = (
         }
         throw new Error('Could not create project.');
       })
+
       .then(json => {
         dispatch(user.actions.setLastCreatedProjectId(json.projectId));
+      })
+      .then(() => {
+        console.log('fileInput', fileInput);
+        console.log('sista then thunk');
+        const projectId = getStore().user.project.lastCreatedProjectId;
+        console.log({ projectId });
+        const formData = new FormData();
+        console.log(formData);
+        formData.append('image', fileInput.current.files[0]);
+        console.log('efter append', formData);
+
+        fetch(`http://localhost:8080/projects/${projectId}`, {
+          method: 'PATCH',
+          body: formData,
+        }).then(res => {
+          res.json();
+          console.log(res.json);
+        });
       })
       .catch(err => {
         dispatch(
