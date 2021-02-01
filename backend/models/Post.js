@@ -2,10 +2,6 @@ import mongoose from "mongoose";
 
 export const postSchema = new mongoose.Schema({
 	//To say if it's a picture or plain text, maybe?
-	postType: {
-		type: String,
-		required: true,
-	},
 	message: {
 		type: String,
 		required: true,
