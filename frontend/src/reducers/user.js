@@ -242,6 +242,7 @@ export const logout = () => {
 			});
 		dispatch(user.actions.setInitialState());
 		localStorage.clear();
+		browserHistory.push(`/`);
 	};
 };
 
