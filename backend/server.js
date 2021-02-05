@@ -295,6 +295,7 @@ app.patch(
 		}
 	}
 );
+
 // app.post('/pets', parser.single('image'), async (req, res) => {
 // 	res.json({ imageUrl: req.file.path, imageId: req.file.filename})
 // })
@@ -468,6 +469,7 @@ app.post("/comments", async (req, res) => {
 			);
 
 			res.status(200).json({
+				post,
 				updatedProject,
 			});
 		}
@@ -490,6 +492,26 @@ app.get("/comments/:projectId", async (req, res) => {
 	} catch (err) {
 		res.status(404).json({
 			error: "COMMENTS NOT FOUND",
+			errors: { message: err.message, error: err },
+		});
+	}
+});
+
+app.patch("/comments/:postId", parser.single("image"), async (req, res) => {
+	const { postId } = req.params;
+	try {
+		console.log("try patch project");
+
+		const post = await Post.findOneAndUpdate(
+			{ _id: postId },
+			{ image: { imageName: req.file.filename, imageUrl: req.file.path } },
+			{ new: true }
+		);
+		res.status(200).json(post);
+		console.log("patch post", post);
+	} catch (err) {
+		res.status(400).json({
+			message: ADD_IMAGE_FAILED,
 			errors: { message: err.message, error: err },
 		});
 	}

@@ -25,6 +25,7 @@ const initialState = {
 		singleProjectId: null,
 		lastCreatedProjectId: null,
 		lastUpdatedProjectId: null,
+		lastPostId: null,
 		deletedProjects: null,
 		invitedUsers: 0,
 		invitedUserEmail: null,
@@ -95,6 +96,10 @@ export const user = createSlice({
 		setLastUpdatedProjectId: (store, action) => {
 			const projectId = action.payload;
 			store.project.lastUpdatedProjectId = projectId;
+		},
+		setLastPostId: (store, action) => {
+			const postId = action.payload;
+			store.project.lastPostId = postId;
 		},
 		setDeletedProjects: (store, action) => {
 			const deletedCount = action.payload;
@@ -559,9 +564,9 @@ export const inviteFriend = (toUserEmail, projectId) => {
 	};
 };
 
-export const addComment = (projectId, message, createdBy) => {
+export const addComment = (projectId, message, createdBy, fileInput) => {
 	console.log("Start of addComment");
-	return (dispatch) => {
+	return (dispatch, getStore) => {
 		fetch("http://localhost:8080/comments", {
 			method: "POST",
 			body: JSON.stringify({ projectId, message, createdBy }),
@@ -573,8 +578,69 @@ export const addComment = (projectId, message, createdBy) => {
 				}
 				throw new Error("Could not post comment");
 			})
+
 			.then((json) => {
 				console.log("I then after result OK", json);
+				dispatch(user.actions.setLastUpdatedProjectId(json.updatedProject._id));
+				dispatch(user.actions.setLastPostId(json.post._id));
+				//Flytta ner sen	dispatch(getSingleProject(projectId));
+				// can this be done in another way?
+				dispatch(user.actions.setErrorMessage({ errorMessage: "" }));
+			})
+			.then(() => {
+				const postId = getStore().user.project.lastPostId;
+				console.log("lastUpdatedProjectId:", projectId);
+				console.log("In next then, fileinput");
+				const formData = new FormData();
+				console.log("formdata before append", formData);
+				console.log("fileinput:", fileInput[0]);
+				formData.append("image", fileInput[0]);
+				console.log("formdata after append", formData);
+
+				fetch(`http://localhost:8080/comments/${postId}`, {
+					method: "PATCH",
+					body: formData,
+				}).then((res) => {
+					console.log("done with patch");
+					dispatch(getSingleProject(projectId));
+					res.json();
+				});
+			})
+			.catch((err) => {
+				dispatch(
+					user.actions.setErrorMessage({ errorMessage: err.toString() })
+				);
+			});
+	};
+};
+
+export const addCommentTest = (projectId, message, createdBy, fileInput) => {
+	console.log("Start of addCommentTEST");
+	const formData = new FormData();
+	console.log("formdata before append", formData);
+	console.log("fileinput:", fileInput[0]);
+	formData.append("image", fileInput[0]);
+	console.log("formdata after first append", formData);
+	formData.append("json", JSON.stringify({ projectId, message, createdBy }));
+	console.log("formdata after second append", formData);
+	return (dispatch) => {
+		fetch("http://localhost:8080/commentimg", {
+			method: "POST",
+			body: {
+				formData: formData,
+			},
+			headers: { "Content-Type": "application/json" },
+		})
+			.then((res) => {
+				if (res.ok) {
+					return res.json();
+				}
+				throw new Error("Could not post comment");
+			})
+
+			.then((json) => {
+				console.log("I then after result OK", json);
+				dispatch(user.actions.setLastUpdatedProjectId(json.projectId));
 				dispatch(getSingleProject(projectId));
 				// can this be done in another way?
 				dispatch(user.actions.setErrorMessage({ errorMessage: "" }));

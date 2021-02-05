@@ -1,25 +1,33 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+
 import { makeStyles } from "@material-ui/core/styles";
 import { ListItem } from "@material-ui/core";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
+
 import ListItemText from "@material-ui/core/ListItemText";
 import Grid from "@material-ui/core/Grid";
-import { logout, user } from "../reducers/user";
-import Container from "@material-ui/core/Container";
+
 import Paper from "@material-ui/core/Paper";
 import moment from "moment";
-import Box from "@material-ui/core/Box";
+
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
+
 import List from "@material-ui/core/List";
-import Avatar from "@material-ui/core/Avatar";
+
 import Fab from "@material-ui/core/Fab";
 import SendIcon from "@material-ui/icons/Send";
 import { addComment } from "reducers/user";
 import { animateScroll } from "react-scroll";
+import CameraAltIcon from "@material-ui/icons/CameraAlt";
+import { DropzoneArea } from "material-ui-dropzone";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Link from "@material-ui/core/Link";
+import Typography from "@material-ui/core/Typography";
+
+import { useDebounce } from "use-debounce";
 
 const useStyles = makeStyles({
 	table: {
@@ -53,7 +61,7 @@ const useStyles = makeStyles({
 		//width: "100%",
 	},
 	myMessageBubble: {
-		background: "pink",
+		background: "#ebedf8",
 		borderRadius: "10px",
 		display: "flex",
 		flexDirection: "column",
@@ -68,9 +76,23 @@ const useStyles = makeStyles({
 	alignRight: {
 		justifyContent: "flex-end",
 	},
+	reverseFlexOrder: {
+		flexDirection: "row-reverse",
+	},
+	customAccordion: {
+		backgroundColor: "transparent",
+		boxShadow: "unset",
+		"&::before": {
+			background: "transparent",
+		},
+	},
+	postImage: {
+		width: "100%",
+	},
 });
 
 const Comments = ({ projectId, posts }) => {
+	//If we write a sentence that contains an url, is there any way to extract only the url??
 	const dispatch = useDispatch();
 	const classes = useStyles();
 
@@ -80,11 +102,23 @@ const Comments = ({ projectId, posts }) => {
 
 	const [messageText, setMessageText] = useState("");
 	const [messageUpdate, setMessageUpdate] = useState(0);
+	const [dropzoneOpen, setDropzoneOpen] = useState(false);
+	const regexUrl = /^((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+	const expression = new RegExp(regexUrl);
+	console.log("test regex: ", expression.test("hejsan"));
+	const [key, setKey] = useState(0);
+	const [debounceKey] = useDebounce(key, 1000);
+
+	console.log("posts: ", postsIn);
 	//const posts = singleProject.posts;
 	const handleSubmitComment = () => {
 		console.log("handlesubmitcomment");
-		dispatch(addComment(singleProjectId, messageText, loggedInUser));
+		//dispatch(addComment(singleProjectId, messageText, loggedInUser,file));
+		dispatch(addComment(singleProjectId, messageText, loggedInUser, file));
+		setDropzoneOpen(false);
+		setKey(key + 1);
 		setMessageText("");
+		setFile("");
 		setMessageUpdate(messageUpdate + 1);
 	};
 
@@ -92,6 +126,15 @@ const Comments = ({ projectId, posts }) => {
 		scrollToBottom();
 	}, [posts]);
 
+	const toggleDropZone = () => {
+		setDropzoneOpen(!dropzoneOpen);
+	};
+
+	const onLinkClick = (event, url) => {
+		event.preventDefault();
+		window.open(url, "_blank", "noopener,noreferrer");
+	};
+	const [file, setFile] = useState([]);
 	const scrollToBottom = () => {
 		animateScroll.scrollToBottom({
 			containerId: "list",
@@ -123,10 +166,59 @@ const Comments = ({ projectId, posts }) => {
 								}
 							>
 								<Grid item>
-									<ListItemText
-										align="left"
-										primary={post.message}
-									></ListItemText>
+									<>
+										{post.image.imageUrl !== "" ? (
+											<>
+												<img
+													className={classes.postImage}
+													src={post.image.imageUrl}
+												/>
+												{expression.test(post.message) ? (
+													<Typography className={classes.root}>
+														<a
+															href={
+																post.message.startsWith("http")
+																	? post.message
+																	: `//${post.message}`
+															}
+															target="_blank"
+															rel="noopener noreferrer"
+														>
+															{post.message}
+														</a>
+													</Typography>
+												) : (
+													<ListItemText
+														align="left"
+														primary={post.message}
+													></ListItemText>
+												)}
+											</>
+										) : (
+											<>
+												{expression.test(post.message) ? (
+													<Typography className={classes.root}>
+														<a
+															href={
+																post.message.startsWith("http")
+																	? post.message
+																	: `//${post.message}`
+															}
+															target="_blank"
+															rel="noopener noreferrer"
+														>
+															{post.message}
+														</a>
+													</Typography>
+												) : (
+													<ListItemText
+														align="left"
+														primary={post.message}
+													></ListItemText>
+												)}
+											</>
+										)}
+									</>
 								</Grid>
 								<Grid item>
 									<ListItemText
@@ -164,6 +256,27 @@ const Comments = ({ projectId, posts }) => {
 						<SendIcon />
 					</Fab>
 				</Grid>
+				<Accordion
+					onChange={() => toggleDropZone()}
+					expanded={dropzoneOpen}
+					className={classes.customAccordion}
+				>
+					<AccordionSummary
+						className={classes.reverseFlexOrder}
+						expandIcon={<CameraAltIcon />}
+						aria-controls="panel1a-content"
+						id="panel1a-header"
+						align="left"
+					></AccordionSummary>
+					<AccordionDetails>
+						<DropzoneArea
+							key={debounceKey}
+							clearOnUnmount={true}
+							initialFiles={[]}
+							onChange={(files) => setFile(files)}
+						/>
+					</AccordionDetails>
+				</Accordion>
 			</Grid>
 		</Grid>
 	);

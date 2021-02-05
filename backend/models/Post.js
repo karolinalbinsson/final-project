@@ -23,4 +23,14 @@ export const postSchema = new mongoose.Schema({
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "Project",
 	},
+	image: {
+		imageName: {
+			type: String,
+			default: "",
+		},
+		imageUrl: {
+			type: String,
+			default: "",
+		},
+	},
 });
