@@ -204,7 +204,7 @@ const ProjectPage = () => {
 						<div className={classes.appBarSpacer} />
 						<Container maxWidth="lg" className={classes.container}>
 							<Grid container spacing={3}>
-								<Grid item md={8} xs={12}>
+								<Grid item md={7} xs={12}>
 									<Card
 										projectId={project._id}
 										projectTitle={project.projectName}
@@ -215,6 +215,7 @@ const ProjectPage = () => {
 										creator={project.creator.name}
 										updatedAt={moment(project.updatedAt).fromNow()}
 										imageUrl={project.image.imageUrl}
+										invitedUsersEmail={project.invitedUsersEmail}
 									/>
 
 									{/* {isDialogOpen && <ProjectDialog />} */}

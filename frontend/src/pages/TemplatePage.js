@@ -231,6 +231,8 @@ const TemplatePage = () => {
 											shortDescription={project.projectShortDescription}
 											longDescription={project.projectLongDescription}
 											imageUrl={project.image.imageUrl}
+											invitedUsersEmail={project.invitedUsersEmail}
+											usersInvited={project.usersInvited}
 										/>
 									</Grid>
 								))}

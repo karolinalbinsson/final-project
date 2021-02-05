@@ -260,16 +260,17 @@ export const logout = () => {
 				if (!res.ok) {
 					throw new Error("Failed to logout");
 				}
-				return res.json();
+				localStorage.clear();
+				dispatch(user.actions.setInitialState());
+				browserHistory.push(`/logIn`);
+
+				//				return res.json();
 			})
 			.catch((err) => {
 				dispatch(
 					user.actions.setErrorMessage({ errorMessage: err.toString() })
 				);
 			});
-		dispatch(user.actions.setInitialState());
-		localStorage.clear();
-		browserHistory.push(`/`);
 	};
 };
 

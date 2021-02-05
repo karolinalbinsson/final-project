@@ -6,7 +6,6 @@ export const postSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 		minlength: 2,
-		maxlength: 200,
 	},
 	createdAt: {
 		type: Date,

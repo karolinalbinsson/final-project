@@ -51,7 +51,7 @@ const useStyles = makeStyles({
 		scrollSnapType: "y proximity",
 	},
 	messageBubble: {
-		background: "yellow",
+		background: "#fff0f5",
 		borderRadius: "10px",
 		display: "flex",
 		flexDirection: "column",
@@ -87,7 +87,12 @@ const useStyles = makeStyles({
 		},
 	},
 	postImage: {
-		width: "100%",
+		maxHeight: "300px",
+		maxWidth: "100%",
+	},
+	dropZone: {
+		minHeight: "unset",
+		maxHeight: "200px",
 	},
 });
 
@@ -103,9 +108,12 @@ const Comments = ({ projectId, posts }) => {
 	const [messageText, setMessageText] = useState("");
 	const [messageUpdate, setMessageUpdate] = useState(0);
 	const [dropzoneOpen, setDropzoneOpen] = useState(false);
-	const regexUrl = /^((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
-	const expression = new RegExp(regexUrl);
-	console.log("test regex: ", expression.test("hejsan"));
+	const regexIsUrl = /^((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
+	const regexContainsUrl = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gim;
+	const isUrl = new RegExp(regexIsUrl);
+	const containsUrl = new RegExp(regexContainsUrl);
+	console.log("test regex:", containsUrl.test("kolla denna www.google.com"));
+
 	const [key, setKey] = useState(0);
 	const [debounceKey] = useDebounce(key, 1000);
 
@@ -142,7 +150,7 @@ const Comments = ({ projectId, posts }) => {
 	};
 
 	return (
-		<Grid item md={4} xs={12}>
+		<Grid item md={5} xs={12}>
 			<Paper>
 				<List id="list" className={classes.messageArea}>
 					{posts.map((post, index) => (
@@ -158,6 +166,7 @@ const Comments = ({ projectId, posts }) => {
 							<Grid
 								item
 								xs={9}
+								md={10}
 								container
 								className={
 									post.createdBy._id === loggedInUser
@@ -173,13 +182,17 @@ const Comments = ({ projectId, posts }) => {
 													className={classes.postImage}
 													src={post.image.imageUrl}
 												/>
-												{expression.test(post.message) ? (
+												{post.message.match(regexContainsUrl) ? (
 													<Typography className={classes.root}>
 														<a
 															href={
-																post.message.startsWith("http")
-																	? post.message
-																	: `//${post.message}`
+																post.message
+																	.match(regexContainsUrl)[0]
+																	.startsWith("http")
+																	? post.message.match(regexContainsUrl)[0]
+																	: `//${
+																			post.message.match(regexContainsUrl)[0]
+																	  }`
 															}
 															target="_blank"
 															rel="noopener noreferrer"
@@ -196,13 +209,17 @@ const Comments = ({ projectId, posts }) => {
 											</>
 										) : (
 											<>
-												{expression.test(post.message) ? (
+												{post.message.match(regexContainsUrl) ? (
 													<Typography className={classes.root}>
 														<a
 															href={
-																post.message.startsWith("http")
-																	? post.message
-																	: `//${post.message}`
+																post.message
+																	.match(regexContainsUrl)[0]
+																	.startsWith("http")
+																	? post.message.match(regexContainsUrl)[0]
+																	: `//${
+																			post.message.match(regexContainsUrl)[0]
+																	  }`
 															}
 															target="_blank"
 															rel="noopener noreferrer"
@@ -270,10 +287,13 @@ const Comments = ({ projectId, posts }) => {
 					></AccordionSummary>
 					<AccordionDetails>
 						<DropzoneArea
+							dropzoneClass={classes.dropZone}
 							key={debounceKey}
 							clearOnUnmount={true}
+							filesLimit={1}
 							initialFiles={[]}
 							onChange={(files) => setFile(files)}
+							useChipsForPreview={true}
 						/>
 					</AccordionDetails>
 				</Accordion>

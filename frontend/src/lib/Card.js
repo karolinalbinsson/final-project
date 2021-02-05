@@ -48,6 +48,7 @@ const ProjectCard = ({
 	updatedAt,
 	linkTo,
 	imageUrl,
+	invitedUsersEmail,
 }) => {
 	const [expanded, setExpanded] = useState(false); //more info of project
 	const [open, setOpen] = useState(false); //sharebutton
@@ -59,7 +60,12 @@ const ProjectCard = ({
 	const deletedProjectId = useSelector(
 		(store) => store.user.project.deletedProjects
 	);
-
+	const emailList = usersInvited.map((data) => data.email);
+	const pendingInvites = invitedUsersEmail.filter(
+		(email) => !emailList.includes(email)
+	);
+	console.log("Active members:", emailList);
+	console.log("Pending:", pendingInvites);
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const classes = useCardStyles();
@@ -223,15 +229,32 @@ const ProjectCard = ({
 							<Collapse in={expanded} timeout="auto" unmountOnExit>
 								<CardContent>
 									{updatedAt && (
-										<Typography paragraph> Updated: {updatedAt}</Typography>
+										<Typography variant="subtitle1">
+											{" "}
+											Updated: {updatedAt}
+										</Typography>
 									)}
 									<Typography paragraph>{longDescription}</Typography>
-									{usersInvited && (
+									{usersInvited.length > 0 && (
 										<>
-											<Typography paragraph>Invited users:</Typography>
+											<Typography variant="subtitle1">
+												Project Members:
+											</Typography>
 											{usersInvited.map((user) => (
 												<Typography key={user.email} paragraph>
 													{user.name}
+												</Typography>
+											))}
+										</>
+									)}
+									{pendingInvites.length > 0 && (
+										<>
+											<Typography variant="subtitle1">
+												Pending invites:
+											</Typography>
+											{pendingInvites.map((emailAddress) => (
+												<Typography key={emailAddress} paragraph>
+													{emailAddress}
 												</Typography>
 											))}
 										</>
