@@ -124,8 +124,16 @@ const ProfilePage = () => {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const name = useSelector((store) => store.user.login.name);
+	const userId = useSelector((store) => store.user.login.userId);
 	const email = useSelector((store) => store.user.login.email);
 	const createdAt = useSelector((store) => store.user.login.userCreatedAt);
+	const allProjects = useSelector(
+		(store) => store.user.project.createdProjects
+	);
+	const myProjects = allProjects.filter((item) => item.creator._id === userId);
+
+	console.log({ allProjects });
+	console.log({ myProjects });
 	/*
 	useEffect(() => {
 		dispatch(getSingleProject(projectId));
@@ -232,6 +240,12 @@ const ProfilePage = () => {
 												<Typography gutterBottom variant="subtitle1">
 													Member since:{" "}
 													{moment(createdAt).format("MMMM Do YYYY")}
+												</Typography>
+												<Typography gutterBottom variant="subtitle1">
+													Collaborating in {allProjects.length} projects
+												</Typography>
+												<Typography gutterBottom variant="subtitle1">
+													Created {myProjects.length} projects
 												</Typography>
 											</Grid>
 											<Button variant="outlined" color="secondary">
