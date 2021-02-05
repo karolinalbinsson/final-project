@@ -30,4 +30,8 @@ export const userSchema = new mongoose.Schema({
 		type: Date,
 		default: () => new Date(),
 	},
+	createdAt: {
+		type: Date,
+		default: () => new Date(),
+	},
 });

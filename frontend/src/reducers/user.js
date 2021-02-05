@@ -12,6 +12,8 @@ const initialState = {
 	login: {
 		name: localStorage.name || null,
 		userId: localStorage.userId || null,
+		email: localStorage.email || null,
+		userCreatedAt: localStorage.userCreatedAt || null,
 		errorMessage: null,
 		accessToken: localStorage.accessToken || null,
 		//Create
@@ -49,6 +51,18 @@ export const user = createSlice({
 			store.login.userId = userId;
 			//console.log({ userId });
 			localStorage.setItem("userId", userId);
+		},
+		setEmail: (store, action) => {
+			const { email } = action.payload;
+			store.login.email = email;
+			//console.log({ userId });
+			localStorage.setItem("email", email);
+		},
+		setUserCreatedAt: (store, action) => {
+			const { userCreatedAt } = action.payload;
+			store.login.userCreatedAt = userCreatedAt;
+			//console.log({ userId });
+			localStorage.setItem("userCreatedAt", userCreatedAt);
 		},
 		setErrorMessage: (store, action) => {
 			const { errorMessage } = action.payload;
@@ -165,6 +179,10 @@ export const login = (email, password) => {
 				);
 				dispatch(user.actions.setUserId({ userId: json.userId }));
 				dispatch(user.actions.setName({ name: json.name }));
+				dispatch(user.actions.setEmail({ email: json.email }));
+				dispatch(
+					user.actions.setUserCreatedAt({ userCreatedAt: json.createdAt })
+				);
 				browserHistory.push(`/dashboard`);
 			})
 			.catch((err) => {
@@ -205,6 +223,10 @@ export const signUp = (name, email, password) => {
 				);
 				dispatch(user.actions.setUserId({ userId: json.userId }));
 				dispatch(user.actions.setName({ name: json.name }));
+				dispatch(user.actions.setEmail({ email: json.email }));
+				dispatch(
+					user.actions.setUserCreatedAt({ userCreatedAt: json.createdAt })
+				);
 				// can this be done in another way?
 				dispatch(user.actions.setErrorMessage({ errorMessage: "" }));
 				//browserHistory.push(`/dashboard/${json.userId}`);
@@ -648,6 +670,39 @@ export const addCommentTest = (projectId, message, createdBy, fileInput) => {
 			.catch((err) => {
 				dispatch(
 					user.actions.setErrorMessage({ errorMessage: err.toString() })
+				);
+			});
+	};
+};
+
+export const deleteUser = (userId) => {
+	return (dispatch, getStore) => {
+		const accessToken = getStore().user.login.accessToken;
+		//const userId = getStore().user.login.userId;
+		//console.log('delete', userId);
+
+		fetch(`http://localhost:8080/users/${userId}`, {
+			method: "DELETE",
+			//body: JSON.stringify({ userId: userId }),
+			headers: { Authorization: accessToken },
+		})
+			.then((res) => {
+				if (res.ok) {
+					return res.json();
+				}
+				throw new Error("Could not delete this user.");
+			})
+			.then((json) => {})
+			.catch((err) => {
+				dispatch(
+					user.actions.setErrorMessage({ errorMessage: err.toString() })
+				);
+				dispatch(
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: err.toString(),
+						snackBarSeverity: "error",
+					})
 				);
 			});
 	};

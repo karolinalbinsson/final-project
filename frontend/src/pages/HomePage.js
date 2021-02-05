@@ -6,6 +6,7 @@ import LogInForm from "../components/LogInForm";
 import SignUpForm from "../components/SignUpForm";
 import ProjectPage from "./ProjectPage";
 import TemplatePage from "./TemplatePage";
+import ProfilePage from "./ProfilePage";
 import SnackBarComponent from "lib/SnackBarComponent";
 
 const HomePage = () => {
@@ -28,6 +29,9 @@ const HomePage = () => {
 				</Route>
 				<Route exact path="/project/:projectId">
 					<ProjectPage />
+				</Route>
+				<Route exact path="/myProfile/">
+					<ProfilePage />
 				</Route>
 			</Switch>
 			<SnackBarComponent />

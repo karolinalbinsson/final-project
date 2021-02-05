@@ -171,8 +171,24 @@ app.post("/users", async (req, res) => {
 	}
 });
 
+//Get user
+app.get("/users/:userId", authenticateUser);
+app.get("/users/:userId", async (req, res) => {
+	try {
+		const userId = req.params.userId;
+		const user = await User.findById({
+			_id: userId,
+		}).lean();
+		console.log("User", user);
+		res.status(200).json(user);
+	} catch (err) {
+		res.status(404).json({
+			error: "USER NOT FOUND",
+			errors: { message: err.message, error: err },
+		});
+	}
+});
 //Delete user
-
 app.delete("/users/:userId/", authenticateUser);
 app.delete("/users/:userId/", async (req, res) => {
 	try {
@@ -211,6 +227,8 @@ app.post("/sessions", async (req, res) => {
 				userId: updatedUser._id,
 				accessToken: updatedUser.accessToken,
 				name: updatedUser.name,
+				email: updatedUser.email,
+				createdAt: updatedUser.createdAt,
 				lastLogin: updateDate,
 			});
 		} else {
