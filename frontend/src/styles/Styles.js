@@ -1,4 +1,7 @@
 import { makeStyles, createStyles } from '@material-ui/core/styles';
+import { deepOrange } from '@material-ui/core/colors';
+import { withStyles } from '@material-ui/core/styles';
+import Avatar from '@material-ui/core/Avatar';
 
 //_________Sign up form
 export const useSignUpStyles = makeStyles(theme => ({
@@ -94,3 +97,31 @@ export const useFormProjectStyles = makeStyles(theme => ({
     margin: theme.spacing(3, 0, 2),
   },
 }));
+
+// profile page
+export const useProfileStyles = makeStyles(theme => ({
+  large: {
+    width: theme.spacing(20),
+    height: theme.spacing(20),
+    fontSize: '60px',
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500],
+  },
+  avatarImage: {
+    display: 'flex',
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+  input: {
+    display: 'none',
+  },
+}));
+
+export const SmallAvatar = withStyles(theme => ({
+  root: {
+    width: 40,
+    height: 40,
+    border: `2px solid ${theme.palette.background.paper}`,
+  },
+}))(Avatar);
