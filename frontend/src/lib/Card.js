@@ -68,8 +68,8 @@ const ProjectCard = ({
   const pendingInvites = invitedUsersEmail.filter(
     email => !emailList.includes(email)
   );
-  console.log('Active members:', emailList);
-  console.log('Pending:', pendingInvites);
+  //console.log('Active members:', emailList);
+  //console.log('Pending:', pendingInvites);
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useCardStyles();
@@ -155,14 +155,15 @@ const ProjectCard = ({
                     </Menu>
                   </>
                 }
-                title={projectTitle}
+                title={
+                  linkTo ? `${projectTitle.substr(0, 15)}...` : projectTitle
+                }
                 subheader={`Created by: ${creator}, ${createdAt}`}
               />
               {linkTo ? (
                 <Link to={linkTo}>
                   <CardMedia
                     className={classes.media}
-                    //image="https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80"
                     image={imageUrl ? imageUrl : defaultUrl}
                     title="My first project"
                   />
@@ -170,7 +171,6 @@ const ProjectCard = ({
               ) : (
                 <CardMedia
                   className={classes.media}
-                  //	image="https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80"
                   image={imageUrl ? imageUrl : defaultUrl}
                   title="My first project"
                 />
@@ -178,7 +178,9 @@ const ProjectCard = ({
 
               <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  {shortDescription}.
+                  {linkTo && shortDescription.length > 0
+                    ? `${shortDescription.substr(0, 40)}...`
+                    : shortDescription}
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
