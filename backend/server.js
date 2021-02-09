@@ -215,16 +215,47 @@ app.delete("/users/:userId/", authenticateUser);
 app.delete("/users/:userId/", async (req, res) => {
 	try {
 		const userId = req.params.userId;
+		const defaultUser = process.env.DEFAULT_USER;
+		console.log("defaultuser", defaultUser);
 		//To check if the authorized user is the same as the user-Id in the URL.
 		//User can only delete themselves.
 		if (userId != req.user._id) {
 			throw NOT_ALLOWED;
 		}
+
+		const updatedProjects = Project.updateMany(
+			{ creator: { $eq: req.user._id } },
+			{ $set: { creator: process.env.DEFAULT_USER } },
+			function (err, docs) {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log("Updated Docs : ", docs);
+				}
+			}
+		);
+
+		const deletedComments = await Post.deleteMany(
+			{ createdBy: req.user._id },
+			function (err, docs) {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log("Updated Docs : ", docs);
+				}
+			}
+		);
+
 		const deletedUser = await User.deleteOne({
 			_id: userId,
 		});
 
-		if (deletedUser.deletedCount > 0 && deletedUser.ok === 1) {
+		if (
+			deletedComments &&
+			updatedProjects &&
+			deletedUser.deletedCount > 0 &&
+			deletedUser.ok === 1
+		) {
 			res.status(200).json(deletedUser);
 		} else throw USER_NOT_FOUND;
 	} catch (err) {
@@ -424,11 +455,14 @@ app.delete("/projects/:projectId", async (req, res) => {
 			_id: projectId,
 		});
 		const projectCreator = project.creator.toString();
-		if (userId === projectCreator) {
+		if (
+			userId === projectCreator ||
+			projectCreator === process.env.DEFAULT_USER
+		) {
 			console.log("inside delete if");
 			const deletedProject = await Project.deleteOne({
 				_id: projectId,
-				creator: req.user._id,
+				//creator: req.user._id,
 			});
 
 			if (deletedProject.deletedCount > 0 && deletedProject.ok === 1) {

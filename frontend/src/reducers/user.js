@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { USERS_URL, SESSIONS_URL } from "../urls";
 import { createBrowserHistory } from "history";
-
+import { ui } from "./ui";
 //export const { enqueueSnackbar } = useSnackbar();
 //import { useHistory } from 'react-router-dom';
 
@@ -266,6 +266,7 @@ export const signUp = (name, lastName, email, password) => {
 // Update user - add profile image
 export const addProfileImage = (fileInput) => {
 	return (dispatch, getStore) => {
+		dispatch(ui.actions.setLoading(true));
 		const userId = getStore().user.login.userId;
 		const formData = new FormData();
 		console.log("formdata in addprofileimage before append", formData);
@@ -307,6 +308,7 @@ export const addProfileImage = (fileInput) => {
 					})
 				);
 			});
+		dispatch(ui.actions.setLoading(false));
 	};
 };
 
@@ -336,6 +338,7 @@ export const logout = () => {
 
 export const deleteUser = (userId) => {
 	return (dispatch, getStore) => {
+		dispatch(ui.actions.setLoading(true));
 		const accessToken = getStore().user.login.accessToken;
 		//const userId = getStore().user.login.userId;
 		//console.log('delete', userId);
@@ -364,6 +367,7 @@ export const deleteUser = (userId) => {
 					})
 				);
 			});
+		dispatch(ui.actions.setLoading(false));
 	};
 };
 
@@ -371,6 +375,7 @@ export const deleteUser = (userId) => {
 //ÄNDRA TILL PLURAL
 export const getUserProjects = () => {
 	return (dispatch, getStore) => {
+		dispatch(ui.actions.setLoading(true));
 		const accessToken = getStore().user.login.accessToken;
 		//console.log('thunken', accessToken);
 		//const userId = getStore().user.login.userId;
@@ -393,6 +398,7 @@ export const getUserProjects = () => {
 						createdProjects: json,
 					})
 				);
+				dispatch(ui.actions.setLoading(false));
 				//console.log(json);
 			})
 
@@ -400,6 +406,7 @@ export const getUserProjects = () => {
 				dispatch(
 					user.actions.setErrorMessage({ errorMessage: err.toString() })
 				);
+				dispatch(ui.actions.setLoading(false));
 			});
 	};
 };
@@ -409,6 +416,7 @@ export const getUserProjects = () => {
 //GET one users own created / invited to projects
 export const getSingleProject = (projectId) => {
 	return (dispatch, getStore) => {
+		//	dispatch(ui.actions.setLoading(true));
 		const accessToken = getStore().user.login.accessToken;
 		//const projectId = getStore().user.project.userId;
 
@@ -435,12 +443,15 @@ export const getSingleProject = (projectId) => {
 					user.actions.setErrorMessage({ errorMessage: err.toString() })
 				);
 			});
+		//dispatch(ui.actions.setLoading(false));
 	};
 };
 
 //DELETE one project own created
 export const deleteSingleProject = (projectId) => {
+	console.log("ProjectID in delete single project", projectId);
 	return (dispatch, getStore) => {
+		dispatch(ui.actions.setLoading(true));
 		const accessToken = getStore().user.login.accessToken;
 		//const userId = getStore().user.login.userId;
 		//console.log('delete', userId);
@@ -480,6 +491,7 @@ export const deleteSingleProject = (projectId) => {
 					})
 				);
 			});
+		dispatch(ui.actions.setLoading(false));
 	};
 };
 
@@ -493,7 +505,7 @@ export const createNewProject = (
 	return (dispatch, getStore) => {
 		const accessToken = getStore().user.login.accessToken;
 		const creator = getStore().user.login.userId;
-
+		dispatch(ui.actions.setLoading(true));
 		fetch("http://localhost:8080/projects", {
 			method: "POST",
 			body: JSON.stringify({
@@ -563,6 +575,7 @@ export const createNewProject = (
 					})
 				);
 			});
+		dispatch(ui.actions.setLoading(false));
 	};
 };
 
