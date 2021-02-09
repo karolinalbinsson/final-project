@@ -331,6 +331,39 @@ export const logout = () => {
   };
 };
 
+export const deleteUser = userId => {
+  return (dispatch, getStore) => {
+    const accessToken = getStore().user.login.accessToken;
+    //const userId = getStore().user.login.userId;
+    //console.log('delete', userId);
+
+    fetch(`http://localhost:8080/users/${userId}`, {
+      method: 'DELETE',
+      //body: JSON.stringify({ userId: userId }),
+      headers: { Authorization: accessToken },
+    })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error('Could not delete user');
+        }
+        localStorage.clear();
+        dispatch(user.actions.setInitialState());
+      })
+      .catch(err => {
+        dispatch(
+          user.actions.setErrorMessage({ errorMessage: err.toString() })
+        );
+        dispatch(
+          user.actions.setSnackBar({
+            snackBarOpen: true,
+            snackBarMessage: err.toString(),
+            snackBarSeverity: 'error',
+          })
+        );
+      });
+  };
+};
+
 //GET one users own created / invited to projects
 //ÄNDRA TILL PLURAL
 export const getUserProjects = () => {
@@ -730,39 +763,6 @@ export const addCommentTest = (projectId, message, createdBy, fileInput) => {
       .catch(err => {
         dispatch(
           user.actions.setErrorMessage({ errorMessage: err.toString() })
-        );
-      });
-  };
-};
-
-export const deleteUser = userId => {
-  return (dispatch, getStore) => {
-    const accessToken = getStore().user.login.accessToken;
-    //const userId = getStore().user.login.userId;
-    //console.log('delete', userId);
-
-    fetch(`http://localhost:8080/users/${userId}`, {
-      method: 'DELETE',
-      //body: JSON.stringify({ userId: userId }),
-      headers: { Authorization: accessToken },
-    })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error('Could not delete this user.');
-      })
-      .then(json => {})
-      .catch(err => {
-        dispatch(
-          user.actions.setErrorMessage({ errorMessage: err.toString() })
-        );
-        dispatch(
-          user.actions.setSnackBar({
-            snackBarOpen: true,
-            snackBarMessage: err.toString(),
-            snackBarSeverity: 'error',
-          })
         );
       });
   };

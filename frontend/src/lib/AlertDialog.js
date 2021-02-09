@@ -38,7 +38,7 @@ const AlertDialog = ({
             Cancel
           </Button>
           <Button
-            onClick={() => handleDelete(projectId)}
+            onClick={() => handleDelete()}
             variant="contained"
             color="primary"
           >

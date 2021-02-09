@@ -114,6 +114,7 @@ export const useProfileStyles = makeStyles(theme => ({
     '& > *': {
       margin: theme.spacing(1),
     },
+    justifyContent: 'center', //kolla övriga ställen där avatar används
   },
   input: {
     display: 'none',

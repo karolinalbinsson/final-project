@@ -27,7 +27,7 @@ const NavigationItems = () => {
 
   const handleLogOut = () => {
     dispatch(logout());
-    history.push('/');
+    history.push('/logIn');
   };
 
   return (

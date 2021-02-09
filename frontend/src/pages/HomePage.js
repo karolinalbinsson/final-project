@@ -28,10 +28,10 @@ const HomePage = () => {
           {!accessToken ? <Redirect to="/logIn" /> : <DashboardPage />}
         </Route>
         <Route exact path="/project/:projectId">
-          <ProjectPage />
+          {!accessToken ? <Redirect to="/logIn" /> : <ProjectPage />}
         </Route>
         <Route exact path="/myProfile/">
-          <ProfilePage />
+          {!accessToken ? <Redirect to="/logIn" /> : <ProfilePage />}
         </Route>
       </Switch>
       <SnackBarComponent />
