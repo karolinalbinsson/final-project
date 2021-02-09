@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect, useHistory, Link } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
+
 import Grid from '@material-ui/core/Grid';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -14,8 +15,6 @@ import Typography from '@material-ui/core/Typography';
 import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-
-//dialog
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -23,22 +22,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 import AvatarGroup from '@material-ui/lab/AvatarGroup';
-
-//Edit project menu
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import {
-  deleteSingleProject,
-  inviteFriend,
-  user,
-  getSingleProject,
-} from 'reducers/user';
+
+import { deleteSingleProject, inviteFriend, user } from 'reducers/user';
 
 import AlertDialog from '../lib/AlertDialog';
 import AvatarImage from '../lib/AvatarImage';
-
 import { useCardStyles } from '../styles/Styles';
 
 const ProjectCard = ({
@@ -59,6 +50,7 @@ const ProjectCard = ({
   const [anchorEl, setAnchorEl] = useState(null); //edit button högst upp
   const [email, setEmail] = useState(''); //invite button
   const [openAlert, setOpenAlert] = useState(false);
+
   const defaultUrl =
     'https://images.unsplash.com/photo-1586281380117-5a60ae2050cc?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80';
   const deletedProjectId = useSelector(
@@ -68,12 +60,8 @@ const ProjectCard = ({
   const pendingInvites = invitedUsersEmail.filter(
     email => !emailList.includes(email)
   );
-  //console.log('Active members:', emailList);
-  //console.log('Pending:', pendingInvites);
-  const history = useHistory();
   const dispatch = useDispatch();
   const classes = useCardStyles();
-  //const avatarClasses = useProfileStyles();
 
   const handleClick = event => {
     setAnchorEl(event.currentTarget);
@@ -101,7 +89,6 @@ const ProjectCard = ({
     dispatch(deleteSingleProject(projectId));
   };
 
-  //edit project button
   const handleEditDialog = () => {
     dispatch(user.actions.resetSingleProject());
     dispatch(user.actions.setSingleProjectId(projectId));
@@ -146,12 +133,7 @@ const ProjectCard = ({
                         Edit
                       </MenuItem>
                       <MenuItem onClick={toggleInviteButton}>Invite</MenuItem>
-                      <MenuItem
-                        //onClick={() => handleDelete(projectId)}
-                        onClick={toggleAlert}
-                      >
-                        Delete
-                      </MenuItem>
+                      <MenuItem onClick={toggleAlert}>Delete</MenuItem>
                     </Menu>
                   </>
                 }
@@ -255,7 +237,6 @@ const ProjectCard = ({
                               .toUpperCase()
                               .concat(user.lastName.charAt(0).toUpperCase())}
                             className={classes.small}
-                            //alt={name}
                             alt={'profile image'}
                             src={user.image.imageUrl}
                           />

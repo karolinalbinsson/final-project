@@ -5,9 +5,8 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import LogInForm from '../components/LogInForm';
 import SignUpForm from '../components/SignUpForm';
 import ProjectPage from './ProjectPage';
-import TemplatePage from './TemplatePage';
+import DashboardPage from './DashboardPage';
 import ProfilePage from './ProfilePage';
-import TestPage from './TestPage';
 import SnackBarComponent from 'lib/SnackBarComponent';
 
 const HomePage = () => {
@@ -26,16 +25,13 @@ const HomePage = () => {
           {accessToken ? <Redirect to="/dashboard/" /> : <SignUpForm />}
         </Route>
         <Route exact path="/dashboard/">
-          {!accessToken ? <Redirect to="/logIn" /> : <TemplatePage />}
+          {!accessToken ? <Redirect to="/logIn" /> : <DashboardPage />}
         </Route>
         <Route exact path="/project/:projectId">
           <ProjectPage />
         </Route>
         <Route exact path="/myProfile/">
           <ProfilePage />
-        </Route>
-        <Route exact path="/testPage/">
-          <TestPage />
         </Route>
       </Switch>
       <SnackBarComponent />

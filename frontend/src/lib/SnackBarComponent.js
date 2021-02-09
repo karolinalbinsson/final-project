@@ -1,41 +1,26 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { user } from '../reducers/user';
+
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
-import { makeStyles } from '@material-ui/core/styles';
 
-function Alert(props) {
+import { user } from '../reducers/user';
+import { useSnackBarStyles } from '../styles/Styles';
+
+const Alert = props => {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    width: '100%',
-    '& > * + *': {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
+};
 
 const SnackBar = () => {
-  const classes = useStyles();
+  const classes = useSnackBarStyles();
   const dispatch = useDispatch();
-  const invitedUserEmail = useSelector(
-    store => store.user.project.invitedUserEmail
-  );
-  console.log(invitedUserEmail);
-
-  //	const errorMessage = useSelector((store) => store.user.login.errorMessage);
   const snackBarMessage = useSelector(
     store => store.user.project.snackBarMessage
   );
   const open = useSelector(store => store.user.project.snackBarOpen);
   const severity = useSelector(store => store.user.project.snackBarSeverity);
 
-  console.log('Is snackbar open:?', { open });
-
-  const handleClose = (event, reason) => {
+  const handleClose = reason => {
     if (reason === 'clickaway') {
       return;
     }
@@ -45,6 +30,7 @@ const SnackBar = () => {
   useEffect(() => {
     'Render snackbar';
   }, []);
+
   return (
     <div className={classes.root}>
       <Snackbar

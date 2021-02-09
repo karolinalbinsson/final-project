@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Button from '@material-ui/core/Button';
@@ -8,7 +8,6 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-
 import IconButton from '@material-ui/core/IconButton';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -98,7 +97,7 @@ const SignUpForm = () => {
               <OutlinedInput
                 required={true}
                 id="outlined-adornment-password"
-                type={showPassword ? 'text' : 'password'} //changed when icon is clicked
+                type={showPassword ? 'text' : 'password'}
                 value={password}
                 fullWidth={true}
                 onChange={event => setPassword(event.target.value)}
@@ -109,7 +108,6 @@ const SignUpForm = () => {
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                     >
-                      {/* toggles */}
                       {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>

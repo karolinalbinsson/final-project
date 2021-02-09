@@ -8,7 +8,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 import { DropzoneArea } from 'material-ui-dropzone';
 
 import {
@@ -21,9 +20,6 @@ import { useFormProjectStyles } from '../styles/Styles';
 
 const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
   const singleProject = useSelector(store => store.user.project.singleProject);
-  if (mode === 'edit') {
-    const singleProjectId = singleProject._id;
-  }
   const dispatch = useDispatch();
   const classes = useFormProjectStyles();
 
@@ -36,7 +32,6 @@ const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
   const [projectLongDescription, setProjectLongDescription] = useState(
     singleProject ? singleProject.projectLongDescription : ''
   );
-
   const [file, setFile] = useState('');
 
   const handleEditSubmit = () => {
@@ -45,7 +40,6 @@ const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
         projectName,
         projectShortDescription,
         projectLongDescription,
-        //singleProjectId
         singleProject._id
       )
     );
@@ -69,7 +63,6 @@ const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
     setProjectShortDescription('');
     setProjectLongDescription('');
     toggleDialog();
-    //	dispatch(getUserProjects());
   };
 
   return (
@@ -129,12 +122,9 @@ const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
                 />
               </Grid>
             </Grid>
-            {/*New fileupload start*/}
-
             {mode !== 'edit' && (
               <DropzoneArea onChange={files => setFile(files)} />
             )}
-            {/*New fileupload end*/}
           </form>
         </DialogContent>
         <DialogActions>

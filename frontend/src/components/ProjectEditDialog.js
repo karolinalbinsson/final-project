@@ -5,9 +5,7 @@ import { user, getSingleProject } from '../reducers/user';
 import ProjectDialog from '../lib/ProjectDialog';
 
 const ProjectEditDialog = () => {
-  console.log('in project edit dialog parent');
   const dispatch = useDispatch();
-
   const singleProject = useSelector(store => store.user.project.singleProject);
 
   const singleProjectId = useSelector(

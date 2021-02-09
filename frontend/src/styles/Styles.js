@@ -3,6 +3,8 @@ import { deepOrange } from '@material-ui/core/colors';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 
+const drawerWidth = 240;
+
 //_________Sign up form
 export const useSignUpStyles = makeStyles(theme => ({
   paper: {
@@ -125,3 +127,182 @@ export const SmallAvatar = withStyles(theme => ({
     border: `2px solid ${theme.palette.background.paper}`,
   },
 }))(Avatar);
+
+// comment style
+export const useCommentsStyles = makeStyles({
+  table: {
+    minWidth: 650,
+  },
+  chatSection: {
+    width: '100%',
+    height: '80vh',
+  },
+  headBG: {
+    backgroundColor: '#e0e0e0',
+  },
+  borderRight500: {
+    borderRight: '1px solid #e0e0e0',
+  },
+  messageArea: {
+    height: '70vh',
+    //overflowY: "auto",
+    overflowY: 'scroll',
+    overscrollBehaviorY: 'contain',
+    scrollSnapType: 'y proximity',
+  },
+  messageBubble: {
+    background: '#fff0f5',
+    borderRadius: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '5px',
+    wordBreak: 'break-word',
+
+    //width: "100%",
+  },
+  myMessageBubble: {
+    background: '#ebedf8',
+    borderRadius: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '5px',
+    wordBreak: 'break-word',
+
+    //width: "100%",
+  },
+  alignLeft: {
+    justifyContent: 'flex-start',
+  },
+  alignRight: {
+    justifyContent: 'flex-end',
+  },
+  reverseFlexOrder: {
+    flexDirection: 'row-reverse',
+  },
+  customAccordion: {
+    backgroundColor: 'transparent',
+    boxShadow: 'unset',
+    '&::before': {
+      background: 'transparent',
+    },
+  },
+  postImage: {
+    maxHeight: '300px',
+    maxWidth: '100%',
+  },
+  dropZone: {
+    minHeight: 'unset',
+    maxHeight: '200px',
+  },
+});
+
+// navigation styles
+export const useNavigationStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(['width', 'margin'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    // [theme.breakpoints.up('sm')]: {
+    //   display: 'none',
+    // },
+    marginRight: 36,
+  },
+  hide: {
+    display: 'none',
+  },
+  drawer: {
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
+      whiteSpace: 'nowrap',
+    },
+  },
+  drawerOpen: {
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  drawerClose: {
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: theme.spacing(7) + 1,
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(9) + 1,
+    },
+  },
+  toolbar: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+  },
+}));
+
+// snackbar styles
+export const useSnackBarStyles = makeStyles(theme => ({
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  },
+}));
+
+// main styles
+export const useMainStyles = makeStyles(theme => ({
+  root: {
+    display: 'flex',
+  },
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    height: '100vh',
+    overflow: 'auto',
+  },
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+  paper: {
+    padding: theme.spacing(2),
+    display: 'flex',
+    overflow: 'auto',
+    flexDirection: 'column',
+  },
+  fixedHeight: {
+    height: 240,
+  },
+  large: {
+    width: theme.spacing(20),
+    height: theme.spacing(20),
+  },
+}));

@@ -14,7 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 
 import { useTemplateStyles } from '../styles/Styles';
-import { TemplateListItems } from '../components/TemplateListItems';
+import { TemplateListItems } from '../components/NavigationItems';
 
 const TemplateNav = () => {
   const classes = useTemplateStyles();
@@ -24,13 +24,7 @@ const TemplateNav = () => {
   const toggleDrawOpen = () => {
     setOpen(!open);
   };
-  // const handleDrawerOpen = () => {
-  //   setOpen(true);
-  // };
 
-  // const handleDrawerClose = () => {
-  //   setOpen(false);
-  // };
   return (
     <>
       <AppBar

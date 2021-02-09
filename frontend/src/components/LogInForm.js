@@ -17,7 +17,6 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { login } from '../reducers/user';
-
 import { useLogInStyles } from '../styles/Styles';
 
 const LogInForm = () => {
@@ -68,7 +67,7 @@ const LogInForm = () => {
               <OutlinedInput
                 required={true}
                 id="outlined-adornment-password"
-                type={showPassword ? 'text' : 'password'} //changed when icon is clicked
+                type={showPassword ? 'text' : 'password'}
                 value={password}
                 fullWidth={true}
                 onChange={event => setPassword(event.target.value)}
@@ -79,7 +78,6 @@ const LogInForm = () => {
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
                     >
-                      {/* toggles */}
                       {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
