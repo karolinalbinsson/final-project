@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout, user } from '../reducers/user';
-//import Button from '@material-ui/core/Button';
+import { user } from '../reducers/user';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/core/styles';
-import { StoreOutlined } from '@material-ui/icons';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -26,7 +24,7 @@ const SnackBar = () => {
   const invitedUserEmail = useSelector(
     store => store.user.project.invitedUserEmail
   );
-  // console.log(invitedUserEmail);
+  console.log(invitedUserEmail);
 
   //	const errorMessage = useSelector((store) => store.user.login.errorMessage);
   const snackBarMessage = useSelector(
@@ -35,7 +33,7 @@ const SnackBar = () => {
   const open = useSelector(store => store.user.project.snackBarOpen);
   const severity = useSelector(store => store.user.project.snackBarSeverity);
 
-  // console.log("Is snackbar open:?", { open });
+  console.log('Is snackbar open:?', { open });
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {

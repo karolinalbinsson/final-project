@@ -89,7 +89,6 @@ export const user = createSlice({
       store.login.accessToken = accessToken;
       localStorage.setItem('accessToken', accessToken);
     },
-
     //create project dialoge
     toggleCreateDialog: store => {
       store.login.isDialogCreateOpen = !store.login.isDialogCreateOpen;
@@ -247,10 +246,7 @@ export const signUp = (name, lastName, email, password) => {
         dispatch(
           user.actions.setUserCreatedAt({ userCreatedAt: json.createdAt })
         );
-        // can this be done in another way?
         dispatch(user.actions.setErrorMessage({ errorMessage: '' }));
-        //browserHistory.push(`/dashboard/${json.userId}`);
-        browserHistory.push(`/dashboard`);
       })
       .catch(err => {
         dispatch(
@@ -326,9 +322,6 @@ export const logout = () => {
         }
         localStorage.clear();
         dispatch(user.actions.setInitialState());
-        browserHistory.push(`/logIn`);
-
-        //				return res.json();
       })
       .catch(err => {
         dispatch(

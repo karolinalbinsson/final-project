@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Button from '@material-ui/core/Button';
@@ -18,8 +18,6 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 
 import { signUp } from 'reducers/user';
-//import SnackBar from '../lib/SnackBar';
-
 import { useLogInStyles } from '../styles/Styles';
 
 const SignUpForm = () => {
@@ -35,7 +33,6 @@ const SignUpForm = () => {
 
   const minimumPasswordLength = { minLength: 5 };
 
-  // Toggle password visibility
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
   const handleSubmit = event => {

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -21,12 +20,7 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import SnackBarComponent from 'lib/SnackBarComponent';
-import { useTemplateStyles } from '../styles/Styles';
-import { getSingleProject } from '../reducers/user';
-import Card from '../lib/Card';
 import TemplateListItems from '../components/TemplateListItems';
-import ProjectEditDialog from '../components/ProjectEditDialog';
-import Comments from '../components/Comments';
 import { Paper } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -48,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
   },
   toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
+    paddingRight: 24,
   },
   toolbarIcon: {
     display: 'flex',

@@ -19,7 +19,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 
-import { useTemplateStyles } from '../styles/Styles';
 import { getUserProjects, user } from '../reducers/user';
 import Card from '../lib/Card';
 import TemplateListItems from '../components/TemplateListItems';
