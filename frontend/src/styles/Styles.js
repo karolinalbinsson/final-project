@@ -1,8 +1,14 @@
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { deepOrange, teal, pink } from "@material-ui/core/colors";
+import {
+	deepOrange,
+	teal,
+	pink,
+	blueGrey,
+	grey,
+} from "@material-ui/core/colors";
 import { withStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
-
+import Switch from "@material-ui/core/Switch";
 const drawerWidth = 240;
 
 //_________Sign up form
@@ -80,6 +86,13 @@ export const useCardStyles = makeStyles((theme) =>
 		expandOpen: {
 			transform: "rotate(180deg)",
 		},
+		hiddenDiv: {
+			border: "1px solid transparent !important",
+		},
+		small: {
+			backgroundColor: deepOrange[500],
+			color: theme.palette.getContrastText(deepOrange[500]),
+		},
 	})
 );
 
@@ -156,7 +169,7 @@ export const useCommentsStyles = makeStyles({
 		scrollSnapType: "y proximity",
 	},
 	messageBubbleLight: {
-		background: teal[50],
+		background: grey[200],
 		borderRadius: "10px",
 		display: "flex",
 		flexDirection: "column",
@@ -166,7 +179,7 @@ export const useCommentsStyles = makeStyles({
 		//width: "100%",
 	},
 	messageBubbleDark: {
-		background: teal[800],
+		background: blueGrey[400],
 		borderRadius: "10px",
 		display: "flex",
 		flexDirection: "column",
@@ -176,7 +189,7 @@ export const useCommentsStyles = makeStyles({
 		//width: "100%",
 	},
 	myMessageBubbleLight: {
-		background: pink[50],
+		background: teal[50],
 		borderRadius: "10px",
 		display: "flex",
 		flexDirection: "column",
@@ -186,7 +199,7 @@ export const useCommentsStyles = makeStyles({
 		//width: "100%",
 	},
 	myMessageBubbleDark: {
-		background: pink[800],
+		background: blueGrey[700],
 		borderRadius: "10px",
 		display: "flex",
 		flexDirection: "column",
@@ -283,6 +296,12 @@ export const useNavigationStyles = makeStyles((theme) => ({
 		// necessary for content to be below app bar
 		...theme.mixins.toolbar,
 	},
+	toolbarTest: {
+		display: "flex",
+	},
+	title: {
+		flexGrow: 1,
+	},
 	drawerPaper: {
 		width: drawerWidth,
 	},
@@ -331,3 +350,17 @@ export const useMainStyles = makeStyles((theme) => ({
 		height: theme.spacing(20),
 	},
 }));
+
+export const ThemeSwitch = withStyles({
+	switchBase: {
+		color: pink[100],
+		"&$checked": {
+			color: pink[400],
+		},
+		"&$checked + $track": {
+			backgroundColor: pink[300],
+		},
+	},
+	checked: {},
+	track: {},
+})(Switch);

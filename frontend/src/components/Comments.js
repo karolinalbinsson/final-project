@@ -2,27 +2,23 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { animateScroll } from "react-scroll";
 import moment from "moment";
-import { useDebounce } from "use-debounce";
 
 import { ListItem } from "@material-ui/core";
-import ListItemText from "@material-ui/core/ListItemText";
+
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
 import List from "@material-ui/core/List";
-import Fab from "@material-ui/core/Fab";
+
 import SendIcon from "@material-ui/icons/Send";
 import CameraAltIcon from "@material-ui/icons/CameraAlt";
-import { DropzoneArea } from "material-ui-dropzone";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
+
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import { addComment } from "reducers/user";
 import { useCommentsStyles } from "../styles/Styles";
-import { useCardStyles, useProfileStyles, SmallAvatar } from "../styles/Styles";
+import { useProfileStyles } from "../styles/Styles";
 import Chip from "@material-ui/core/Chip";
 
 const Comments = ({ projectId, posts }) => {
@@ -54,6 +50,7 @@ const Comments = ({ projectId, posts }) => {
 	};
 
 	useEffect(() => {
+		deleteImage();
 		scrollToBottom();
 	}, [posts]);
 
@@ -199,7 +196,7 @@ const Comments = ({ projectId, posts }) => {
 				<Grid item xs={8}>
 					<TextField
 						id="outlined-basic-email"
-						label="Type Something"
+						placeholder="Type Something"
 						fullWidth
 						value={messageText}
 						onChange={(event) => setMessageText(event.target.value)}

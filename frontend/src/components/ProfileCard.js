@@ -16,7 +16,7 @@ import CameraAltIcon from "@material-ui/icons/CameraAlt";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
+
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { deleteUser, addProfileImage } from "reducers/user";
 import AlertDialog from "../lib/AlertDialog";
@@ -25,18 +25,11 @@ import { useCardStyles, useProfileStyles, SmallAvatar } from "../styles/Styles";
 import Input from "@material-ui/core/Input";
 import Button from "@material-ui/core/Button";
 
-import TextField from "@material-ui/core/TextField";
-import Link from "@material-ui/core/Link";
-
-import OutlinedInput from "@material-ui/core/OutlinedInput";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import { WEB_URL } from "../urls";
-import { signUp } from "reducers/user";
-import { useLogInStyles } from "../styles/Styles";
 
 const ProfileCard = ({
 	name,
@@ -263,7 +256,6 @@ const ProfileCard = ({
 											open={Boolean(anchorEl)}
 											onClose={handleClose}
 										>
-											<MenuItem>Update profile</MenuItem>
 											<MenuItem onClick={togglePasswordDialog}>
 												Change password
 											</MenuItem>

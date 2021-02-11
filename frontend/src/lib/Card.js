@@ -25,6 +25,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import AvatarGroup from "@material-ui/lab/AvatarGroup";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import { deleteSingleProject, inviteFriend, user } from "reducers/user";
 
@@ -238,16 +239,25 @@ const ProjectCard = ({
 											</Typography>
 											<AvatarGroup max={4}>
 												{usersInvited.map((user) => (
-													<AvatarImage
+													<Tooltip
 														key={user.email}
-														initials={user.name
-															.charAt(0)
-															.toUpperCase()
-															.concat(user.lastName.charAt(0).toUpperCase())}
-														className={classes.small}
-														alt={"profile image"}
-														src={user.image.imageUrl}
-													/>
+														title={`${user.name} ${user.lastName}`}
+													>
+														<div className={classes.hiddenDiv}>
+															<AvatarImage
+																key={user.email}
+																initials={user.name
+																	.charAt(0)
+																	.toUpperCase()
+																	.concat(
+																		user.lastName.charAt(0).toUpperCase()
+																	)}
+																className={classes.small}
+																alt={"profile image"}
+																src={user.image.imageUrl}
+															/>
+														</div>
+													</Tooltip>
 												))}
 											</AvatarGroup>
 										</>

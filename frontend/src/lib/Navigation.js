@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import clsx from "clsx";
 import AppBar from "@material-ui/core/AppBar";
@@ -19,8 +20,6 @@ import Switch from "@material-ui/core/Switch";
 import NavigationItems from "../components/NavigationItems";
 import { useNavigationStyles } from "../styles/Styles";
 import { user } from "../reducers/user";
-import { withStyles } from "@material-ui/core/styles";
-import { purple, pink } from "@material-ui/core/colors";
 
 const Navigation = (props) => {
 	const { window, pageHeader } = props;
@@ -45,20 +44,6 @@ const Navigation = (props) => {
 	const container =
 		window !== undefined ? () => window().document.body : undefined;
 
-	const PurpleSwitch = withStyles({
-		switchBase: {
-			color: pink[100],
-			"&$checked": {
-				color: pink[400],
-			},
-			"&$checked + $track": {
-				backgroundColor: pink[300],
-			},
-		},
-		checked: {},
-		track: {},
-	})(Switch);
-
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
@@ -68,7 +53,7 @@ const Navigation = (props) => {
 					[classes.appBarShift]: open,
 				})}
 			>
-				<Toolbar>
+				<Toolbar className={classes.toolbarTest}>
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
@@ -80,14 +65,25 @@ const Navigation = (props) => {
 					>
 						<MenuIcon />
 					</IconButton>
-					<Typography variant="h6" noWrap>
+					<Typography variant="h6" noWrap className={classes.title}>
 						{`${name}´s ${pageHeader}`}
 					</Typography>
-					<PurpleSwitch
-						checked={isDarkMode}
-						onChange={handleThemeSwitch}
-						name="checkedA"
-					/>
+					<Tooltip
+						title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+					>
+						{/* <ThemeSwitch
+							className={classes.switch}
+							checked={isDarkMode}
+							onChange={handleThemeSwitch}
+							name="checkedA"
+						/> */}
+						<Switch
+							checked={isDarkMode}
+							onChange={handleThemeSwitch}
+							color="default"
+							inputProps={{ "aria-label": "checkbox with default color" }}
+						/>
+					</Tooltip>
 					{/* <Switch
 						color="secondary"
 						checked={isDarkMode}

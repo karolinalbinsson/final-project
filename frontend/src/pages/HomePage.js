@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
-import { purple, pink, grey } from "@material-ui/core/colors";
+import { teal, blueGrey } from "@material-ui/core/colors";
 import LogInForm from "../components/LogInForm";
 import SignUpForm from "../components/SignUpForm";
 import ProjectPage from "./ProjectPage";
@@ -20,10 +20,10 @@ const HomePage = () => {
 		palette: {
 			type: palletType,
 			primary: {
-				main: palletType === "dark" ? pink[800] : pink[400],
+				main: palletType === "dark" ? blueGrey[500] : teal[400],
 			},
 			secondary: {
-				main: palletType === "dark" ? grey[100] : pink[600],
+				main: palletType === "dark" ? blueGrey[100] : teal[600],
 			},
 		},
 	});
