@@ -123,7 +123,10 @@ const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {
               </Grid>
             </Grid>
             {mode !== 'edit' && (
-              <DropzoneArea onChange={files => setFile(files)} />
+              <DropzoneArea
+                maxFileSize={8000000}
+                onChange={files => setFile(files)}
+              />
             )}
           </form>
         </DialogContent>

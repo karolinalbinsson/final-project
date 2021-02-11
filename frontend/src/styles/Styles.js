@@ -26,9 +26,12 @@ export const useSignUpStyles = makeStyles(theme => ({
 export const useLogInStyles = makeStyles(theme => ({
   root: {
     height: '100vh',
+    flexWrap: 'wrap-reverse',
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    //backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage:
+      'url(https://images.unsplash.com/photo-1521092375781-38696f9841fe?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2250&q=80)',
     backgroundRepeat: 'no-repeat',
     backgroundColor:
       theme.palette.type === 'dark'
@@ -36,6 +39,29 @@ export const useLogInStyles = makeStyles(theme => ({
         : theme.palette.grey[900],
     backgroundSize: 'cover',
     backgroundPosition: 'center',
+  },
+  information: {
+    margin: theme.spacing(8, 4),
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      margin: '20%',
+      display: 'flex ',
+      justifyContent: 'center',
+    },
+  },
+  informationText: {
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    color: 'white',
+    padding: '10px',
+    [theme.breakpoints.up('md')]: {
+      fontSize: '1.3rem',
+    },
+  },
+  informationMobile: {
+    margin: '32px',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
   },
   paper: {
     margin: theme.spacing(8, 4),
@@ -305,5 +331,18 @@ export const useMainStyles = makeStyles(theme => ({
   large: {
     width: theme.spacing(20),
     height: theme.spacing(20),
+  },
+}));
+
+// Animation style
+export const useAnimationStyles = makeStyles(theme => ({
+  animation: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: '20px',
+  },
+  animationText: {
+    color: '#A25365',
   },
 }));

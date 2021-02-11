@@ -13,11 +13,13 @@ import SnackBarComponent from 'lib/SnackBarComponent';
 import Navigation from '../lib/Navigation';
 import { useMainStyles } from '../styles/Styles';
 import BackdropLoader from '../lib/BackdropLoader';
+import Animation from '../components/Animation';
 
 const DashboardPage = () => {
   const classes = useMainStyles();
   const userId = useSelector(store => store.user.login.userId);
   const projects = useSelector(store => store.user.project.createdProjects);
+  console.log('projects', projects);
 
   const numberOfInvitedUsers = useSelector(
     store => store.user.project.invitedUsers
@@ -54,6 +56,7 @@ const DashboardPage = () => {
       <Navigation pageHeader="Dashboard" />
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
+        {projects.length === 0 && <Animation />}
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
             <SnackBarComponent />
