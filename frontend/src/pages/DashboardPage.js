@@ -51,6 +51,18 @@ const DashboardPage = () => {
     dispatch(user.actions.setDeletedProjects(null));
   }, [dispatch, projects]);
 
+  const mediumGrid = projects.length === 1 ? 9 : 6;
+  const largeGrid = projects.length === 1 ? 6 : projects.length === 2 ? 6 : 3;
+
+  //   <Grid
+  //   container
+  //   spacing={0}
+  //   direction="column"
+  //   alignItems="center"
+  //   justify="center"
+  //   style={{ minHeight: '100vh' }}
+  //  ></Grid>
+
   return (
     <div className={classes.root}>
       <Navigation pageHeader="Dashboard" />
@@ -58,13 +70,19 @@ const DashboardPage = () => {
         <div className={classes.appBarSpacer} />
         {projects.length === 0 && <Animation />}
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
+          <Grid container alignItems="center" justify="center" spacing={3}>
             <SnackBarComponent />
             <BackdropLoader />
             {projects && (
               <>
                 {projects.map(project => (
-                  <Grid item xs={12} md={6} lg={3} key={project._id}>
+                  <Grid
+                    item
+                    xs={12}
+                    md={mediumGrid}
+                    lg={largeGrid}
+                    key={project._id}
+                  >
                     <Card
                       creator={project.creator.name}
                       linkTo={`/project/${project._id}`}
