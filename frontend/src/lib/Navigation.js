@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import clsx from 'clsx';
 import AppBar from '@material-ui/core/AppBar';
@@ -19,9 +20,11 @@ import NavigationItems from '../components/NavigationItems';
 import { useNavigationStyles } from '../styles/Styles';
 
 const Navigation = props => {
-  const { window } = props;
+  const { window, pageHeader } = props;
   const classes = useNavigationStyles();
   const theme = useTheme();
+  const name = useSelector(store => store.user.login.name);
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -55,7 +58,7 @@ const Navigation = props => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Responsive drawer
+            {`${name}´s ${pageHeader}`}
           </Typography>
         </Toolbar>
       </AppBar>

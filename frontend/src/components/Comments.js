@@ -27,43 +27,17 @@ const Comments = ({ projectId, posts }) => {
   //If we write a sentence that contains an url, is there any way to extract only the url??
   const dispatch = useDispatch();
   const classes = useCommentsStyles();
-
   const singleProjectId = projectId;
   const loggedInUser = useSelector(store => store.user.login.userId);
+  const regexContainsUrl = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gim;
 
   const [messageText, setMessageText] = useState('');
   const [messageUpdate, setMessageUpdate] = useState(0);
   const [dropzoneOpen, setDropzoneOpen] = useState(false);
   const [key, setKey] = useState(0);
   const [file, setFile] = useState([]);
-
   const [debounceKey] = useDebounce(key, 1000);
-  //const regexIsUrl = /^((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)/;
-  const regexContainsUrl = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gim;
-  //const isUrl = new RegExp(regexIsUrl);
-  //const containsUrl = new RegExp(regexContainsUrl);
-  //console.log('test regex:', containsUrl.test('kolla denna www.google.com'));
 
-  function replaceURLs(message) {
-    if (!message) return;
-
-    var urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g;
-    return message.replace(urlRegex, function (url) {
-      var hyperlink = url;
-      if (!hyperlink.match('^https?://')) {
-        hyperlink = 'http://' + hyperlink;
-      }
-      return (
-        '<a href="' +
-        hyperlink +
-        '" target="_blank" rel="noopener noreferrer">' +
-        url +
-        '</a>'
-      );
-    });
-  }
-
-  //const posts = singleProject.posts;
   const handleSubmitComment = () => {
     dispatch(addComment(singleProjectId, messageText, loggedInUser, file));
     setDropzoneOpen(false);
@@ -71,7 +45,6 @@ const Comments = ({ projectId, posts }) => {
     setMessageText('');
     setFile('');
     setMessageUpdate(messageUpdate + 1);
-    replaceURLs();
   };
 
   useEffect(() => {

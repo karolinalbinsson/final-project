@@ -11,8 +11,8 @@ const AlertDialog = ({
   open,
   handleClose,
   handleDelete,
-  projectName,
-  projectId,
+  name,
+  deleteTitle,
 }) => {
   return (
     <div>
@@ -22,10 +22,10 @@ const AlertDialog = ({
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{'Delete project'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{deleteTitle}</DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to delete "{projectName}"?
+            Are you sure you want to delete "{name}"?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

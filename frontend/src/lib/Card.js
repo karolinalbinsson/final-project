@@ -48,7 +48,6 @@ const ProjectCard = ({
   const [expanded, setExpanded] = useState(false); //more info of project
   const [open, setOpen] = useState(false); //sharebutton
   const [anchorEl, setAnchorEl] = useState(null); //edit button högst upp
-  console.log('anchor', anchorEl);
   const [email, setEmail] = useState(''); //invite button
   const [openAlert, setOpenAlert] = useState(false);
 
@@ -86,7 +85,7 @@ const ProjectCard = ({
     handleClose();
   };
 
-  const handleDelete = projectId => {
+  const handleDelete = () => {
     dispatch(deleteSingleProject(projectId));
   };
 
@@ -113,8 +112,9 @@ const ProjectCard = ({
             open={openAlert}
             handleClose={toggleAlert}
             handleDelete={handleDelete}
-            projectName={projectTitle}
+            name={projectTitle}
             projectId={projectId}
+            deleteTitle="Delete project"
           />
         )}
         <Grid container spacing={3}>
