@@ -28,6 +28,7 @@ const initialState = {
 		isDialogCreateOpen: false,
 		isDialogEditOpen: false,
 		isDialogOpen: false,
+		isDarkMode: false,
 	},
 	project: {
 		createdProjects: [], //byt namn till projects (projekt som vi har)
@@ -167,6 +168,9 @@ export const user = createSlice({
 		setSnackBarSeverity: (store, action) => {
 			const severity = action.payload;
 			store.project.snackBarSeverity = severity;
+		},
+		toggleDarkMode: (store) => {
+			store.login.isDarkMode = !store.login.isDarkMode;
 		},
 	},
 });

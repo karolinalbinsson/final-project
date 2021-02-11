@@ -1,5 +1,5 @@
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { deepOrange } from "@material-ui/core/colors";
+import { deepOrange, deepPurple } from "@material-ui/core/colors";
 import { withStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 
