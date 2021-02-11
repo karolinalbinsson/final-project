@@ -359,17 +359,15 @@ export const addProfileImage = (fileInput) => {
 export const logout = () => {
 	return (dispatch, getStore) => {
 		const accessToken = getStore().user.login.accessToken;
-		//console.log('access LOgout ', accessToken);
 		fetch(`${USERS_URL}/logout`, {
 			method: "POST",
 			headers: { Authorization: accessToken },
 		})
 			.then((res) => {
-				if (!res.ok) {
-					throw new Error("Failed to logout");
-				}
-				localStorage.clear();
-				dispatch(user.actions.setInitialState());
+				if (res.ok) {
+					//localStorage.clear();
+					dispatch(user.actions.setInitialState());
+				} else throw new Error("Failed to log out.");
 			})
 			.catch((err) => {
 				dispatch(
