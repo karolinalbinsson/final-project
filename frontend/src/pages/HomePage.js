@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
 
+import { purple, pink, grey } from "@material-ui/core/colors";
 import LogInForm from "../components/LogInForm";
 import SignUpForm from "../components/SignUpForm";
 import ProjectPage from "./ProjectPage";
@@ -15,15 +16,21 @@ const HomePage = () => {
 	const isDarkMode = useSelector((store) => store.user.login.isDarkMode);
 	const palletType = isDarkMode ? "dark" : "light";
 
-	const darkTheme = createMuiTheme({
+	const theme = createMuiTheme({
 		palette: {
 			type: palletType,
+			primary: {
+				main: palletType === "dark" ? pink[800] : pink[400],
+			},
+			secondary: {
+				main: palletType === "dark" ? grey[100] : pink[600],
+			},
 		},
 	});
 
 	return (
 		<BrowserRouter>
-			<ThemeProvider theme={darkTheme}>
+			<ThemeProvider theme={theme}>
 				<Switch>
 					<Route exact path="/">
 						<Redirect to="/logIn" />

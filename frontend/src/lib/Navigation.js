@@ -20,7 +20,7 @@ import NavigationItems from "../components/NavigationItems";
 import { useNavigationStyles } from "../styles/Styles";
 import { user } from "../reducers/user";
 import { withStyles } from "@material-ui/core/styles";
-import { purple } from "@material-ui/core/colors";
+import { purple, pink } from "@material-ui/core/colors";
 
 const Navigation = (props) => {
 	const { window, pageHeader } = props;
@@ -42,19 +42,17 @@ const Navigation = (props) => {
 		dispatch(user.actions.toggleDarkMode());
 	};
 
-	console.log("IS DARK MODE", isDarkMode);
-
 	const container =
 		window !== undefined ? () => window().document.body : undefined;
 
 	const PurpleSwitch = withStyles({
 		switchBase: {
-			color: purple[300],
+			color: pink[100],
 			"&$checked": {
-				color: purple[500],
+				color: pink[400],
 			},
 			"&$checked + $track": {
-				backgroundColor: purple[500],
+				backgroundColor: pink[300],
 			},
 		},
 		checked: {},

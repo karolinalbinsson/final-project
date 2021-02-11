@@ -37,6 +37,7 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { WEB_URL } from "../urls";
 import { signUp } from "reducers/user";
 import { useLogInStyles } from "../styles/Styles";
+
 const ProfileCard = ({
 	name,
 	lastName,

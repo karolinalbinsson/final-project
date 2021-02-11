@@ -1,5 +1,5 @@
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { deepOrange, deepPurple } from "@material-ui/core/colors";
+import { deepOrange, teal, pink } from "@material-ui/core/colors";
 import { withStyles } from "@material-ui/core/styles";
 import Avatar from "@material-ui/core/Avatar";
 
@@ -155,8 +155,8 @@ export const useCommentsStyles = makeStyles({
 		overscrollBehaviorY: "contain",
 		scrollSnapType: "y proximity",
 	},
-	messageBubble: {
-		background: "#fff0f5",
+	messageBubbleLight: {
+		background: teal[50],
 		borderRadius: "10px",
 		display: "flex",
 		flexDirection: "column",
@@ -165,8 +165,28 @@ export const useCommentsStyles = makeStyles({
 
 		//width: "100%",
 	},
-	myMessageBubble: {
-		background: "#ebedf8",
+	messageBubbleDark: {
+		background: teal[800],
+		borderRadius: "10px",
+		display: "flex",
+		flexDirection: "column",
+		padding: "5px",
+		wordBreak: "break-word",
+
+		//width: "100%",
+	},
+	myMessageBubbleLight: {
+		background: pink[50],
+		borderRadius: "10px",
+		display: "flex",
+		flexDirection: "column",
+		padding: "5px",
+		wordBreak: "break-word",
+
+		//width: "100%",
+	},
+	myMessageBubbleDark: {
+		background: pink[800],
 		borderRadius: "10px",
 		display: "flex",
 		flexDirection: "column",
