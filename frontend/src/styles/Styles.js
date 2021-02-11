@@ -175,7 +175,7 @@ export const useCommentsStyles = makeStyles({
     justifyContent: 'flex-start',
   },
   alignRight: {
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end !important',
   },
   reverseFlexOrder: {
     flexDirection: 'row-reverse',

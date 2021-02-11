@@ -44,6 +44,25 @@ const Comments = ({ projectId, posts }) => {
   //const containsUrl = new RegExp(regexContainsUrl);
   //console.log('test regex:', containsUrl.test('kolla denna www.google.com'));
 
+  function replaceURLs(message) {
+    if (!message) return;
+
+    var urlRegex = /(((https?:\/\/)|(www\.))[^\s]+)/g;
+    return message.replace(urlRegex, function (url) {
+      var hyperlink = url;
+      if (!hyperlink.match('^https?://')) {
+        hyperlink = 'http://' + hyperlink;
+      }
+      return (
+        '<a href="' +
+        hyperlink +
+        '" target="_blank" rel="noopener noreferrer">' +
+        url +
+        '</a>'
+      );
+    });
+  }
+
   //const posts = singleProject.posts;
   const handleSubmitComment = () => {
     dispatch(addComment(singleProjectId, messageText, loggedInUser, file));
@@ -52,6 +71,7 @@ const Comments = ({ projectId, posts }) => {
     setMessageText('');
     setFile('');
     setMessageUpdate(messageUpdate + 1);
+    replaceURLs();
   };
 
   useEffect(() => {

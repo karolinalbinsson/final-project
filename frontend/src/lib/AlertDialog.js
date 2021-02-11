@@ -30,7 +30,7 @@ const AlertDialog = ({
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={handleClose}
+            onClick={() => handleClose()}
             variant="outlined"
             color="secondary"
             autoFocus
