@@ -4,8 +4,8 @@ export const postSchema = new mongoose.Schema({
 	//To say if it's a picture or plain text, maybe?
 	message: {
 		type: String,
-		required: true,
-		minlength: 2,
+		//required: true,
+		//minlength: 2,
 	},
 	createdAt: {
 		type: Date,

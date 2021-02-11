@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { animateScroll } from "react-scroll";
 import moment from "moment";
@@ -19,47 +19,63 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
-
+import IconButton from "@material-ui/core/IconButton";
 import { addComment } from "reducers/user";
 import { useCommentsStyles } from "../styles/Styles";
+import { useCardStyles, useProfileStyles, SmallAvatar } from "../styles/Styles";
+import Chip from "@material-ui/core/Chip";
 
 const Comments = ({ projectId, posts }) => {
 	//If we write a sentence that contains an url, is there any way to extract only the url??
 	const dispatch = useDispatch();
 	const classes = useCommentsStyles();
+	const iconClasses = useProfileStyles();
 	const singleProjectId = projectId;
 	const loggedInUser = useSelector((store) => store.user.login.userId);
 	const regexContainsUrl = /(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})/gim;
 	const isDarkMode = useSelector((store) => store.user.login.isDarkMode);
+	const fileInput = useRef();
 
 	const [messageText, setMessageText] = useState("");
-	const [messageUpdate, setMessageUpdate] = useState(0);
-	const [dropzoneOpen, setDropzoneOpen] = useState(false);
-	const [key, setKey] = useState(0);
-	const [file, setFile] = useState([]);
-	const [debounceKey] = useDebounce(key, 1000);
+	const [imageAttached, setImageAttached] = useState(false);
+	//	const [messageUpdate, setMessageUpdate] = useState(0);
+	//const [dropzoneOpen, setDropzoneOpen] = useState(false);
+	//const [key, setKey] = useState(0);
+	//const [file, setFile] = useState([]);
+	//const [debounceKey] = useDebounce(key, 1000);
 
 	const handleSubmitComment = () => {
-		dispatch(addComment(singleProjectId, messageText, loggedInUser, file));
-		setDropzoneOpen(false);
-		setKey(key + 1);
+		dispatch(addComment(singleProjectId, messageText, loggedInUser, fileInput));
+		//	setDropzoneOpen(false);
+		//setKey(key + 1);
 		setMessageText("");
-		setFile("");
-		setMessageUpdate(messageUpdate + 1);
+		//setFile("");
+		//setMessageUpdate(messageUpdate + 1);
 	};
 
 	useEffect(() => {
 		scrollToBottom();
 	}, [posts]);
 
-	const toggleDropZone = () => {
-		setDropzoneOpen(!dropzoneOpen);
-	};
+	// const toggleDropZone = () => {
+	// 	setDropzoneOpen(!dropzoneOpen);
+	// };
 
 	const scrollToBottom = () => {
 		animateScroll.scrollToBottom({
 			containerId: "list",
 		});
+	};
+
+	const handleImageChange = () => {
+		setImageAttached(true);
+		console.log("image added", fileInput);
+	};
+
+	const deleteImage = () => {
+		fileInput.current.value = "";
+		setImageAttached(false);
+		console.log("after delete", fileInput);
 	};
 
 	return (
@@ -171,7 +187,16 @@ const Comments = ({ projectId, posts }) => {
 			<Divider />
 
 			<Grid container style={{ padding: "20px" }}>
-				<Grid item xs={11}>
+				<Grid item xs={12} align="left">
+					{imageAttached && (
+						<Chip
+							label={fileInput.current.files[0].name}
+							onDelete={() => deleteImage()}
+							color="primary"
+						/>
+					)}
+				</Grid>
+				<Grid item xs={8}>
 					<TextField
 						id="outlined-basic-email"
 						label="Type Something"
@@ -181,39 +206,33 @@ const Comments = ({ projectId, posts }) => {
 					/>
 				</Grid>
 				<Grid item xs={1} align="right">
-					<Fab
-						color="primary"
-						aria-label="add"
+					<IconButton aria-label="upload image">
+						<input
+							// key={inputKey}
+							accept="image/*"
+							className={iconClasses.input}
+							id="contained-button-file"
+							multiple
+							type="file"
+							ref={fileInput}
+							onChange={() => handleImageChange(true)}
+						/>
+						<label htmlFor="contained-button-file">
+							<CameraAltIcon />
+						</label>
+					</IconButton>
+				</Grid>
+				<Grid item xs={1} align="right">
+					<IconButton
+						color="secondary"
 						onClick={() => handleSubmitComment()}
-						disabled={messageText.length < 1 ? true : false}
+						disabled={
+							messageText.length < 1 && imageAttached === false ? true : false
+						}
 					>
 						<SendIcon />
-					</Fab>
+					</IconButton>
 				</Grid>
-				<Accordion
-					onChange={() => toggleDropZone()}
-					expanded={dropzoneOpen}
-					className={classes.customAccordion}
-				>
-					<AccordionSummary
-						className={classes.reverseFlexOrder}
-						expandIcon={<CameraAltIcon />}
-						aria-controls="panel1a-content"
-						id="panel1a-header"
-						align="left"
-					></AccordionSummary>
-					<AccordionDetails>
-						<DropzoneArea
-							dropzoneClass={classes.dropZone}
-							key={debounceKey}
-							clearOnUnmount={true}
-							filesLimit={1}
-							initialFiles={[]}
-							onChange={(files) => setFile(files)}
-							useChipsForPreview={true}
-						/>
-					</AccordionDetails>
-				</Accordion>
 			</Grid>
 		</Grid>
 	);

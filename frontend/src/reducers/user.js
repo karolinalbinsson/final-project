@@ -750,11 +750,9 @@ export const addComment = (projectId, message, createdBy, fileInput) => {
 				const postId = getStore().user.project.lastPostId;
 				console.log("lastUpdatedProjectId:", projectId);
 				console.log("In next then, fileinput");
+
 				const formData = new FormData();
-				console.log("formdata before append", formData);
-				console.log("fileinput:", fileInput[0]);
-				formData.append("image", fileInput[0]);
-				console.log("formdata after append", formData);
+				formData.append("image", fileInput.current.files[0]);
 
 				fetch(`${COMMENTS_URL}/${postId}`, {
 					method: "PATCH",
