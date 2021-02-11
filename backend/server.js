@@ -117,6 +117,15 @@ userSchema.pre("save", async function (next) {
 	user.password = bcrypt.hashSync(user.password, salt);
 	next();
 });
+//______________Middleware to hash password before new password is updated
+userSchema.pre("updateOne", async function (next) {
+	console.log("In pre function updateOne");
+	const user = this;
+
+	const salt = bcrypt.genSaltSync();
+	user.password = bcrypt.hashSync(user.password, salt);
+	next();
+});
 
 //______________Models
 const User = mongoose.model("User", userSchema);
@@ -161,6 +170,45 @@ app.post("/users", async (req, res) => {
 				errors: { message: err.message, error: err },
 			});
 		}
+	}
+});
+
+//______________Create a new password
+//app.post("/users/:userId/password", authenticateUser);
+app.post("/users/:userId/password", async (req, res) => {
+	try {
+		const { userId } = req.params;
+		let { oldPassword, newPassword } = req.body;
+		console.log(oldPassword, newPassword);
+		//const salt = bcrypt.genSaltSync();
+		//oldPassword = bcrypt.hashSync(oldPassword, salt);
+
+		const user = await User.findById({ _id: userId });
+
+		if (user) {
+			console.log("Found user");
+			const match = bcrypt.compareSync(oldPassword, user.password);
+			console.log({ match });
+			if (match) {
+				user.password = newPassword;
+				const savedUser = await user.save();
+
+				if (savedUser) {
+					res.status(200).json({
+						updated: savedUser,
+					});
+				} else throw "Update of password failed.";
+			} else {
+				res.status(401).json({
+					message: "Current password is not correct",
+				});
+			}
+		}
+	} catch (err) {
+		res.status(400).json({
+			message: UPDATE_FAILED,
+			errors: { message: err.message, error: err },
+		});
 	}
 });
 

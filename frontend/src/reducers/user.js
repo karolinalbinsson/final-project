@@ -270,6 +270,47 @@ export const signUp = (name, lastName, email, password) => {
 	};
 };
 
+//Change password
+export const changePassword = (oldPassword, newPassword) => {
+	return (dispatch, getStore) => {
+		const userId = getStore().user.login.userId;
+		fetch(`${USERS_URL}/${userId}/password`, {
+			method: "POST",
+			body: JSON.stringify({ oldPassword, newPassword }),
+			headers: { "Content-Type": "application/json" },
+		})
+			.then((res) => {
+				if (res.ok) {
+					return res.json();
+				} else if (res.status === 401) {
+					throw new Error("Current password is not correct, update failed");
+				} else throw new Error("Password update failed");
+			})
+			.then(() => {
+				dispatch(
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: "Password updated!",
+						snackBarSeverity: "success",
+					})
+				);
+			})
+			.catch((err) => {
+				console.log("ERROR", err);
+				dispatch(
+					user.actions.setErrorMessage({ errorMessage: err.toString() })
+				);
+				dispatch(
+					user.actions.setSnackBar({
+						snackBarOpen: true,
+						snackBarMessage: err.message,
+						snackBarSeverity: "error",
+					})
+				);
+			});
+	};
+};
+
 // Update user - add profile image
 export const addProfileImage = (fileInput) => {
 	return (dispatch, getStore) => {
