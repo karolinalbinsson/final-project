@@ -346,3 +346,12 @@ export const useAnimationStyles = makeStyles(theme => ({
     color: '#A25365',
   },
 }));
+
+// Tooltip style
+export const useTooltipStyles = makeStyles(theme => ({
+  absolute: {
+    position: 'absolute',
+    bottom: theme.spacing(2),
+    right: theme.spacing(3),
+  },
+}));

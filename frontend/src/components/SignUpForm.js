@@ -15,8 +15,10 @@ import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
+
 import { WEB_URL } from '../urls';
 import { signUp } from 'reducers/user';
+import CustomTooltip from './CustomTooltip';
 import { useLogInStyles } from '../styles/Styles';
 
 const SignUpForm = () => {
@@ -45,19 +47,7 @@ const SignUpForm = () => {
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image}>
-        <div className={classes.information}>
-          <Typography
-            component="p"
-            variant="subtitle1"
-            className={classes.informationText}
-          >
-            Save your plans in your own project planner dashboard. Sign up and
-            start your planning. Keep it to yourself or invite friends to
-            collaborate.
-          </Typography>
-        </div>
-      </Grid>
+      <Grid item xs={false} sm={4} md={7} className={classes.image}></Grid>
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Typography component="h1" variant="h5">
@@ -145,17 +135,7 @@ const SignUpForm = () => {
             </Grid>
           </form>
         </div>
-        <div className={classes.informationMobile}>
-          <Typography
-            component="p"
-            variant="subtitle1"
-            className={classes.informationTextMobile}
-          >
-            Save your plans in your own project planner dashboard. Sign up and
-            start your planning. Keep it to yourself or invite friends to
-            collaborate.
-          </Typography>
-        </div>
+        <CustomTooltip />
       </Grid>
     </Grid>
   );

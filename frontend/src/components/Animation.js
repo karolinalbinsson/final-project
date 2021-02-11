@@ -19,6 +19,7 @@ const Animation = () => {
       animationData: require('../Animation/lottie.json'),
     });
   }, []);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} sm={12} className={classes.animation}>
