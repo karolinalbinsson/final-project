@@ -15,7 +15,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormControl from "@material-ui/core/FormControl";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import { BASE_URL } from "../urls";
+import { WEB_URL } from "../urls";
 import { login } from "../reducers/user";
 import { useLogInStyles } from "../styles/Styles";
 
@@ -103,7 +103,7 @@ const LogInForm = () => {
 								</Link>
 							</Grid>
 							<Grid item>
-								<Link href={`${BASE_URL}signUp`} variant="body2">
+								<Link href={`${WEB_URL}signUp`} variant="body2">
 									{"Don't have an account? Sign Up"}
 								</Link>
 							</Grid>

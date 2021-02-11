@@ -1,4 +1,5 @@
 export const BASE_URL = "https://project-planner-tsk.herokuapp.com/";
+export const WEB_URL = "https://project-planner-tsk.netlify.app/";
 export const USERS_URL = "https://project-planner-tsk.herokuapp.com/users";
 export const PROJECTS_URL =
 	"https://project-planner-tsk.herokuapp.com/projects";
