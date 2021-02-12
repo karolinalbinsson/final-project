@@ -231,7 +231,9 @@ const ProjectCard = ({
 											Updated: {updatedAt}
 										</Typography>
 									)}
-									<Typography paragraph>{longDescription}</Typography>
+									<Typography style={{ whiteSpace: "pre-line" }} paragraph>
+										{longDescription}
+									</Typography>
 									{usersInvited.length > 0 && (
 										<>
 											<Typography variant="subtitle1">
