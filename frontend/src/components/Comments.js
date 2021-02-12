@@ -6,7 +6,6 @@ import moment from "moment";
 import { ListItem } from "@material-ui/core";
 
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import Divider from "@material-ui/core/Divider";
 import TextField from "@material-ui/core/TextField";
 import List from "@material-ui/core/List";
@@ -16,13 +15,14 @@ import CameraAltIcon from "@material-ui/icons/CameraAlt";
 
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
+import Card from "@material-ui/core/Card";
+
 import { addComment } from "reducers/user";
 import { useCommentsStyles } from "../styles/Styles";
 import { useProfileStyles } from "../styles/Styles";
 import Chip from "@material-ui/core/Chip";
 
 const Comments = ({ projectId, posts }) => {
-	//If we write a sentence that contains an url, is there any way to extract only the url??
 	const dispatch = useDispatch();
 	const classes = useCommentsStyles();
 	const iconClasses = useProfileStyles();
@@ -34,29 +34,16 @@ const Comments = ({ projectId, posts }) => {
 
 	const [messageText, setMessageText] = useState("");
 	const [imageAttached, setImageAttached] = useState(false);
-	//	const [messageUpdate, setMessageUpdate] = useState(0);
-	//const [dropzoneOpen, setDropzoneOpen] = useState(false);
-	//const [key, setKey] = useState(0);
-	//const [file, setFile] = useState([]);
-	//const [debounceKey] = useDebounce(key, 1000);
 
 	const handleSubmitComment = () => {
 		dispatch(addComment(singleProjectId, messageText, loggedInUser, fileInput));
-		//	setDropzoneOpen(false);
-		//setKey(key + 1);
 		setMessageText("");
-		//setFile("");
-		//setMessageUpdate(messageUpdate + 1);
 	};
 
 	useEffect(() => {
 		deleteImage();
 		scrollToBottom();
 	}, [posts]);
-
-	// const toggleDropZone = () => {
-	// 	setDropzoneOpen(!dropzoneOpen);
-	// };
 
 	const scrollToBottom = () => {
 		animateScroll.scrollToBottom({
@@ -76,8 +63,8 @@ const Comments = ({ projectId, posts }) => {
 	};
 
 	return (
-		<Grid item md={5} xs={12}>
-			<Paper>
+		<div className={classes.root}>
+			<Card className={classes.card}>
 				<List id="list" className={classes.messageArea}>
 					{posts.map((post, index) => (
 						<ListItem
@@ -179,59 +166,56 @@ const Comments = ({ projectId, posts }) => {
 						</ListItem>
 					))}
 				</List>
-			</Paper>
-
-			<Divider />
-
-			<Grid container style={{ padding: "20px" }}>
-				<Grid item xs={12} align="left">
-					{imageAttached && (
-						<Chip
-							label={fileInput.current.files[0].name}
-							onDelete={() => deleteImage()}
-							color="primary"
+				<Divider />
+				<Grid container style={{ padding: "20px" }}>
+					<Grid item xs={12} align="left">
+						{imageAttached && (
+							<Chip
+								label={fileInput.current.files[0].name}
+								onDelete={() => deleteImage()}
+								color="primary"
+							/>
+						)}
+					</Grid>
+					<Grid item xs={10}>
+						<TextField
+							id="outlined-basic-email"
+							placeholder="Type Something"
+							fullWidth
+							value={messageText}
+							onChange={(event) => setMessageText(event.target.value)}
 						/>
-					)}
+					</Grid>
+					<Grid item xs={1} align="right">
+						<IconButton aria-label="upload image">
+							<input
+								accept="image/*"
+								className={iconClasses.input}
+								id="contained-button-file"
+								multiple
+								type="file"
+								ref={fileInput}
+								onChange={() => handleImageChange(true)}
+							/>
+							<label htmlFor="contained-button-file">
+								<CameraAltIcon />
+							</label>
+						</IconButton>
+					</Grid>
+					<Grid item xs={1} align="right">
+						<IconButton
+							color="secondary"
+							onClick={() => handleSubmitComment()}
+							disabled={
+								messageText.length < 1 && imageAttached === false ? true : false
+							}
+						>
+							<SendIcon />
+						</IconButton>
+					</Grid>
 				</Grid>
-				<Grid item xs={8}>
-					<TextField
-						id="outlined-basic-email"
-						placeholder="Type Something"
-						fullWidth
-						value={messageText}
-						onChange={(event) => setMessageText(event.target.value)}
-					/>
-				</Grid>
-				<Grid item xs={1} align="right">
-					<IconButton aria-label="upload image">
-						<input
-							// key={inputKey}
-							accept="image/*"
-							className={iconClasses.input}
-							id="contained-button-file"
-							multiple
-							type="file"
-							ref={fileInput}
-							onChange={() => handleImageChange(true)}
-						/>
-						<label htmlFor="contained-button-file">
-							<CameraAltIcon />
-						</label>
-					</IconButton>
-				</Grid>
-				<Grid item xs={1} align="right">
-					<IconButton
-						color="secondary"
-						onClick={() => handleSubmitComment()}
-						disabled={
-							messageText.length < 1 && imageAttached === false ? true : false
-						}
-					>
-						<SendIcon />
-					</IconButton>
-				</Grid>
-			</Grid>
-		</Grid>
+			</Card>
+		</div>
 	);
 };
 export default Comments;

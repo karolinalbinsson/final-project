@@ -61,7 +61,9 @@ const ProjectPage = () => {
 										invitedUsersEmail={project.invitedUsersEmail}
 									/>
 								</Grid>
-								<Comments projectId={project._id} posts={project.posts} />
+								<Grid item md={5} xs={12}>
+									<Comments projectId={project._id} posts={project.posts} />
+								</Grid>
 							</Grid>
 							<SnackBarComponent />
 							<BackdropLoader />
