@@ -33,8 +33,8 @@ const ProfilePage = () => {
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            <Grid item md={7} xs={12}>
+          <Grid container alignItems="center" justify="center" spacing={3}>
+            <Grid item xs={12} md={9} lg={6}>
               <ProfileCard
                 name={name}
                 lastName={lastName}

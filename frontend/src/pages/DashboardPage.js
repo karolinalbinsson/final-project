@@ -70,7 +70,7 @@ const DashboardPage = () => {
         <div className={classes.appBarSpacer} />
         {projects.length === 0 && <Animation />}
         <Container maxWidth="lg" className={classes.container}>
-          <Grid container alignItems="center" justify="center" spacing={3}>
+          <Grid container justify="center" spacing={3}>
             <SnackBarComponent />
             <BackdropLoader />
             {projects && (
