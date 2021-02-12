@@ -11,7 +11,7 @@ export const projectSchema = new mongoose.Schema({
 	},
 	projectLongDescription: {
 		type: String,
-		maxlength: 240,
+		maxlength: 1000,
 	},
 	createdAt: {
 		type: Date,
