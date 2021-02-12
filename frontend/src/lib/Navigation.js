@@ -71,12 +71,6 @@ const Navigation = (props) => {
 					<Tooltip
 						title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
 					>
-						{/* <ThemeSwitch
-							className={classes.switch}
-							checked={isDarkMode}
-							onChange={handleThemeSwitch}
-							name="checkedA"
-						/> */}
 						<Switch
 							checked={isDarkMode}
 							onChange={handleThemeSwitch}
@@ -84,13 +78,6 @@ const Navigation = (props) => {
 							inputProps={{ "aria-label": "checkbox with default color" }}
 						/>
 					</Tooltip>
-					{/* <Switch
-						color="secondary"
-						checked={isDarkMode}
-						onChange={handleThemeSwitch}
-						name="checkedA"
-						inputProps={{ "aria-label": "primary checkbox" }}
-					/> */}
 				</Toolbar>
 			</AppBar>
 			<nav className={classes.drawer} aria-label="mailbox folders">
@@ -132,11 +119,7 @@ const Navigation = (props) => {
 				>
 					<div className={classes.toolbar}>
 						<IconButton onClick={handleDrawerToggle}>
-							{theme.direction === "rtl" ? (
-								<ChevronRightIcon />
-							) : (
-								<ChevronLeftIcon />
-							)}
+							{open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
 						</IconButton>
 					</div>
 					<Divider />
