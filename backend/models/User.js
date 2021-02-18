@@ -1,8 +1,7 @@
 import crypto from 'crypto';
 import mongoose from 'mongoose';
-import { isEmail } from 'validator'; //npm install validator
+import { isEmail } from 'validator';
 
-// Schema
 export const userSchema = new mongoose.Schema({
   name: {
     type: String,
