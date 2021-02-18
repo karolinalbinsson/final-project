@@ -19,7 +19,6 @@ const DashboardPage = () => {
   const classes = useMainStyles();
   const userId = useSelector(store => store.user.login.userId);
   const projects = useSelector(store => store.user.project.createdProjects);
-  console.log('projects', projects);
 
   const numberOfInvitedUsers = useSelector(
     store => store.user.project.invitedUsers
@@ -81,7 +80,6 @@ const DashboardPage = () => {
                 ))}
               </>
             )}
-
             {isDialogEditOpen && <ProjectEditDialog />}
             {isDialogCreateOpen && <ProjectCreateDialog />}
           </Grid>

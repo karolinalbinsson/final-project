@@ -15,7 +15,6 @@ import {
   getSingleProject,
   createNewProject,
 } from '../reducers/user';
-
 import { useFormProjectStyles } from '../styles/Styles';
 
 const ProjectDialog = ({ dialogTitle, toggleDialog, mode, open }) => {

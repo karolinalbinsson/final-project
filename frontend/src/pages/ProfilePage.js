@@ -20,7 +20,6 @@ const ProfilePage = () => {
   const createdAt = useSelector(store => store.user.login.userCreatedAt);
   const allProjects = useSelector(store => store.user.project.createdProjects);
   const myProjects = allProjects.filter(item => item.creator._id === userId);
-  //const profileImage = useSelector(store => store.user.login.profileImage);
 
   const initials = name
     .charAt(0)

@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { useTooltipStyles } from '../styles/Styles';
 
-const CustomTooltip = ({ title }) => {
+const CustomTooltip = () => {
   const classes = useTooltipStyles();
 
   return (
