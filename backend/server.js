@@ -77,7 +77,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 //______________Error message if server is down
-app.use((res, next) => {
+app.use((req, res, next) => {
 	if (mongoose.connection.readyState === 1) {
 		next();
 	} else {
