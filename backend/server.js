@@ -130,7 +130,7 @@ const Post = mongoose.model('Post', postSchema);
 const listEndpoints = require('express-list-endpoints');
 
 //______________Endpoint documentation
-app.get('/', res => {
+app.get('/', (req, res) => {
   res.send(listEndpoints(app));
 });
 
