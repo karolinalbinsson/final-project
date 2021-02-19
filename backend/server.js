@@ -40,8 +40,7 @@ const PROJECT_NOT_FOUND = "Project not found";
 
 const mongoUrl =
 	process.env.MONGO_URL ||
-	"mongodb+srv://dbUserKaApp:gpkjBPEbRybpn9VM@cluster0.qxpka.mongodb.net/project-planner-tsk?retryWrites=true&w=majority";
-//	`mongodb+srv://${process.env.DB_USER}:${process.env.DB_KEY}@cluster0.qxpka.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+	`mongodb+srv://${process.env.DB_USER}:${process.env.DB_KEY}@cluster0.qxpka.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 mongoose.connect(mongoUrl, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
@@ -591,9 +590,7 @@ app.post("/inviteUser", async (req, res) => {
 				{ $push: { invitedUsersEmail: toUserEmail } }
 			);
 			const emailResults = await sendEmail(userFromName, toUserEmail, mode);
-			if (!emailResults) {
-				throw "Error, message not sent.";
-			}
+
 			res
 				.json({
 					message: "Send OK",
