@@ -569,7 +569,6 @@ app.post("/inviteUser", authenticateUser);
 app.post("/inviteUser", async (req, res) => {
 	try {
 		const { fromUserId, toUserEmail, projectId } = req.body;
-		let mode = "invite";
 		let userFromName = null;
 
 		//Check if the email is already added in the project
@@ -596,7 +595,7 @@ app.post("/inviteUser", async (req, res) => {
 				{ $push: { invitedUsersEmail: toUserEmail } }
 			);
 
-			const emailResults = await sendEmail(userFromName, toUserEmail, mode);
+			const emailResults = await sendEmail(userFromName, toUserEmail);
 			res
 				.json({
 					message: "Send OK",
@@ -615,7 +614,7 @@ app.post("/inviteUser", async (req, res) => {
 	}
 });
 
-const sendEmail = async (fromUserName, toUserEmail, mode, userNameFor = "") => {
+const sendEmail = async (fromUserName, toUserEmail, userNameFor = "") => {
 	try {
 		const transport = nodemailer.createTransport({
 			service: process.env.MAIL_SERVICE,
@@ -628,21 +627,14 @@ const sendEmail = async (fromUserName, toUserEmail, mode, userNameFor = "") => {
 		const mailOptions = {
 			from: `👋 Project Planner 👋 ${process.env.MAIL_FROM}`,
 			to: toUserEmail,
-			subject:
-				mode === "invite"
-					? "Project Planner invite"
-					: "Project Planner notification",
-			text: "Hey there, it’s our first message sent with Nodemailer ;) ",
-			html:
-				mode === "invite"
-					? createHtmlInvite(userNameFor, fromUserName)
-					: createHtmlNotification(userNameFor, fromUser),
+			subject: "Project Planner invite",
+			text: "Project Planner invite",
+			html: createHtmlInvite(userNameFor, fromUserName),
 		};
 
 		const emailInfo = await transport.sendMail(mailOptions);
 		return emailInfo;
 	} catch (error) {
-		console.log(error);
 		throw "Error, message not sent.";
 	}
 };
