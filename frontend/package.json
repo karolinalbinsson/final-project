@@ -18,7 +18,7 @@
 		"lottie-web": "^5.7.6",
 		"material-ui-dropzone": "^3.5.0",
 		"material-ui-image": "^3.3.1",
-		"moment": "^2.29.1",
+		"moment": "^2.29.4",
 		"react": "^16.14.0",
 		"react-dom": "^16.14.0",
 		"react-redux": "^7.2.2",
